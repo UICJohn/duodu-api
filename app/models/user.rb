@@ -2,12 +2,9 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   attr_accessor :verification_code, :verification_code_required
-  attr_writer :login
 
-    # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable
   devise :database_authenticatable, :async, :registerable, :trackable, :validatable, :jwt_authenticatable,
-         jwt_revocation_strategy: JWTBlacklist, :authentication_keys => [:login]
+         jwt_revocation_strategy: JWTBlacklist, :authentication_keys => [:phone]
 
   has_attached_file :avatar, styles: { medium: "300x300>", thumb: "100x100>" }, default_url: lambda{ |attachment| ActionController::Base.helpers.image_path("thumb/#{attachment.instance.gender || "male"}_avatar.png") }
 
@@ -21,4 +18,15 @@ class User < ApplicationRecord
   def email_required?
     false
   end
+
+  private
+
+  def verify_phone
+    begin
+      raise unless VerificationCode.new(phone).verify? verification_code
+    rescue
+      errors.add(:verification_code, "invalid")
+    end
+  end
+
 end

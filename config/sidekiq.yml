@@ -1,0 +1,11 @@
+---
+:concurrency: 30
+logfile: ./log/sidekiq.log
+:queues:
+  - critical
+  - default
+  - push_notifications
+staging:
+  :concurrency:  4
+production:
+  :concurrency:  20

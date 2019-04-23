@@ -31,5 +31,33 @@ module DuoduApi
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    config.time_zone = "Asia/Shanghai"
+
+    config.autoload_paths << Rails.root.join('lib')
+
+    config.active_job.queue_adapter = :sidekiq
+
+
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins "*"
+        resource "*",
+          :headers => :any,
+          :expose  => [
+            "X-Requested-With",
+            "Content-Type",
+            "Authorization",
+            "Accept",
+            "Client-Security-Token",
+            "Accept-Encoding",
+            "iat",
+            "exp",
+            "jti"
+          ],
+          :methods => [:get, :post, :options, :delete, :put, :head]
+      end
+    end
+
   end
 end

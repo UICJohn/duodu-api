@@ -3,10 +3,9 @@ Rails.application.routes.draw do
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
 
-  devise_for :users, skip: :all
+  devise_for :users, defaults: { format: :json }, controllers: { sessions: 'users/sessions', registrations: 'users/registrations' }
 
   devise_scope :user do
-    post '/users' => "users/registrations#create"
     get "/users/send_verify_code" => "users/registrations#send_verify_code"
   end
 

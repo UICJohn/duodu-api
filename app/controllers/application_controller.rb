@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::API
+  include ActionController::Helpers
   before_action :configure_permitted_parameters, if: :devise_controller?
   respond_to :json
 
@@ -9,11 +10,21 @@ class ApplicationController < ActionController::API
       e.set_backtrace(exception.backtrace)
       ExceptionNotifier.notify_exception(e, env: request.env)
       if Rails.env.production?
-        error_500
+        error!({msg: "Oops, something went wrong."})
       else
         raise exception
       end
     end
+  end
+
+  def error!(msg, code = 500)
+    self.response_body = msg.to_json
+    self.status = code
+  end
+
+  def success!(msg, code = 200)
+    self.response_body = msg.to_json
+    self.status = code
   end
 
   protected

@@ -299,9 +299,5 @@ Devise.setup do |config|
   config.skip_session_storage = [:http_auth]
   config.jwt do |jwt|
     jwt.secret = ENV['DEVISE_JWT_SECRET_KEY'] || "699f26bcdeaff72666790a38f71bd1c95572fdc16765bdb994c2397a4f19a48e82059e71c31dd7ffdf07f78cd5b99a27ba3035685f565f64750b4479d8c9ee43"
-    jwt.dispatch_requests = [
-      ['POST', %r{^/users$}],
-      ['POST', %r{^/users/sign_in$}]
-    ]
   end
 end

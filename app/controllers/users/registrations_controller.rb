@@ -5,11 +5,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def create
     build_resource(sign_up_params)
 
-    # resource.verification_code_required = true
-
+    resource.verification_code_required = true
     resource.save
     yield resource if block_given?
     if resource.persisted?
+      sign_up(resource_name, resource)
       render json: resource
     else
       clean_up_passwords resource

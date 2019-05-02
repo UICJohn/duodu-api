@@ -8,7 +8,7 @@ class ApplicationController < ActionController::API
       error_message = "Oops, something went wrong. Here is the error message: #{exception}"
       e = Exception.new(error_message)
       e.set_backtrace(exception.backtrace)
-      ExceptionNotifier.notify_exception(e, env: request.env)
+      # ExceptionNotifier.notify_exception(e, env: request.env)
       if Rails.env.production?
         error!({msg: "Oops, something went wrong."})
       else

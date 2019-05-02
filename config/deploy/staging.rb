@@ -3,7 +3,7 @@ set :port, 22
 set :user, 'deploy'
 set :deploy_via, :remote_cache
 set :use_sudo, false
-set :branch, 'develop'
+set :branch, 'master'
 
 server '165.22.254.102',
   roles: [:web, :app, :db, :sidekiq],

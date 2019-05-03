@@ -19,7 +19,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def send_verify_code
-    if phone = params[:phone].try(:strip!) && phone_validator(phone)
+    if phone = params[:phone].try(:strip) && phone_validator(phone)
       if User.find_by(phone: phone).present?
         error!({error: "手机号码已被占用, 请换个手机号码试试"})
       else

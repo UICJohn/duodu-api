@@ -72,3 +72,5 @@ gem 'countries', require: 'countries/global'
 gem 'aliyun-sms'
 
 gem 'rack-cors'
+
+gem 'exception_notification'

@@ -11,7 +11,7 @@ server '157.230.251.69',
   user: fetch(:user),
   primary: true
 
-set :rails_env, :staging
+set :rails_env, 'staging'
 set :conditionally_migrate, true
 
 set :deploy_to,       "/home/#{fetch(:user)}/#{fetch(:application)}"

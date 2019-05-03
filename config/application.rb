@@ -38,7 +38,6 @@ module DuoduApi
 
     config.active_job.queue_adapter = :sidekiq
 
-
     config.middleware.insert_before 0, Rack::Cors do
       allow do
         origins "*"
@@ -58,6 +57,8 @@ module DuoduApi
           :methods => [:get, :post, :options, :delete, :put, :head]
       end
     end
-
+    config.autoload_paths << Rails.root.join('lib')
+    config.i18n.available_locales = [:"zh-CN", :en]
+    config.i18n.default_locale = :en
   end
 end

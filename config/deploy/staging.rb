@@ -5,7 +5,7 @@ set :deploy_via, :remote_cache
 set :use_sudo, false
 set :branch, 'master'
 
-server '165.22.254.102',
+server '157.230.251.69',
   roles: [:web, :app, :db, :sidekiq],
   port: fetch(:port),
   user: fetch(:user),

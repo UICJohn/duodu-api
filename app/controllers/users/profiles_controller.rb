@@ -3,7 +3,7 @@ class Users::ProfilesController < ApplicationController
   def update
     @user = current_user
     if @user.update_attributes(profiles_params)
-      render 'users/show'
+      render :show
     else
       error!(current_user.errors)
     end

@@ -31,10 +31,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
     end
   end
 
-  def wait_for_activation
-
-  end
-
   def after_inactive_sign_up_path_for(resource)
     users_wait_for_activation_path
   end

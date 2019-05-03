@@ -23,7 +23,7 @@ class User < ApplicationRecord
 
   def verify_phone
     begin
-      raise unless VerificationCode.new(phone).verify? verification_code
+      raise unless VerificationCode.new(phone).verify? verification_code.strip
     rescue
       errors.add(:verification_code, "invalid")
     end

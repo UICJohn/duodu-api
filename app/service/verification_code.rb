@@ -29,7 +29,7 @@ class VerificationCode
     if record.nil? or (Time.now - record["created_at"].to_time) > 1.minutes
       code = (0..6).map{Random.rand(9)}.join
       cache(code)
-      if Rails.env.production? or Rails.env.staging?
+      if Rails.env.production?
         Aliyun::Sms.send(@phone, 'SMS_129270223', "{'code': #{code}}")
       else
         puts "Verification Code: #{code}"

@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   devise_scope :user do
     get "/users/send_verify_code" => "users/registrations#send_verify_code"
     put "/users/profiles" => "users/profiles#update"
+    get "/users/profiles" => "users/profiles#show"
   end
 
   match '*a', :to => 'errors#not_found', via: :get

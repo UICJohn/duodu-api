@@ -9,6 +9,11 @@ class Users::ProfilesController < ApplicationController
     end
   end
 
+
+  def show
+    @user = current_user
+  end
+
   private
   def profiles_params
     params.require(:profiles).permit(:intro, :city, :country, :suburb, :province, :gender, :username, :avatar)

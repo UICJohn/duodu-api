@@ -11,5 +11,9 @@ Rails.application.routes.draw do
     get "/users/profiles" => "users/profiles#show"
   end
 
+  namespace 'v1' do
+    resources :tags, only: [:index]
+  end
+
   match '*a', :to => 'errors#not_found', via: :get
 end

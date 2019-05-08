@@ -8,7 +8,8 @@ class User < ApplicationRecord
 
   has_attached_file :avatar, styles: { medium: "300x300>", thumb: "100x100>" }, default_url: lambda{ |attachment| ActionController::Base.helpers.image_path("thumb/#{attachment.instance.gender || "male"}_avatar.png") }
 
-  validates :phone, presence: true, format: { with: /\A[0-9]{11}\z/, message: "invalid" }, uniqueness: true
+  # validates :phone, presence: true, format: { with: /\A[0-9]{11}\z/, message: "invalid" }, uniqueness: true
+  validates :phone, presence: true
   validates :verification_code, presence: true, :if => :verification_code_required
   validate  :verify_phone, :if => :verification_code_required
   validates_format_of :email,:with => Devise::email_regexp, :allow_blank => true

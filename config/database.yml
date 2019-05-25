@@ -1,6 +1,6 @@
 default: &default
   adapter: postgresql
-  host: 192.168.0.22
+  host: localhost
   username: postgres
   password: adelaide12345
   timeout: 5000

@@ -3,8 +3,11 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable and :omniauthable
   attr_accessor :verification_code, :verification_code_required
 
-  devise :database_authenticatable, :async, :registerable, :trackable, :validatable, :jwt_authenticatable,
-         jwt_revocation_strategy: JWTBlacklist, :authentication_keys => [:phone]
+  # devise :database_authenticatable, :async, :registerable, :trackable, :validatable, :jwt_authenticatable,
+  #        jwt_revocation_strategy: JWTBlacklist, :authentication_keys => [:phone]
+
+  devise :database_authenticatable, :async, :recoverable, :registerable, :trackable, :validatable, 
+          :authentication_keys => [:login]
 
   has_attached_file :avatar, styles: { medium: "300x300>", thumb: "100x100>" }, default_url: lambda{ |attachment| ActionController::Base.helpers.image_path("thumb/#{attachment.instance.gender || "male"}_avatar.png") }
 
@@ -20,6 +23,15 @@ class User < ApplicationRecord
   end
 
   private
+
+  def self.find_for_database_authentication(warden_conditions)
+    conditions = warden_conditions.dup
+    if login = conditions.delete(:login)
+      where(conditions.to_hash).where(["phone = :value OR email = :value", { :value => login }]).first
+    elsif conditions.has_key?(:phone) || conditions.has_key?(:email)
+      where(conditions.to_hash).first
+    end
+  end
 
   def verify_phone
     begin

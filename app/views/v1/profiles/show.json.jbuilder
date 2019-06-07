@@ -1,6 +1,7 @@
 json.user do
   json.email @user.email
   json.username @user.username
+  json.avatar @user.avatar.url
   json.country @user.country
   json.city @user.city
   json.province @user.province

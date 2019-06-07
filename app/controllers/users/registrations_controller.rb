@@ -5,7 +5,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def create
     build_resource(sign_up_params)
 
-    # resource.verification_code_required = true
+    resource.verification_code_required = true
     resource.save
     yield resource if block_given?
     if resource.persisted?
@@ -21,7 +21,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def send_verify_code
     if (phone = params[:phone].try(:strip)) && phone_validator(phone)
       if User.find_by(phone: phone).present?
-        error!({error: "手机号码已被占用, 请换个手机号码试试"})
+        error!({error: "手机号码已被占用"})
       else
         SendVerificationCodeWorker.perform_async(phone)
         success!({message: '验证码已发送'})

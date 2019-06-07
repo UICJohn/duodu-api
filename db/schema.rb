@@ -17,13 +17,34 @@ ActiveRecord::Schema.define(version: 2019_05_04_125727) do
 
   create_table "categories", force: :cascade do |t|
     t.string "name"
+    t.string "code_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "category_translations", force: :cascade do |t|
+    t.bigint "category_id", null: false
+    t.string "locale", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name"
+    t.index ["category_id"], name: "index_category_translations_on_category_id"
+    t.index ["locale"], name: "index_category_translations_on_locale"
   end
 
   create_table "jwt_blacklist", force: :cascade do |t|
     t.string "jti", null: false
     t.index ["jti"], name: "index_jwt_blacklist_on_jti"
+  end
+
+  create_table "tag_translations", force: :cascade do |t|
+    t.bigint "tag_id", null: false
+    t.string "locale", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name"
+    t.index ["locale"], name: "index_tag_translations_on_locale"
+    t.index ["tag_id"], name: "index_tag_translations_on_tag_id"
   end
 
   create_table "tags", force: :cascade do |t|
@@ -58,7 +79,8 @@ ActiveRecord::Schema.define(version: 2019_05_04_125727) do
     t.datetime "avatar_updated_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "tag_ids", default: [], array: true
+    t.integer "occupation_tag_ids", default: [], array: true
+    t.integer "hobby_tag_ids", default: [], array: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["phone"], name: "index_users_on_phone", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

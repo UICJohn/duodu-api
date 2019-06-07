@@ -1,5 +1,6 @@
-class Users::ProfilesController < ApplicationController
+class V1::ProfilesController < ApplicationController
   before_action :authenticate_user!
+
   def update
     @user = current_user
     if @user.update_attributes(profiles_params)
@@ -9,13 +10,12 @@ class Users::ProfilesController < ApplicationController
     end
   end
 
-
   def show
     @user = current_user
   end
 
   private
   def profiles_params
-    params.require(:profiles).permit(:intro, :city, :country, :suburb, :province, :gender, :username, :avatar, :tag_ids)
+    params.require(:profiles).permit(:intro, :city, :country, :suburb, :province, :gender, :occupation, :hobby, :username, :avatar, :tag_ids)
   end
 end

@@ -32,6 +32,13 @@ module DuoduApi
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use ActionDispatch::Session::CookieStore
+
+    if Rails.env.development?
+      config.action_controller.asset_host = 'http://localhost:3000'
+    end
+
     config.time_zone = "Asia/Shanghai"
 
     config.autoload_paths << Rails.root.join('lib')
@@ -59,6 +66,6 @@ module DuoduApi
     end
     config.autoload_paths << Rails.root.join('lib')
     config.i18n.available_locales = [:"zh-CN", :en]
-    config.i18n.default_locale = :en
+    config.i18n.default_locale = :"zh-CN"
   end
 end

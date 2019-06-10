@@ -37,7 +37,11 @@ zh-CN:
           attributes:
             phone:
               taken: '该手机号码已注册'
+            reset_password_token:
+              blank: 'token 为空'
   devise:
     failure:
       user:
         invalid: '用户名或密码错误'
+
+

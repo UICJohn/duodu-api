@@ -15,6 +15,9 @@ Rails.application.routes.draw do
   namespace 'v1' do
     put "/profiles" => "profiles#update"
     get "/profiles" => "profiles#show"
+    post "/profiles/add_tag" => "profiles#add_tag"
+    post "/profiles/upload_avatar" => "profiles#upload_avatar"
+    delete "/profiles/delete_tag" => "profiles#delete_tag"
     resources :tags, only: [:index]
   end
 

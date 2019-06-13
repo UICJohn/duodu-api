@@ -35,11 +35,17 @@ class DeviseCreateUsers < ActiveRecord::Migration[5.2]
       ##profile
       t.string :phone,     null: false, default: ""
       t.string :username
+      t.string :first_name
+      t.string :last_name
       t.string :gender
       t.string :country
       t.string :province
       t.string :city
       t.string :suburb
+      t.string :occupation
+      t.string :school
+      t.string :major
+      t.integer :password_status
       t.text   :intro
       t.attachment :avatar
 
@@ -48,7 +54,6 @@ class DeviseCreateUsers < ActiveRecord::Migration[5.2]
 
     add_index :users, :email,                unique: true
     add_index :users, :phone,                unique: true
-    add_index :users, :username,             unique: true
     add_index :users, :reset_password_token, unique: true
     # add_index :users, :confirmation_token,   unique: true
     # add_index :users, :unlock_token,         unique: true

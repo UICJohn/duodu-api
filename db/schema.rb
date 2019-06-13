@@ -67,11 +67,17 @@ ActiveRecord::Schema.define(version: 2019_05_04_125727) do
     t.inet "last_sign_in_ip"
     t.string "phone", default: "", null: false
     t.string "username"
+    t.string "first_name"
+    t.string "last_name"
     t.string "gender"
     t.string "country"
     t.string "province"
     t.string "city"
     t.string "suburb"
+    t.string "occupation"
+    t.string "school"
+    t.string "major"
+    t.integer "password_status"
     t.text "intro"
     t.string "avatar_file_name"
     t.string "avatar_content_type"
@@ -79,12 +85,10 @@ ActiveRecord::Schema.define(version: 2019_05_04_125727) do
     t.datetime "avatar_updated_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "occupation_tag_ids", default: [], array: true
-    t.integer "hobby_tag_ids", default: [], array: true
+    t.string "tags", default: [], array: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["phone"], name: "index_users_on_phone", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-    t.index ["username"], name: "index_users_on_username", unique: true
   end
 
 end

@@ -16,10 +16,23 @@ class User < ApplicationRecord
   validate  :verify_phone, :if => :verification_code_required
   validates_format_of :email,:with => Devise::email_regexp, :allow_blank => true
   validates :email, uniqueness: true, :allow_blank => true
+  validate :limited_tags
   validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\z/
+
+  before_create :set_password_status
+
+  enum password_status: {0 => 'weak', 1 => 'good', 2 => 'strong'}
+
+  def limited_tags
+    errors.add(:tags, "标签不能超过10个") if tags.size > 10
+  end
 
   def email_required?
     false
+  end
+
+  def hidden_phone
+    phone[0..2] + '*' * 4 + phone[-4..-1]
   end
 
   private
@@ -37,8 +50,17 @@ class User < ApplicationRecord
     begin
       raise unless VerificationCode.new(phone).verify? verification_code.strip
     rescue
-      errors.add(:verification_code, "invalid")
+      errors.add(:verification_code, "验证码不正确")
     end
   end
 
+  def set_password_status
+    if password.match(/^(?=.*[a-zA-Z])(?=.*[0-9]).{10,}$/) 
+      password_status = 1
+    elsif password.match(/^(?=.*[a-zA-Z])(?=.*[0-9]).{6,}$/) 
+      password_status = 2
+    else
+      password_status = 0
+    end
+  end
 end

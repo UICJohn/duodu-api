@@ -1,5 +1,5 @@
 json.user do
-  json.email @user.email
+  json.email @user.hidden_email
   json.phone @user.hidden_phone
   json.username @user.username
   json.avatar URI.join(request.url, @user.avatar.url)
@@ -17,4 +17,5 @@ json.user do
   json.major @user.major
   json.intro @user.intro
   json.password_status @user.password_status
+  json.unconfirmed @user.unconfirmed_email.present?
 end

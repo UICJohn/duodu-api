@@ -14,6 +14,7 @@ Rails.application.routes.draw do
 
   namespace 'v1' do
     put "/profiles" => "profiles#update"
+    put "/profiles/update_password" => "profiles#update_password"
     get "/profiles" => "profiles#show"
     post "/profiles/add_tag" => "profiles#add_tag"
     post "/profiles/upload_avatar" => "profiles#upload_avatar"

@@ -13,7 +13,6 @@ class V1::ProfilesController < ApplicationController
     @user = current_user
   end
 
-
   def upload_avatar
     if params[:file].present?
       @user = current_user
@@ -63,8 +62,25 @@ class V1::ProfilesController < ApplicationController
     end
   end
 
+
+  def update_password
+    @user = current_user
+    if params[:user][:current_password].present?
+      if @user.valid_password?(params[:user][:current_password])
+        if @user.update(password: params[:user][:password])
+          bypass_sign_in(@user)
+          success!({message: '成功更新密码'})
+        end
+      else
+        error!({error: {current_password: "密码不正确"}})
+      end
+    else
+      error!({error: {current_password: "请输入原密码"}})      
+    end
+  end
+
   private
   def profiles_params
-    params.require(:profiles).permit(:intro, :city, :country, :suburb, :gender, :occupation, :username, :avatar,  :first_name, :last_name, :major, :school)
-  end
+    params.require(:profiles).permit(:intro, :city, :country, :suburb, :gender, :occupation, :username, :avatar,  :first_name, :last_name, :major, :school, :email)
+  end  
 end

@@ -81,6 +81,26 @@ class V1::ProfilesController < ApplicationController
 
   private
   def profiles_params
-    params.require(:profiles).permit(:intro, :city, :country, :suburb, :gender, :occupation, :username, :avatar,  :first_name, :last_name, :major, :school, :email)
+    params.require(:profiles).permit(
+      :intro, 
+      :city, 
+      :country, 
+      :suburb, 
+      :gender, 
+      :occupation, 
+      :username, 
+      :avatar,  
+      :first_name, 
+      :last_name, 
+      :major, 
+      :school, 
+      :email, 
+      preference_attributes: [
+        :id,
+        :show_privacy_data,
+        :share_location,
+        :receive_all_message
+      ]
+    )
   end  
 end

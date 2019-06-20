@@ -18,11 +18,17 @@ class User < ApplicationRecord
   validates :email, uniqueness: true, :allow_blank => true
   validates_format_of :email,:with => Devise::email_regexp, :allow_blank => true
   validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\z/
+  
+  has_one :preference
+  
+  accepts_nested_attributes_for :preference
 
 
   before_save :set_password_status, on: [:create, :update]
+  after_create :create_preference
 
   enum password_status: [:weak, :good, :strong]
+
 
   def limited_tags
     errors.add(:tags, "标签不能超过10个") if tags.size > 10
@@ -78,5 +84,9 @@ class User < ApplicationRecord
     else
       :weak
     end
+  end
+
+  def create_preference
+    self.preference = Preference.create
   end
 end

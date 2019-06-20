@@ -18,4 +18,10 @@ json.user do
   json.intro @user.intro
   json.password_status @user.password_status
   json.unconfirmed @user.unconfirmed_email.present?
+  json.preference do
+    json.id @user.preference.id
+    json.show_privacy_data @user.preference.show_privacy_data
+    json.share_location @user.preference.share_location
+    json.receive_all_message @user.preference.receive_all_message
+  end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_04_125727) do
+ActiveRecord::Schema.define(version: 2019_06_20_093812) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,6 +35,14 @@ ActiveRecord::Schema.define(version: 2019_05_04_125727) do
   create_table "jwt_blacklist", force: :cascade do |t|
     t.string "jti", null: false
     t.index ["jti"], name: "index_jwt_blacklist_on_jti"
+  end
+
+  create_table "preferences", force: :cascade do |t|
+    t.boolean "show_privacy_data", default: false
+    t.boolean "share_location", default: false
+    t.boolean "receive_all_message"
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_preferences_on_user_id"
   end
 
   create_table "tag_translations", force: :cascade do |t|

@@ -9,6 +9,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :async, :recoverable, :registerable, :trackable, :validatable, :confirmable,
           :authentication_keys => [:login]
 
+  searchkick callbacks: :async
+
   has_attached_file :avatar, styles: { medium: "300x300>", thumb: "100x100>" }, default_url: lambda{ |attachment| ActionController::Base.helpers.image_path("thumb/#{attachment.instance.gender || "male"}_avatar.png") }
 
   validate  :verify_phone, :if => :verification_code_required
@@ -18,7 +20,7 @@ class User < ApplicationRecord
   validates :email, uniqueness: true, :allow_blank => true
   validates_format_of :email,:with => Devise::email_regexp, :allow_blank => true
   validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\z/
-  
+
   has_one :preference
   
   accepts_nested_attributes_for :preference
@@ -27,8 +29,31 @@ class User < ApplicationRecord
   before_save :set_password_status, on: [:create, :update]
   after_create :create_preference
 
+  has_many :friend_requests, dependent: :destroy
+  has_many :pending_friends, through: :friend_requests, source: :friend
+
+  has_many :friendships
+  has_many :friends, through: :friendships, :source => :user
+
   enum password_status: [:weak, :good, :strong]
 
+  def search_data
+    {
+      usernmae:   username,
+      gender:     gender,
+      occupation: occupation,
+      first_name: first_name,
+      last_name:  last_name,
+      major:      major,
+      country:    country,
+      province:   province,
+      city:       city,
+      school:     school,
+      share_location: preference.share_location,
+      show_privacy_data: preference.show_privacy_data,
+      receive_all_message: preference.receive_all_message,
+    }
+  end
 
   def limited_tags
     errors.add(:tags, "标签不能超过10个") if tags.size > 10

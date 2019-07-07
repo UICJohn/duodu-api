@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :friend_requests
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   require 'sidekiq/web'
   if Rails.env.staging? or Rails.env.development?
@@ -19,7 +20,11 @@ Rails.application.routes.draw do
     post "/profiles/add_tag" => "profiles#add_tag"
     post "/profiles/upload_avatar" => "profiles#upload_avatar"
     delete "/profiles/delete_tag" => "profiles#delete_tag"
+
+    resources :friend_requests, only: [:create, :destroy, :update]
+
     resources :tags, only: [:index]
+
   end
 
   match '*a', :to => 'errors#not_found', via: :get

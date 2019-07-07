@@ -10,10 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_20_093812) do
+ActiveRecord::Schema.define(version: 2019_06_26_152029) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "attachments", force: :cascade do |t|
+    t.integer "attachable_id"
+    t.string "attachable_type"
+    t.string "file_file_name"
+    t.string "file_content_type"
+    t.integer "file_file_size"
+    t.datetime "file_updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["attachable_type", "attachable_id"], name: "index_attachments_on_attachable_type_and_attachable_id"
+  end
 
   create_table "categories", force: :cascade do |t|
     t.string "name"
@@ -32,17 +44,101 @@ ActiveRecord::Schema.define(version: 2019_06_20_093812) do
     t.index ["locale"], name: "index_category_translations_on_locale"
   end
 
+  create_table "comments", force: :cascade do |t|
+    t.integer "user_id"
+    t.text "body"
+    t.integer "parent_id"
+  end
+
+  create_table "friend_requests", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "friend_id"
+    t.integer "status", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["friend_id"], name: "index_friend_requests_on_friend_id"
+    t.index ["user_id"], name: "index_friend_requests_on_user_id"
+  end
+
+  create_table "friendships", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "friend_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["friend_id"], name: "index_friendships_on_friend_id"
+    t.index ["user_id"], name: "index_friendships_on_user_id"
+  end
+
   create_table "jwt_blacklist", force: :cascade do |t|
     t.string "jti", null: false
     t.index ["jti"], name: "index_jwt_blacklist_on_jti"
   end
 
+  create_table "posts", force: :cascade do |t|
+    t.string "title"
+    t.text "body"
+    t.integer "type"
+    t.integer "property_id"
+    t.string "address"
+    t.string "province"
+    t.string "city"
+    t.string "suburb"
+    t.integer "user_id"
+    t.string "phone_number"
+    t.boolean "draft", default: true
+    t.boolean "take"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "preferences", force: :cascade do |t|
     t.boolean "show_privacy_data", default: false
     t.boolean "share_location", default: false
-    t.boolean "receive_all_message"
+    t.boolean "receive_all_message", default: true
     t.bigint "user_id"
     t.index ["user_id"], name: "index_preferences_on_user_id"
+  end
+
+  create_table "properties", force: :cascade do |t|
+    t.string "country"
+    t.string "province"
+    t.string "city"
+    t.string "address"
+    t.integer "unit"
+    t.integer "floor"
+    t.integer "number"
+    t.integer "landlord_id"
+    t.string "certification_file_name"
+    t.string "certification_content_type"
+    t.integer "certification_file_size"
+    t.datetime "certification_updated_at"
+    t.string "identification_file_name"
+    t.string "identification_content_type"
+    t.integer "identification_file_size"
+    t.datetime "identification_updated_at"
+    t.boolean "verified", default: false
+    t.decimal "lng", precision: 10, scale: 6
+    t.decimal "lat", precision: 10, scale: 6
+    t.boolean "has_elevator", default: false
+    t.boolean "available", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "rooms", force: :cascade do |t|
+    t.bigint "property_id"
+    t.string "title"
+    t.text "body"
+    t.integer "parent_id"
+    t.string "parent_type"
+    t.boolean "has_bathroom", default: false
+    t.boolean "has_windows", default: false
+    t.boolean "has_furniture", default: false
+    t.boolean "has_air_conditioner", default: false
+    t.boolean "available"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["property_id"], name: "index_rooms_on_property_id"
   end
 
   create_table "tag_translations", force: :cascade do |t|
@@ -103,4 +199,9 @@ ActiveRecord::Schema.define(version: 2019_06_20_093812) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "friend_requests", "users"
+  add_foreign_key "friend_requests", "users", column: "friend_id"
+  add_foreign_key "friendships", "users"
+  add_foreign_key "friendships", "users", column: "friend_id"
+  add_foreign_key "rooms", "properties"
 end

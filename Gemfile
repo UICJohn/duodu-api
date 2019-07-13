@@ -10,8 +10,8 @@ gem 'pg'
 # Use Puma as the app server
 gem 'puma', '~> 3.11'
 
-# gem 'devise-jwt'
-gem 'devise'
+gem 'devise-jwt'
+# gem 'devise'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 
@@ -78,3 +78,5 @@ gem 'rack-cors'
 gem 'exception_notification'
 
 gem 'globalize'
+
+gem "omniauth-wechat-oauth2"

@@ -1,5 +1,7 @@
 class V1::ProfilesController < ApplicationController
   before_action :authenticate_user!
+  respond_to :json
+
   def update
     @user = current_user
     if @user.update_attributes(profiles_params)
@@ -82,11 +84,12 @@ class V1::ProfilesController < ApplicationController
   private
   def profiles_params
     params.require(:profiles).permit(
-      :intro, 
-      :city, 
-      :country, 
-      :suburb, 
-      :gender, 
+      :intro,
+      :city,
+      :country,
+      :province,
+      :suburb,
+      :gender,
       :occupation, 
       :username, 
       :avatar,  
@@ -94,7 +97,9 @@ class V1::ProfilesController < ApplicationController
       :last_name, 
       :major, 
       :school, 
-      :email, 
+      :email,
+      :avatarUrl,
+      :company,
       preference_attributes: [
         :id,
         :show_privacy_data,

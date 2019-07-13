@@ -1,10 +1,12 @@
 class Users::SessionsController < Devise::SessionsController
   respond_to :json
 
-
-  protected
-  def configure_sign_in_params
-    devise_parameter_sanitizer.permit(:users, keys: [:phone, :password])
+  def wechat_auth
+    if params[:code]
+      response = Wechat::API.new.auth(params[:code])
+      @user = User.from_wechat({provider: 'wechat', uid: response["openid"], session_key: response["session_key"]})
+      sign_in @user
+    end
   end
 
   private

@@ -7,6 +7,7 @@ json.user do
   json.city @user.city
   json.province @user.province
   json.into @user.intro
+  json.company @user.company
   json.suburb @user.suburb
   json.gender @user.gender
   json.occupation @user.occupation

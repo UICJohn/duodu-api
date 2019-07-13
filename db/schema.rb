@@ -173,7 +173,13 @@ ActiveRecord::Schema.define(version: 2019_06_26_152029) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string "unconfirmed_email"
-    t.string "phone", default: "", null: false
+    t.integer "failed_attempts", default: 0, null: false
+    t.string "unlock_token"
+    t.datetime "locked_at"
+    t.string "provider"
+    t.string "uid"
+    t.string "session_key"
+    t.string "phone"
     t.string "username"
     t.string "first_name"
     t.string "last_name"
@@ -182,6 +188,7 @@ ActiveRecord::Schema.define(version: 2019_06_26_152029) do
     t.string "province"
     t.string "city"
     t.string "suburb"
+    t.string "company"
     t.string "occupation"
     t.string "school"
     t.string "major"
@@ -195,7 +202,6 @@ ActiveRecord::Schema.define(version: 2019_06_26_152029) do
     t.datetime "updated_at", null: false
     t.string "tags", default: [], array: true
     t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["phone"], name: "index_users_on_phone", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 

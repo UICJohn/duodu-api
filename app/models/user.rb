@@ -1,12 +1,12 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  attr_accessor :verification_code, :verification_code_required
+  attr_accessor :verification_code, :verification_code_required, :avatarUrl
 
   # devise :database_authenticatable, :async, :registerable, :trackable, :validatable, :jwt_authenticatable,
   #        jwt_revocation_strategy: JWTBlacklist, :authentication_keys => [:phone]
 
-  devise :database_authenticatable, :async, :recoverable, :registerable, :trackable, :validatable, :confirmable,
+  devise :database_authenticatable, :async, :recoverable, :registerable, :trackable, :validatable, :confirmable, :jwt_authenticatable, jwt_revocation_strategy: JWTBlacklist,
           :authentication_keys => [:login]
 
   searchkick callbacks: :async
@@ -15,7 +15,7 @@ class User < ApplicationRecord
 
   validate  :verify_phone, :if => :verification_code_required
   validate  :limited_tags
-  validates :phone, presence: true, format: { with: /\A[0-9]{11}\z/, message: "invalid" }, uniqueness: true
+  validates :phone, presence: true, format: { with: /\A[0-9]{11}\z/, message: "invalid" }, uniqueness: true, unless: :omniauth_user?
   validates :verification_code, presence: true, :if => :verification_code_required
   validates :email, uniqueness: true, :allow_blank => true
   validates_format_of :email,:with => Devise::email_regexp, :allow_blank => true
@@ -27,6 +27,7 @@ class User < ApplicationRecord
 
 
   before_save :set_password_status, on: [:create, :update]
+  before_save :fetch_avatar
   after_create :create_preference
 
   has_many :friend_requests, dependent: :destroy
@@ -34,6 +35,7 @@ class User < ApplicationRecord
 
   has_many :friendships
   has_many :friends, through: :friendships, :source => :user
+  has_one  :wechat_credential
 
   enum password_status: [:weak, :good, :strong]
 
@@ -64,6 +66,7 @@ class User < ApplicationRecord
   end
 
   def hidden_phone
+    return nil if phone.blank?
     phone[0..2] + '*' * 4 + phone[-4..-1]
   end
 
@@ -74,6 +77,13 @@ class User < ApplicationRecord
       email[0..2] + '*' * 4 + email[(email.index('@'))..-1]
     else
       nil
+    end
+  end
+
+  def self.from_wechat(auth)
+    where(provider: "wechat", uid: auth[:uid]).first_or_create do |user|
+      user.password = Devise.friendly_token[0,20]
+      user.session_key = auth[:session_key]
     end
   end
 
@@ -109,6 +119,20 @@ class User < ApplicationRecord
     else
       :weak
     end
+  end
+
+  def omniauth_user?
+    self.uid.present? && self.provider.present?
+  end
+
+  def fetch_avatar
+
+    FetchAvatarWorker.perform_async(self.id, avatarUrl) if self.avatarUrl.present?
+
+  rescue Exception => e
+
+    raise e unless Rails.env.production?
+
   end
 
   def create_preference

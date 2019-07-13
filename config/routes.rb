@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   devise_for :users, defaults: { format: :json }, controllers: { sessions: 'users/sessions', registrations: 'users/registrations', passwords: 'users/passwords'}
 
   devise_scope :user do
+    post "/users/wechat_auth" => "users/sessions#wechat_auth"
     get "/users/send_verify_code" => "users/registrations#send_verify_code"
     get "/users/send_reset_password_vcode" => "users/passwords#send_verify_code"
   end

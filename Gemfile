@@ -80,3 +80,5 @@ gem 'exception_notification'
 gem 'globalize'
 
 gem "omniauth-wechat-oauth2"
+
+gem 'hiredis'

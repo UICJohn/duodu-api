@@ -15,6 +15,23 @@ class V1::ProfilesController < ApplicationController
     @user = current_user
   end
 
+  def update_phone
+    if params[:profiles][:phone]
+      if not User.find_by(phone: params[:profiles][:phone])
+        current_user.verification_code_required = true
+        if current_user.update_attributes(phone_params)
+          success!
+        else
+          error!({error: current_user.errors})
+        end
+      else
+        error!(error: '号码已被占用')
+      end
+    else
+      error!({error: 'bad request'})
+    end
+  end
+
   def upload_avatar
     if params[:file].present?
       @user = current_user
@@ -82,6 +99,9 @@ class V1::ProfilesController < ApplicationController
   end
 
   private
+  def phone_params
+    params.require(:profiles).permit(:verification_code, :phone)
+  end
   def profiles_params
     params.require(:profiles).permit(
       :intro,
@@ -100,6 +120,7 @@ class V1::ProfilesController < ApplicationController
       :email,
       :avatarUrl,
       :company,
+      :age,
       preference_attributes: [
         :id,
         :show_privacy_data,

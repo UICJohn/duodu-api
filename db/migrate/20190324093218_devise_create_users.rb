@@ -10,7 +10,6 @@ class DeviseCreateUsers < ActiveRecord::Migration[5.2]
       ## Recoverable
       t.string   :reset_password_token
       t.datetime :reset_password_sent_at
-
       ## Rememberable
       t.datetime :remember_created_at
 
@@ -38,21 +37,23 @@ class DeviseCreateUsers < ActiveRecord::Migration[5.2]
       t.string   :session_key
 
       ##profile
-      t.string :phone
-      t.string :username
-      t.string :first_name
-      t.string :last_name
-      t.string :gender
-      t.string :country
-      t.string :province
-      t.string :city
-      t.string :suburb
-      t.string :company
-      t.string :occupation
-      t.string :school
-      t.string :major
+      # t.integer  :current_step
+      t.string  :phone
+      t.integer :age
+      t.string  :username
+      t.string  :first_name
+      t.string  :last_name
+      t.string  :gender
+      t.string  :country
+      t.string  :province
+      t.string  :city
+      t.string  :suburb
+      t.string  :company
+      t.string  :occupation
+      t.string  :school
+      t.string  :major
       t.integer :password_status
-      t.text   :intro
+      t.text    :intro
       t.attachment :avatar
 
       t.timestamps null: false

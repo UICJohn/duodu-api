@@ -15,7 +15,8 @@ class User < ApplicationRecord
 
   validate  :verify_phone, :if => :verification_code_required
   validate  :limited_tags
-  validates :phone, presence: true, format: { with: /\A[0-9]{11}\z/, message: "invalid" }, uniqueness: true, unless: :omniauth_user?
+  validates :phone, presence: true, unless: :omniauth_user?
+  validates :phone, format: { with: /\A[0-9]{11}\z/, message: "invalid" }, uniqueness: true, :allow_blank => true
   validates :verification_code, presence: true, :if => :verification_code_required
   validates :email, uniqueness: true, :allow_blank => true
   validates_format_of :email,:with => Devise::email_regexp, :allow_blank => true
@@ -28,7 +29,7 @@ class User < ApplicationRecord
 
   before_save :set_password_status, on: [:create, :update]
   before_save :fetch_avatar
-  after_create :create_preference
+  after_create :setup_user
 
   has_many :friend_requests, dependent: :destroy
   has_many :pending_friends, through: :friend_requests, source: :friend
@@ -38,6 +39,8 @@ class User < ApplicationRecord
   has_one  :wechat_credential
 
   enum password_status: [:weak, :good, :strong]
+  # enum current_step: [:signup, :details]
+  enum age: ["00后", "90后", "80后", "70后", "60后"]
 
   def search_data
     {
@@ -81,8 +84,8 @@ class User < ApplicationRecord
   end
 
   def self.from_wechat(auth)
-    where(provider: "wechat", uid: auth[:uid]).first_or_create do |user|
-      user.password = Devise.friendly_token[0,20]
+    where(provider: "wechat", uid: auth[:uid]).first_or_create! do |user|
+      user.password = Devise.friendly_token[0,20] if user.password.nil?
       user.session_key = auth[:session_key]
     end
   end
@@ -135,7 +138,8 @@ class User < ApplicationRecord
 
   end
 
-  def create_preference
+  def setup_user
+    # self.current_step = 0
     self.preference = Preference.create
   end
 end

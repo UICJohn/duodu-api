@@ -21,11 +21,14 @@ Rails.application.routes.draw do
     post "/profiles/add_tag" => "profiles#add_tag"
     post "/profiles/upload_avatar" => "profiles#upload_avatar"
     delete "/profiles/delete_tag" => "profiles#delete_tag"
+    put  "/profiles/update_phone" => "profiles#update_phone"
 
     resources :friend_requests, only: [:create, :destroy, :update]
 
     resources :tags, only: [:index]
 
+    resources :schools, only: [:index]
+    resources :occupations, only: [:index]
   end
 
   match '*a', :to => 'errors#not_found', via: :get

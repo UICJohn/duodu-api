@@ -8,8 +8,8 @@ class FetchAvatarWorker
 
   def perform(user_id, url)
     if user = User.find_by(id: user_id)
-      user.update_attributes(avatar: open(url))
+      avatar = open(url)
+      user.avatar.attach(io: avatar, filename: Digest::SHA256.base64digest("#{user.id}/#{user.created_at}_avatar.jpg"))
     end
   end
-
 end

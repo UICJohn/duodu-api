@@ -11,33 +11,33 @@ class User < ApplicationRecord
 
   searchkick callbacks: :async
 
-  has_attached_file :avatar, styles: { medium: "300x300>", thumb: "100x100>" }, default_url: lambda{ |attachment| ActionController::Base.helpers.image_path("thumb/#{attachment.instance.gender || "male"}_avatar.png") }
+  has_one_attached :avatar
 
   validate  :verify_phone, :if => :verification_code_required
   validate  :limited_tags
-  validates :phone, presence: true, format: { with: /\A[0-9]{11}\z/, message: "invalid" }, uniqueness: true, unless: :omniauth_user?
+  validates :phone, presence: true, unless: :omniauth_user?
+  validates :phone, format: { with: /\A[0-9]{11}\z/, message: "invalid" }, uniqueness: true, :allow_blank => true
   validates :verification_code, presence: true, :if => :verification_code_required
   validates :email, uniqueness: true, :allow_blank => true
   validates_format_of :email,:with => Devise::email_regexp, :allow_blank => true
-  validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\z/
-
-  has_one :preference
-  
-  accepts_nested_attributes_for :preference
-
+  # validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\z/
 
   before_save :set_password_status, on: [:create, :update]
   before_save :fetch_avatar
-  after_create :create_preference
+  after_create :setup_user
 
+  has_one :preference
   has_many :friend_requests, dependent: :destroy
   has_many :pending_friends, through: :friend_requests, source: :friend
-
   has_many :friendships
   has_many :friends, through: :friendships, :source => :user
-  has_one  :wechat_credential
+  has_many :posts
 
   enum password_status: [:weak, :good, :strong]
+  # enum current_step: [:signup, :details]
+  enum age: ["00后", "90后", "80后", "70后", "60后"]
+
+  accepts_nested_attributes_for :preference
 
   def search_data
     {
@@ -81,8 +81,8 @@ class User < ApplicationRecord
   end
 
   def self.from_wechat(auth)
-    where(provider: "wechat", uid: auth[:uid]).first_or_create do |user|
-      user.password = Devise.friendly_token[0,20]
+    where(provider: "wechat", uid: auth[:uid]).first_or_create! do |user|
+      user.password = Devise.friendly_token[0,20] if user.password.nil?
       user.session_key = auth[:session_key]
     end
   end
@@ -135,7 +135,8 @@ class User < ApplicationRecord
 
   end
 
-  def create_preference
+  def setup_user
+    # self.current_step = 0
     self.preference = Preference.create
   end
 end

@@ -2,7 +2,7 @@ json.user do
   json.email @user.hidden_email
   json.phone @user.hidden_phone
   json.username @user.username
-  json.avatar URI.join(request.url, @user.avatar.url)
+  json.avatar URI.join(request.url, @user.avatar.try(:url)) if @user.avatar.attached?
   json.country @user.country
   json.city @user.city
   json.province @user.province
@@ -17,6 +17,7 @@ json.user do
   json.school @user.school
   json.major @user.major
   json.intro @user.intro
+  json.age @user.age
   json.password_status @user.password_status
   json.unconfirmed @user.unconfirmed_email.present?
   json.preference do

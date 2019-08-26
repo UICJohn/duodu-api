@@ -4,8 +4,9 @@ class Users::SessionsController < Devise::SessionsController
   def wechat_auth
     if params[:code]
       response = Wechat::API.new.auth(params[:code])
-      @user = User.from_wechat({provider: 'wechat', uid: response["openid"], session_key: response["session_key"]})
-      sign_in @user
+      if @user = User.from_wechat({provider: 'wechat', uid: response["openid"], session_key: response["session_key"]})
+        sign_in @user
+      end
     end
   end
 

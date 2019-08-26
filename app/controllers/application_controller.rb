@@ -19,7 +19,7 @@ class ApplicationController < ActionController::API
     end
   end
 
-  def error!(msg, code = 200)
+  def error!(msg = {}, code = 200)
     self.response_body = msg.to_json
     self.status = code
   end

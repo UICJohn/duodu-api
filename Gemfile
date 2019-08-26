@@ -67,7 +67,9 @@ gem 'kaminari'
 
 gem 'searchkick'
 
-gem "paperclip", "~> 6.0.0"
+# gem "paperclip", "~> 6.0.0"
+
+# gem 'active_storage'
 
 gem 'countries', require: 'countries/global'
 
@@ -80,3 +82,9 @@ gem 'exception_notification'
 gem 'globalize'
 
 gem "omniauth-wechat-oauth2"
+
+gem 'hiredis'
+
+gem 'aliyun-sdk'
+
+gem 'activestorage-aliyun'

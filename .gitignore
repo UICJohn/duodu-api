@@ -28,4 +28,9 @@
 /config/database.yml
 
 /config/wechat.yml
+/config/map.yml
+/config/storage.yml
+
 /public/system/
+
+aliyun_sdk.log

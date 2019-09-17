@@ -2,11 +2,11 @@ class V1::VerificationCodeController < ApplicationController
   before_action :authenticate_user!, :if => :is_wechat?
 
   def create
-    if is_wechat?
+    user = if is_wechat?
       current_user.assign_attributes(send_code_params)
-      user = current_user
+      current_user
     else
-      user = User.new(send_code_params)
+      User.new(send_code_params)
     end
 
     if user.valid?

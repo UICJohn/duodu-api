@@ -27,7 +27,7 @@ class VerificationCode
     "#{@key}_#{@target}"
   end
 
-  def send_code_by_sms
+  def send_code_by_phone
     return unless record_expired?
     code = generate_code
     if Rails.env.production?

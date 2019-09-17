@@ -22,24 +22,17 @@ class V1::ProfilesController < ApplicationController
     if @user.update_attributes(email_params)
       render :show
     else
-      error!({error: @user.errors})
+      error!({error: @user.errors}, 400)
     end
   end
 
   def update_phone
-    if params[:profiles][:phone]
-      if not User.find_by(phone: params[:profiles][:phone])
-        current_user.verification_code_required = true
-        if current_user.update_attributes(phone_params)
-          success!
-        else
-          error!({error: current_user.errors})
-        end
-      else
-        error!(error: '号码已被占用')
-      end
+    @user = current_user
+    @user.update_key_attr = :phone
+    if @user.update_attributes(phone_params)
+      render :show
     else
-      error!({error: 'bad request'})
+      error!({error: @user.errors}, 400)
     end
   end
 
@@ -116,7 +109,7 @@ class V1::ProfilesController < ApplicationController
   end
 
   def phone_params
-    params.require(:profiles).permit(:verification_code, :phone)
+    params.permit(:code, :phone).reject!{ |attr| params[attr].blank? }
   end
 
   def profiles_params

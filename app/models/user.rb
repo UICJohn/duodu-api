@@ -19,7 +19,7 @@ class User < ApplicationRecord
   validates :phone, presence: true, unless: :omniauth_user?
   validates :code, presence: true, :if => :update_key_attr
   validates :email, uniqueness: true, :allow_blank => true
-  validates :phone, format: { with: /\A[0-9]{11}\z/, message: "invalid" }, uniqueness: true, :allow_blank => true
+  validates :phone, format: { with: /\A[0-9]{11}\z/, message: "手机号不正确" }, uniqueness: true, :allow_blank => true
   validates_format_of :email,:with => Devise::email_regexp, :allow_blank => true
   # validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\z/
 

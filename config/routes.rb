@@ -10,7 +10,6 @@ Rails.application.routes.draw do
 
   devise_scope :user do
     post "/users/wechat_auth" => "users/sessions#wechat_auth"
-    get "/users/send_verify_code" => "users/registrations#send_verify_code"
     get "/users/send_reset_password_vcode" => "users/passwords#send_verify_code"
   end
 
@@ -22,6 +21,7 @@ Rails.application.routes.draw do
     post "/profiles/upload_avatar" => "profiles#upload_avatar"
     delete "/profiles/delete_tag" => "profiles#delete_tag"
     put  "/profiles/update_phone" => "profiles#update_phone"
+    put "/profiles/update_email" => "profiles#update_email"
 
     resources :friend_requests, only: [:create, :destroy, :update]
 
@@ -31,9 +31,13 @@ Rails.application.routes.draw do
       post "/post/upload_images" => "posts#upload_images"
     end
 
+    resources :verification_code, only: [:create]
     resources :schools, only: [:index]
     resources :occupations, only: [:index]
   end
 
-  match '*a', :to => 'errors#not_found', via: :get
+  scope format: true, constraints: { format: /jpg|png|gif|PNG/ } do
+    match '*a', :to => 'errors#not_found', via: :get
+  end
+  
 end

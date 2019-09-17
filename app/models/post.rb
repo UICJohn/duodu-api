@@ -11,6 +11,8 @@ class Post < ActiveRecord::Base
   validates :payment_type, :rent_type, :rent, presence: true, if: :house_post?
   validates_numericality_of :min_rent, :rent, :max_rent, allow_blank: true
   enum post_type: [:house, :housemate, :activity]
+  enum rent_type: [:take_house, :share_house]
+
 
   def search_data
     %w(title body post_type address range min_rent max_rent payment_type

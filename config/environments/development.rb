@@ -1,4 +1,5 @@
 Rails.application.configure do
+
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded on
@@ -16,6 +17,7 @@ Rails.application.configure do
   # Run rails dev:cache to toggle caching.
   # if Rails.root.join('tmp', 'caching-dev.txt').exist?
   config.action_controller.perform_caching = true
+  # config.action_controller.default_url_options = {:host=> "localhost:30000"}
     # config.public_file_server.headers = {
     #   'Cache-Control' => "public, max-age=#{2.days.to_i}"
     # }
@@ -26,7 +28,8 @@ Rails.application.configure do
   # end
 
   # Store uploaded files on the local file system (see config/storage.yml for options)
-  # config.active_storage.service = :local
+  config.active_storage.service = :local
+  config.default_url_options = { host: "http://192.168.31.224:3000" }
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
@@ -42,6 +45,10 @@ Rails.application.configure do
   # Highlight code that triggered database queries in logs.
   config.active_record.verbose_query_logs = true
 
+
+
+  config.action_mailer.default_url_options = { host: "localhost:3000" }
+
   config.cache_store = :redis_store, {
     host: "127.0.0.1",
     port: 6379,
@@ -49,7 +56,7 @@ Rails.application.configure do
     namespace: "duodu"
   }
 
-  config.active_storage.service = :aliyun
+  # config.active_storage.service = :aliyun
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
@@ -61,3 +68,5 @@ Rails.application.configure do
   config.action_mailer.smtp_settings = { :address => '127.0.0.1', :port => 1025 }
   config.action_mailer.raise_delivery_errors = false
 end
+
+Rails.application.routes.default_url_options[:host] = 'http://localhost:3000'

@@ -36,7 +36,9 @@ module DuoduApi
     config.middleware.use ActionDispatch::Session::CookieStore
 
     if Rails.env.development?
-      config.action_controller.asset_host = 'http://192.168.31.224:3000'
+      config.action_controller.asset_host = 'http://192.168.31.224'
+    else
+      config.action_controller.asset_host = 'https://duodu.oss-cn-beijing.aliyuncs.com'
     end
 
     config.time_zone = "Asia/Shanghai"

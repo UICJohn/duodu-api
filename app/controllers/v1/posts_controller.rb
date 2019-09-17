@@ -1,6 +1,6 @@
 class V1::PostsController < ApplicationController
   before_action :authenticate_user!, except: [:index]
-
+  respond_to :json
   def index
     # @post = Post.search "apples", where: {in_stock: true},  page: (params[:page] || 1), per_page: 20
     # if current_user.posts.where()

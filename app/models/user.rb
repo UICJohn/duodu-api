@@ -1,24 +1,25 @@
 class User < ApplicationRecord
+  strip_attributes
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  attr_accessor :verification_code, :verification_code_required, :avatarUrl
+  attr_accessor :code, :avatar_url, :update_key_attr
 
   # devise :database_authenticatable, :async, :registerable, :trackable, :validatable, :jwt_authenticatable,
   #        jwt_revocation_strategy: JWTBlacklist, :authentication_keys => [:phone]
 
-  devise :database_authenticatable, :async, :recoverable, :registerable, :trackable, :validatable, :confirmable, :jwt_authenticatable, jwt_revocation_strategy: JWTBlacklist,
+  devise :database_authenticatable, :async, :recoverable, :registerable, :trackable, :validatable, :jwt_authenticatable, jwt_revocation_strategy: JWTBlacklist,
           :authentication_keys => [:login]
 
   searchkick callbacks: :async
 
   has_one_attached :avatar
 
-  validate  :verify_phone, :if => :verification_code_required
+  validate  :verify_code, :if => :update_key_attr
   validate  :limited_tags
   validates :phone, presence: true, unless: :omniauth_user?
-  validates :phone, format: { with: /\A[0-9]{11}\z/, message: "invalid" }, uniqueness: true, :allow_blank => true
-  validates :verification_code, presence: true, :if => :verification_code_required
+  validates :code, presence: true, :if => :update_key_attr
   validates :email, uniqueness: true, :allow_blank => true
+  validates :phone, format: { with: /\A[0-9]{11}\z/, message: "invalid" }, uniqueness: true, :allow_blank => true
   validates_format_of :email,:with => Devise::email_regexp, :allow_blank => true
   # validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\z/
 
@@ -71,9 +72,7 @@ class User < ApplicationRecord
   end
 
   def hidden_email
-    if unconfirmed_email.present?
-      unconfirmed_email[0..2] + '*' * 4 + unconfirmed_email[(unconfirmed_email.index('@'))..-1]
-    elsif email.present?
+    if email.present?
       email[0..2] + '*' * 4 + email[(email.index('@'))..-1]
     else
       nil
@@ -102,11 +101,13 @@ class User < ApplicationRecord
     end
   end
 
-  def verify_phone
+  def verify_code
     begin
-      raise unless VerificationCode.new(phone).verify? verification_code.strip
-    rescue
-      errors.add(:verification_code, "验证码不正确")
+      raise unless VerificationCode.new(
+        {"#{update_key_attr}" => self.send(update_key_attr)}
+      ).verified?(code.strip)
+    rescue Exception => e
+      errors.add(:code, "验证码不正确")
     end
   end
 
@@ -127,7 +128,7 @@ class User < ApplicationRecord
 
   def fetch_avatar
 
-    FetchAvatarWorker.perform_async(self.id, avatarUrl) if self.avatarUrl.present?
+    FetchAvatarWorker.perform_async(self.id, avatar_url) if self.avatar_url.present?
 
   rescue Exception => e
 

@@ -1,21 +1,23 @@
 class VerificationCode
-  def initialize(phone, prefix = nil, expiries_in = 10.minutes.to_i)
-    @phone = phone
-    @@prefix = prefix
+  def initialize(target, expiries_in = 10.minutes.to_i)
+    p target
+    @key = target["email"] ? "email" : "phone"
+    @target = target[@key]
     @expiries_in = expiries_in
   end
 
   def issue
     safe do
-      send_code_via_sms
+      self.send "send_code_by_#{@key}"
     end
   end
 
-  def verify?(code)
+  def verified?(code)
+    p "code: #{code}"
     safe do
       if (record = fetch).present? and record["code"].to_s == code.to_s
-        clean!
-        true
+        p "true"
+        clean! && true 
       else
         false
       end
@@ -24,41 +26,55 @@ class VerificationCode
 
   private
 
-  def send_code_via_sms
-    record = fetch
-    if record.nil? or (Time.now - record["created_at"].to_time) > 1.minutes
-      code = (0..6).map{Random.rand(9)}.join
-      cache(code)
-      if Rails.env.production?
-        Aliyun::Sms.send(@phone, 'SMS_129270223', "{'code': #{code}}")
-      else
-        puts "Verification Code: #{code}"
-      end
+  def record_name
+    "#{@key}_#{@target}"
+  end
+
+  def send_code_by_sms
+    return unless record_expired?
+    code = generate_code
+    if Rails.env.production?
+      Aliyun::Sms.send(@target, 'SMS_129270223', "{'code': #{code}}")
+    else
+      puts "Verification Code: #{code}"
     end
   end
 
+  def send_code_by_email
+    return unless record_expired?
+    code = generate_code
+    puts "Verification Code: #{code}"
+  end
+
+  def record_expired?
+    record = fetch
+    return true if record.nil?
+    return (Time.now - record["created_at"].to_time) > 1.minutes
+  end
+
+  def generate_code
+    code = (0..6).map{Random.rand(9)}.join
+    cache(code)
+    code
+  end
+
   def safe
-    if @phone.present?
+    if @target.present?
       yield if block_given?
     else
-      puts "No phone provided or phone number is not valid" if Rails.env.development?
+      puts "#{@key} is not valid" if Rails.env.development?
     end
   end
 
   def cache(code)
-    $redis.set(key, {code: code, created_at: Time.now}.to_json, ex: @expiries_in)
-  end
-
-  def key
-    Digest::SHA256.digest [@prefix, @phone].compact.join("_")
+    $redis.set(record_name, {code: code, created_at: Time.now}.to_json, ex: @expiries_in)
   end
 
   def fetch
-    verify_record = $redis.get(key).present? ? JSON.parse($redis.get(key)) : nil
+    verify_record = $redis.get(record_name).present? ? JSON.parse($redis.get(record_name)) : nil
   end
 
   def clean!
-    puts 'Clean Done!'
-    $redis.del(key)
+    $redis.del(record_name)
   end
 end

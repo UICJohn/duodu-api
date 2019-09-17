@@ -17,7 +17,7 @@ json.user do
   json.school @user.school
   json.major @user.major
   json.intro @user.intro
-  json.age @user.age
+  json.dob @user.dob
   json.password_status @user.password_status
   json.unconfirmed @user.unconfirmed_email.present?
   json.preference do

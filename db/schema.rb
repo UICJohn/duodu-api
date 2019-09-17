@@ -214,7 +214,7 @@ ActiveRecord::Schema.define(version: 2019_08_15_042245) do
     t.string "uid"
     t.string "session_key"
     t.string "phone"
-    t.integer "age"
+    t.date "dob"
     t.string "username"
     t.string "first_name"
     t.string "last_name"

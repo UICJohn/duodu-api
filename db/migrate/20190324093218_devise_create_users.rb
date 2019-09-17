@@ -39,7 +39,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[5.2]
       ##profile
       # t.integer  :current_step
       t.string  :phone
-      t.integer :age
+      t.date :dob
       t.string  :username
       t.string  :first_name
       t.string  :last_name

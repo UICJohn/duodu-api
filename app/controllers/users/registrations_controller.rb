@@ -1,6 +1,6 @@
 class Users::RegistrationsController < Devise::RegistrationsController
-
   respond_to :json
+  # before_action :validate_receiver
 
   def create
     build_resource(sign_up_params)
@@ -19,15 +19,12 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def send_verify_code
-    if (phone = params[:phone].try(:strip)) && phone_validator(phone)
-      if User.find_by(phone: phone).present?
-        error!({error: "手机号码已被占用"})
-      else
-        SendVerificationCodeWorker.perform_async(phone)
-        success!({message: '验证码已发送'})
-      end
+    user = User.new(verification_params)
+    if user.valid?
+      SendVerificationCodeWorker.perform_async(phone)
+      success!({message: '验证码已发送'})
     else
-      error!({error: '请输入正确的手机号码(目前仅支持中国大陆手机号)'})
+      error!()
     end
   end
 
@@ -36,7 +33,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   private
-  def phone_validator(phone_num)
-    phone_num.match(/\A[0-9]{11}\z/) ? true : false
+  def verification_params
+    params.permit(:phone, :email, :verification_code)
   end
 end

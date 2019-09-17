@@ -15,6 +15,17 @@ class V1::ProfilesController < ApplicationController
     @user = current_user
   end
 
+
+  def update_email
+    @user = current_user
+    @user.update_key_attr = :email
+    if @user.update_attributes(email_params)
+      render :show
+    else
+      error!({error: @user.errors})
+    end
+  end
+
   def update_phone
     if params[:profiles][:phone]
       if not User.find_by(phone: params[:profiles][:phone])
@@ -99,9 +110,15 @@ class V1::ProfilesController < ApplicationController
   end
 
   private
+
+  def email_params
+    params.permit(:email, :code).reject!{ |attr| params[attr].blank? }
+  end
+
   def phone_params
     params.require(:profiles).permit(:verification_code, :phone)
   end
+
   def profiles_params
     params.require(:profiles).permit(
       :intro,
@@ -118,9 +135,9 @@ class V1::ProfilesController < ApplicationController
       :major, 
       :school, 
       :email,
-      :avatarUrl,
+      :avatar_url,
       :company,
-      :age,
+      :dob,
       preference_attributes: [
         :id,
         :show_privacy_data,

@@ -1,6 +1,5 @@
 class VerificationCode
   def initialize(target, expiries_in = 10.minutes.to_i)
-    p target
     @key = target["email"] ? "email" : "phone"
     @target = target[@key]
     @expiries_in = expiries_in
@@ -13,10 +12,8 @@ class VerificationCode
   end
 
   def verified?(code)
-    p "code: #{code}"
     safe do
       if (record = fetch).present? and record["code"].to_s == code.to_s
-        p "true"
         clean! && true 
       else
         false

@@ -39,6 +39,7 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'factory_bot_rails'
   gem 'rspec-rails'
+  gem 'database_cleaner'
 end
 
 group :development do
@@ -52,6 +53,10 @@ group :development do
   gem 'capistrano-bundler'
   gem 'capistrano3-puma'
   gem 'capistrano-sidekiq'
+end
+
+group :test do
+  gem 'mock_redis'
 end
 
 

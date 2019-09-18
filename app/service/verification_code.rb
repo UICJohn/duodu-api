@@ -29,18 +29,22 @@ class VerificationCode
 
   def send_code_by_phone
     return unless record_expired?
+
     code = generate_code
+    cache(code)
+
     if Rails.env.production?
       Aliyun::Sms.send(@target, 'SMS_129270223', "{'code': #{code}}")
     else
-      puts "Verification Code: #{code}"
+      puts "Verification Code: #{code}" if not Rails.env.test?
     end
   end
 
   def send_code_by_email
     return unless record_expired?
     code = generate_code
-    puts "Verification Code: #{code}"
+    cache(code)
+    # send email here
   end
 
   def record_expired?
@@ -50,10 +54,9 @@ class VerificationCode
   end
 
   def generate_code
-    code = (0..6).map{Random.rand(9)}.join
-    cache(code)
-    code
+    "D-#{(0..6).map{Random.rand(9)}.join}"
   end
+    
 
   def safe
     if @target.present?

@@ -23,7 +23,8 @@ class ApplicationController < ActionController::API
   end
 
   def set_platform
-    agent = request.env['HTTP_USER_AGENT']    
+    agent = request.env['HTTP_USER_AGENT']
+    return nil unless agent.present?   
     if _match = agent[/MicroMessenger\/([\d\.]+)/i, 1]
       @platform = :wechat
     else

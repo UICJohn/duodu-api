@@ -13,11 +13,11 @@
 # it.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+ENV['RAILS_ENV'] ||= 'test'
 require 'mock_redis'
-require 'sidekiq/testing'
 require 'factory_bot_rails'
-
-
+require 'sidekiq/testing'
+Sidekiq::Testing.fake!
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
   # rspec-expectations config goes here. You can use an alternate
@@ -48,6 +48,7 @@ RSpec.configure do |config|
   config.before do
     $redis = MockRedis.new
   end
+
   # This option will default to `:apply_to_host_groups` in RSpec 4 (and will
   # have no way to turn it off -- the option exists only for backwards
   # compatibility in RSpec 3). It causes shared context metadata to be

@@ -1,11 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe VerificationCode, type: :model do
-  describe '#issue' do
-    it 'should send code' do
-
-    end
-  end
 
   describe '#verified?' do
     it 'should return true' do

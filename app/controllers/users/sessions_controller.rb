@@ -1,6 +1,5 @@
 class Users::SessionsController < Devise::SessionsController
-  respond_to :json
-
+  respond_to :json  
   def wechat_auth
     if params[:code]
       response = Wechat::API.new.auth(params[:code])

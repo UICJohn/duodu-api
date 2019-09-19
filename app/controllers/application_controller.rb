@@ -49,7 +49,6 @@ class ApplicationController < ActionController::API
 
   private
   def set_storage_host
-    p request.base_url
     ActiveStorage::Current.host = request.base_url
   end
 end

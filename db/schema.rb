@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_15_042245) do
+ActiveRecord::Schema.define(version: 2019_09_19_150852) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -83,6 +83,18 @@ ActiveRecord::Schema.define(version: 2019_08_15_042245) do
     t.index ["jti"], name: "index_jwt_blacklist_on_jti"
   end
 
+  create_table "locations", force: :cascade do |t|
+    t.string "country"
+    t.string "city"
+    t.string "suburb"
+    t.string "name"
+    t.string "address"
+    t.decimal "longitude", precision: 10, scale: 6
+    t.decimal "latitude", precision: 10, scale: 6
+    t.bigint "target_id"
+    t.string "target_type"
+  end
+
   create_table "occupations", force: :cascade do |t|
     t.string "name"
     t.string "py"
@@ -95,20 +107,14 @@ ActiveRecord::Schema.define(version: 2019_08_15_042245) do
     t.text "body"
     t.integer "post_type"
     t.integer "property_id"
-    t.string "country"
-    t.string "address"
-    t.string "province"
-    t.string "city"
-    t.string "suburb"
-    t.decimal "lon", precision: 10, scale: 6
-    t.decimal "lat", precision: 10, scale: 6
     t.integer "range"
     t.integer "min_rent"
     t.integer "max_rent"
     t.integer "rent"
     t.integer "payment_type"
     t.integer "user_id"
-    t.integer "rent_type"
+    t.integer "lease_type"
+    t.integer "tenants"
     t.datetime "available_from"
     t.integer "livings"
     t.integer "rooms"
@@ -121,7 +127,6 @@ ActiveRecord::Schema.define(version: 2019_08_15_042245) do
     t.boolean "has_washing_machine"
     t.boolean "has_cook_top"
     t.boolean "has_refregitor"
-    t.integer "tenants"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -219,10 +224,6 @@ ActiveRecord::Schema.define(version: 2019_08_15_042245) do
     t.string "first_name"
     t.string "last_name"
     t.string "gender"
-    t.string "country"
-    t.string "province"
-    t.string "city"
-    t.string "suburb"
     t.string "company"
     t.string "occupation"
     t.string "school"

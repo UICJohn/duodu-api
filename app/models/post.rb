@@ -1,18 +1,23 @@
 class Post < ActiveRecord::Base
-  include TimeTrackable
+  include TimeTrackable, Locatable
+
   searchkick callbacks: :async
 
   belongs_to :user
   has_many_attached :attachments
+  has_one :location, as: :target
 
   validates :attachments, :length => { :maximum => 9 }
-  validates :title, :body, :post_type, :lon, :lat, :address, :available_from, presence: true
+  validates :title, :body, :post_type, :available_from, presence: true
   validates :range, :range, presence: true, if: :housemate_post?
   validates :payment_type, :rent_type, :rent, presence: true, if: :house_post?
   validates_numericality_of :min_rent, :rent, :max_rent, allow_blank: true
-  enum post_type: [:house, :housemate, :activity]
-  enum rent_type: [:take_house, :share_house]
+  validates_presence_of :location
 
+  enum post_type: [:house, :housemate, :activity]
+  enum lease_type: [:take_house, :share_house]
+
+  accepts_nested_attributes_for :location
 
   def search_data
     %w(title body post_type address range min_rent max_rent payment_type
@@ -23,7 +28,7 @@ class Post < ActiveRecord::Base
       if val = self.send(key)
         [ key, val ]
       end
-    end.compact.to_h.merge(location: {lat: self.lat, lon: self.lon})
+    end.compact.to_h.merge(location: {lat: self.location.latitude, lon: self.location.longitude})
   end
 
   private

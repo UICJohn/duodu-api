@@ -13,8 +13,7 @@ class V1::PostsController < ApplicationController
 
   def create
     @post = current_user.posts.new(posts_params)
-    if @post.save
-      FetchPostLocationWorker.perform_async(@post.id)
+    if @post.save!
       render :show
     else
       error!({error: @post.errors})
@@ -22,7 +21,7 @@ class V1::PostsController < ApplicationController
   end
 
   def upload_images
-    if @post = Post.find_by(id: params[:post_id])
+    if @post = current_user.posts.find_by(id: params[:post_id])
       attachment = @post.attachments.attach(params[:attachment]).first
       @post.update_attributes(cover_image_id: attachment.id) if params[:cover_image]
       render :show
@@ -36,8 +35,8 @@ class V1::PostsController < ApplicationController
     params.require(:post).permit(
       :title,
       :body, 
-      :post_type, 
-      :address, 
+      :post_type,
+      :tenants,
       :range,
       :livings,
       :rooms,
@@ -46,7 +45,7 @@ class V1::PostsController < ApplicationController
       :min_rent, 
       :max_rent, 
       :payment_type, 
-      :rent_type, 
+      :lease_type, 
       :available_from,
       :has_sofa,
       :has_bed,
@@ -55,8 +54,12 @@ class V1::PostsController < ApplicationController
       :has_washing_machine,
       :has_cook_top,
       :has_fridge,
-      :lat,
-      :lon
+      location_attributes: [
+        :longitude,
+        :latitude,
+        :name,
+        :address
+      ]
     )
   end
 end

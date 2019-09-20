@@ -11,9 +11,9 @@ class V1::ProfilesController < ApplicationController
     end
   end
 
-  # def show
-  #   @user = current_user
-  # end
+  def show
+    @user = current_user
+  end
 
 
   def update_email

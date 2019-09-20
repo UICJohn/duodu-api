@@ -6,20 +6,14 @@ class CreatePosts < ActiveRecord::Migration[5.2]
       t.integer :post_type
       t.integer :property_id
 
-      t.string  :country
-      t.string  :address
-      t.string  :province
-      t.string  :city
-      t.string  :suburb
-      t.decimal :lon, precision: 10, scale: 6
-      t.decimal :lat, precision: 10, scale: 6
       t.integer :range
       t.integer :min_rent
       t.integer :max_rent
       t.integer :rent
       t.integer :payment_type
       t.integer :user_id
-      t.integer :rent_type
+      t.integer :lease_type
+      t.integer :tenants
       t.datetime :available_from
 
       # houseinfo

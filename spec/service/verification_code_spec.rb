@@ -56,7 +56,7 @@ RSpec.describe VerificationCode, type: :model do
         allow_any_instance_of(VerificationCode).to receive(:generate_code).and_return("D-4560446")
         code_service = VerificationCode.new({'phone' => '18382830192'})
         code_service.issue
-        expect(code_service.send('fetch')).to eq({"code"=>"D-4560446", "created_at"=>"2019-01-01T00:00:00.000+10:30"})
+        expect(code_service.send('fetch')).to eq({"code"=>"D-4560446", "created_at"=>JSON.load(Time.now.to_json)})
       end
 
       it 'should not fetch record' do

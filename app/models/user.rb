@@ -26,8 +26,8 @@ class User < ApplicationRecord
   before_save :set_password_status, on: [:create, :update]
   before_save :fetch_avatar
   after_create :setup_user
-
-  has_one :preference
+  has_one  :location, as: :target
+  has_one  :preference
   has_many :friend_requests, dependent: :destroy
   has_many :pending_friends, through: :friend_requests, source: :friend
   has_many :friendships
@@ -38,24 +38,31 @@ class User < ApplicationRecord
   # enum current_step: [:signup, :details]
   enum age: ["00后", "90后", "80后", "70后", "60后"]
 
-  accepts_nested_attributes_for :preference
+  accepts_nested_attributes_for :preference, :location
+
+  # delegate :country, :city, :suburb, to: :location
 
   def search_data
-    {
+    data = {
       usernmae:   username,
       gender:     gender,
       occupation: occupation,
       first_name: first_name,
       last_name:  last_name,
       major:      major,
-      country:    country,
-      province:   province,
-      city:       city,
       school:     school,
       share_location: preference.share_location,
       show_privacy_data: preference.show_privacy_data,
       receive_all_message: preference.receive_all_message,
     }
+
+    data.merge!({
+      country:    location.country,
+      province:   location.province,
+      city:       location.city,
+    }) if location.present?
+
+    data
   end
 
   def limited_tags

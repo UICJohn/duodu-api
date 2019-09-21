@@ -4,7 +4,7 @@ class V1::ProfilesController < ApplicationController
 
   def update
     @user = current_user
-    if @user.update_attributes(profiles_params)
+    if @user.update_attributes!(profiles_params)
       render :show
     else
       error!(current_user.errors)
@@ -115,10 +115,6 @@ class V1::ProfilesController < ApplicationController
   def profiles_params
     params.require(:profiles).permit(
       :intro,
-      :city,
-      :country,
-      :province,
-      :suburb,
       :gender,
       :occupation, 
       :username, 
@@ -136,6 +132,17 @@ class V1::ProfilesController < ApplicationController
         :show_privacy_data,
         :share_location,
         :receive_all_message
+      ],
+      location_attributes: [
+        :id,
+        :country,
+        :city,
+        :suburb,
+        :province,
+        :longitude,
+        :latitude,
+        :name,
+        :address
       ]
     )
   end  

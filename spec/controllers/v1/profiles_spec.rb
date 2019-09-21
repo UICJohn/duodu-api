@@ -12,23 +12,26 @@ RSpec.describe 'Profile', :type => :request do
       put '/v1/profiles', params: {
         profiles: {
           intro: 'introduction', 
-          city: 'xian', 
-          country: 'CN', 
-          province: 'shanxi', 
-          suburb: 'xincheng',  
           gender: 'male', 
           occupation: 'programmer', 
-          dob: '2019-12-01'
+          dob: '2019-12-01',
+          location_attributes: {
+            id: @user.location.id,
+            city: 'xian',
+            country: 'CN',
+            province: 'shanxi',
+            suburb: 'xincheng',  
+          }
         }
       }, headers: @headers
 
       @user.reload
       expect(response).to be_successful
       expect(@user.intro).to eq 'introduction'
-      expect(@user.city).to eq 'xian'
-      expect(@user.country).to eq 'CN'
-      expect(@user.province).to eq 'shanxi'
-      expect(@user.suburb).to eq 'xincheng'
+      expect(@user.location.city).to eq 'xian'
+      expect(@user.location.country).to eq 'CN'
+      expect(@user.location.province).to eq 'shanxi'
+      expect(@user.location.suburb).to eq 'xincheng'
       expect(@user.gender).to eq 'male'
       expect(@user.occupation).to eq 'programmer'
       expect(@user.dob).to eq Date.new(2019, 12, 1)
@@ -38,23 +41,25 @@ RSpec.describe 'Profile', :type => :request do
       put '/v1/profiles', params: {
         profiles: {
           intro: 'introduction', 
-          city: 'xian', 
-          country: 'CN', 
-          province: 'shanxi', 
-          suburb: 'xincheng',  
           gender: 'male', 
           occupation: 'programmer', 
-          dob: '2019-12-01'
+          dob: '2019-12-01',
+          location_attributes: {
+            city: 'xian', 
+            country: 'CN', 
+            province: 'shanxi', 
+            suburb: 'xincheng',  
+          }
         }
       }
 
       @user.reload
       expect(response).not_to be_successful
       expect(@user.intro).to eq nil
-      expect(@user.city).to eq nil
-      expect(@user.country).to eq nil
-      expect(@user.province).to eq nil
-      expect(@user.suburb).to eq nil
+      expect(@user.location.city).to eq 'huizhou'
+      expect(@user.location.country).to eq 'CN'
+      expect(@user.location.province).to eq 'guangdong'
+      expect(@user.location.suburb).to eq 'huicheng'
       expect(@user.gender).to eq '0'
       expect(@user.occupation).to eq '程序员'
       expect(@user.dob).to eq nil

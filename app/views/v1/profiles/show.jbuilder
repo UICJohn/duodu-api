@@ -3,12 +3,14 @@ json.user do
   json.phone @user.hidden_phone
   json.username @user.username
   json.avatar URI.join(request.url, @user.avatar.try(:url)) if @user.avatar.attached?
-  json.country @user.country
-  json.city @user.city
-  json.province @user.province
+  json.location do
+    json.country @user.location.country
+    json.city @user.location.city
+    json.province @user.location.province
+    json.suburb @user.location.suburb
+  end if @user.location.present?
   json.into @user.intro
   json.company @user.company
-  json.suburb @user.suburb
   json.gender @user.gender
   json.occupation @user.occupation
   json.tags @user.tags

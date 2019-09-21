@@ -1,6 +1,9 @@
 json.posts do
   json.array! @posts do |post|
-    json.(post, :city, :post_type, :province, :title, :body, :country, :address, :suburb, :lon, :lat, :range, :min_rent, :max_rent, :rent, :rent_type, :available_from, :livings, :rooms, :toilets)
+    json.(post, :post_type, :title, :body, :range, :min_rent, :max_rent, :rent, :rent_type, :available_from, :livings, :rooms, :toilets)
+    json.location do
+      json.(post.location, :country, :city, :suburb, :province, :longitude, :latitude, :name, :address)
+    end
     json.timestamp post.trace_on_create
     json.attachments do
       json.array! post.attachments.limit(4) do |attachment|

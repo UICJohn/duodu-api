@@ -19,6 +19,8 @@ class Post < ActiveRecord::Base
 
   accepts_nested_attributes_for :location
 
+  delegate :country, :city, :suburb, :name, :longitude, :latitude, to: :location
+
   def search_data
     %w(title body post_type address range min_rent max_rent payment_type
       rent_type available_from city province country suburb has_sofa 

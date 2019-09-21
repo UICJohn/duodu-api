@@ -114,7 +114,6 @@ ActiveRecord::Schema.define(version: 2019_09_19_150852) do
     t.integer "rent"
     t.integer "payment_type"
     t.integer "user_id"
-    t.integer "lease_type"
     t.integer "tenants"
     t.datetime "available_from"
     t.integer "livings"

@@ -1,8 +1,9 @@
-json.posts do
+json.page @page
+json.posts do  
   json.array! @posts do |post|
-    json.(post, :post_type, :title, :body, :range, :min_rent, :max_rent, :rent, :rent_type, :available_from, :livings, :rooms, :toilets)
+    json.(post, :post_type, :title, :body, :range, :min_rent, :max_rent, :rent, :livings, :rooms, :toilets)
     json.location do
-      json.(post.location, :country, :city, :suburb, :province, :longitude, :latitude, :name, :address)
+      json.(post.location, :name, :address)
     end
     json.timestamp post.trace_on_create
     json.attachments do

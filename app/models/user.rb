@@ -40,8 +40,6 @@ class User < ApplicationRecord
 
   accepts_nested_attributes_for :preference, :location
 
-  # delegate :country, :city, :suburb, to: :location
-
   def search_data
     data = {
       usernmae:   username,

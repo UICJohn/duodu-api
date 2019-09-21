@@ -12,7 +12,6 @@ class CreatePosts < ActiveRecord::Migration[5.2]
       t.integer :rent
       t.integer :payment_type
       t.integer :user_id
-      t.integer :lease_type
       t.integer :tenants
       t.datetime :available_from
 

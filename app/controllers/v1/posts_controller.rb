@@ -1,14 +1,12 @@
 class V1::PostsController < ApplicationController
-  before_action :authenticate_user!, except: [:index]
   respond_to :json
-  def index
-    # @post = Post.search "apples", where: {in_stock: true},  page: (params[:page] || 1), per_page: 20
-    # if current_user.posts.where()
-    filters = %w(city province title body property_id country address 
-      suburb lon lat range min_rent max_rent rent rent_type available_from 
-      livings rooms toilets).map{ |key| [key, params[key]] if params[key].present? }.compact.to_h
-    @posts = Post.search( "#{params[:keyword] || '*'}", where: filters, page: (params[:page] || 0), per_page: 10, order: {created_at: :desc, _score: :desc})
 
+  before_action :authenticate_user!
+  before_action :set_filters
+
+  def index
+    @page = params[:page] || 1
+    @posts = @filters.present? ? Post.where(@filters).page(@page) : Post.page(@page)
   end
 
   def create
@@ -61,5 +59,9 @@ class V1::PostsController < ApplicationController
         :address
       ]
     )
+  end
+
+  def set_filters
+    @filters = {}
   end
 end

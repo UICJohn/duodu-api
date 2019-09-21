@@ -64,6 +64,16 @@ RSpec.describe 'Profile', :type => :request do
       expect(@user.occupation).to eq '程序员'
       expect(@user.dob).to eq nil
     end
+
+
+    it 'should enqueue avartar worker' do
+      put '/v1/profiles', params: {
+        profiles: {
+          avatar_url: 'url_path'
+        }
+      }, headers: @headers
+      expect(FetchAvatarWorker.jobs.size).to eq 1
+    end
   end
 
   describe '#update_email' do

@@ -5,7 +5,7 @@ FactoryBot.define do
     occupation {'程序员'}
     factory :web_user do
       password {'123458910'}
-      phone { rand(10**9..10**11) } 
+      phone { rand(10**11) } 
     end
 
     factory :wechat_user do

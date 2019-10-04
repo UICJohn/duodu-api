@@ -33,7 +33,8 @@ Rails.application.routes.draw do
 
     resources :verification_code, only: [:create]
     resources :schools, only: [:index]
-    resources :occupations, only: [:index]
+    # resources :occupations, only: [:index]
+    resources :suburbs, only: [:index]
   end
 
   scope format: true, constraints: { format: /jpg|png|gif|PNG/ } do

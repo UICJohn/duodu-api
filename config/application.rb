@@ -68,7 +68,8 @@ module DuoduApi
     end
     config.autoload_paths << Rails.root.join('lib')
     config.i18n.available_locales = [:"zh-CN", :en]
-    # config.i18n.default_locale = :"zh-CN"
-    config.i18n.default_locale = :en
+    # config.i18n.default_locale = :en
+    config.i18n.fallbacks = [:'zh-CN', :en]
+    config.i18n.default_locale = :"zh-CN"
   end
 end

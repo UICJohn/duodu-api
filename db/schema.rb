@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_19_150852) do
+ActiveRecord::Schema.define(version: 2019_09_26_163115) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,16 +84,20 @@ ActiveRecord::Schema.define(version: 2019_09_19_150852) do
   end
 
   create_table "locations", force: :cascade do |t|
-    t.string "country"
-    t.string "province"
-    t.string "city"
-    t.string "suburb"
+    t.integer "country_id"
+    t.integer "province_id"
+    t.integer "city_id"
+    t.integer "suburb_id"
     t.string "name"
     t.string "address"
     t.decimal "longitude", precision: 10, scale: 6
     t.decimal "latitude", precision: 10, scale: 6
     t.bigint "target_id"
     t.string "target_type"
+    t.index ["city_id"], name: "index_locations_on_city_id"
+    t.index ["country_id"], name: "index_locations_on_country_id"
+    t.index ["province_id"], name: "index_locations_on_province_id"
+    t.index ["suburb_id"], name: "index_locations_on_suburb_id"
   end
 
   create_table "occupations", force: :cascade do |t|
@@ -155,6 +159,32 @@ ActiveRecord::Schema.define(version: 2019_09_19_150852) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "region_translations", force: :cascade do |t|
+    t.bigint "region_id", null: false
+    t.string "locale", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name"
+    t.index ["locale"], name: "index_region_translations_on_locale"
+    t.index ["region_id"], name: "index_region_translations_on_region_id"
+  end
+
+  create_table "regions", force: :cascade do |t|
+    t.string "type"
+    t.string "code"
+    t.string "baidu_id"
+    t.string "tencent_id"
+    t.integer "parent_id"
+    t.string "pinyin"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["baidu_id"], name: "index_regions_on_baidu_id"
+    t.index ["parent_id"], name: "index_regions_on_parent_id"
+    t.index ["pinyin"], name: "index_regions_on_pinyin"
+    t.index ["tencent_id"], name: "index_regions_on_tencent_id"
+    t.index ["type"], name: "index_regions_on_type"
+  end
+
   create_table "rooms", force: :cascade do |t|
     t.bigint "property_id"
     t.string "title"
@@ -178,6 +208,45 @@ ActiveRecord::Schema.define(version: 2019_09_19_150852) do
     t.string "py"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "station_translations", force: :cascade do |t|
+    t.bigint "station_id", null: false
+    t.string "locale", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name"
+    t.index ["locale"], name: "index_station_translations_on_locale"
+    t.index ["station_id"], name: "index_station_translations_on_station_id"
+  end
+
+  create_table "stations", force: :cascade do |t|
+    t.string "source_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "stations_subways", id: false, force: :cascade do |t|
+    t.bigint "subway_id", null: false
+    t.bigint "station_id", null: false
+    t.index ["subway_id", "station_id"], name: "index_stations_subways_on_subway_id_and_station_id"
+  end
+
+  create_table "subway_translations", force: :cascade do |t|
+    t.bigint "subway_id", null: false
+    t.string "locale", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name"
+    t.index ["locale"], name: "index_subway_translations_on_locale"
+    t.index ["subway_id"], name: "index_subway_translations_on_subway_id"
+  end
+
+  create_table "subways", force: :cascade do |t|
+    t.string "source_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["source_id"], name: "index_subways_on_source_id"
   end
 
   create_table "tag_translations", force: :cascade do |t|

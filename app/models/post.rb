@@ -1,5 +1,5 @@
-class Post < ActiveRecord::Base
-  include TimeTrackable, Locatable
+class Post < ApplicationRecord
+  include TimeTrackable
 
   # searchkick callbacks: :async
 

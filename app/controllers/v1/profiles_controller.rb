@@ -1,6 +1,5 @@
 class V1::ProfilesController < ApplicationController
   before_action :authenticate_user!
-  respond_to :json
 
   def update
     @user = current_user

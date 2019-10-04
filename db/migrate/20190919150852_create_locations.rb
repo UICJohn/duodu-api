@@ -1,10 +1,10 @@
 class CreateLocations < ActiveRecord::Migration[5.2]
   def change
     create_table :locations do |t|
-      t.string :country
-      t.string :province
-      t.string :city
-      t.string :suburb
+      t.integer :country_id
+      t.integer :province_id
+      t.integer :city_id
+      t.integer :suburb_id
       t.string :name
       t.string :address
       t.decimal :longitude, precision: 10, scale: 6
@@ -12,5 +12,11 @@ class CreateLocations < ActiveRecord::Migration[5.2]
       t.bigint  :target_id
       t.string  :target_type
     end
+
+    add_index :locations, :country_id, using: :btree
+    add_index :locations, :province_id, using: :btree
+    add_index :locations, :city_id, using: :btree
+    add_index :locations, :suburb_id, using: :btree
+    # add_index :locations, [:longitude, :latitude], unique: true
   end
 end

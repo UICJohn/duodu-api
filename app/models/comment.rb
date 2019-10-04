@@ -1,3 +1,3 @@
-class Comment < ActiveRecord::Base
+class Comment < ApplicationRecord
   has_many :attachement, as: :attachable
 end

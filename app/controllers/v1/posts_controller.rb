@@ -55,7 +55,6 @@ class V1::PostsController < ApplicationController
       location_attributes: [
         :longitude,
         :latitude,
-        :name,
         :address
       ]
     )

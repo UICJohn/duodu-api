@@ -66,22 +66,65 @@ describe 'region:tasks' do
     expect(Region::Suburb.count).to eq 2
   end
 
-  it 'should not create two subway' do
+  it 'should not create duplicate subways' do
     Region::Base.create(name: '北京市', baidu_id: 'adfajasdjflkaf')
     allow_any_instance_of(Map).to receive(:fetch_subways_by).and_return([
       {
         "line_name"=>"地铁s1线(石厂-金安桥)",
         "line_uid"=>"8e08d3bb7043c9149e95de7a",
-        "pair_line_uid"=>"2e868a270a6a144a08ccdde1"
+        "pair_line_uid"=>"2e868a270a6a144a08ccdde1",
+        "stops" => []
       }, 
       {
         "line_name" => "地铁s1线(金安桥-石厂)",
         "pair_line_uid"=>"8e08d3bb7043c9149e95de7a",
-        "line_uid"=>"2e868a270a6a144a08ccdde1"
+        "line_uid"=>"2e868a270a6a144a08ccdde1",
+        "stops" => []
       }
     ])
     expect{
       Rake::Task["region:sync_subways"].execute
     }.to change(Subway, :count).by(1)
+
+    Rake::Task["region:sync_subways"].execute
+
+    expect(Subway.count).to eq 1
+  end
+
+
+  it 'should not create duplicate stations' do
+    Region::Base.create(name: '北京市', baidu_id: 'adfajasdjflkaf')
+    allow_any_instance_of(Map).to receive(:fetch_subways_by).and_return([
+      {
+        "line_name"=>"地铁s1线(石厂-金安桥)",
+        "line_uid"=>"8e08d3bb7043c9149e95de7a",
+        "pair_line_uid"=>"2e868a270a6a144a08ccdde1",
+        "stops" => [
+          {
+            "uid" => '3e08d3bb7043c9149e25d47v',
+            "name" => '西苑'
+          }
+        ]
+      },
+      {
+        "line_name" => "地铁s1线(金安桥-石厂)",
+        "pair_line_uid"=>"8e08d3bb7043c9149e95de7a",
+        "line_uid"=>"2e868a270a6a144a08ccdde1",
+        "stops" => [
+          {
+            "uid" => '3e08d3bb7043c9149e25d47v',
+            "name" => '西苑'
+          }
+        ]
+      }
+    ])
+    expect{
+      Rake::Task["region:sync_subways"].execute
+    }.to change(Subway, :count).by(1)
+
+    Rake::Task["region:sync_subways"].execute
+
+    expect(Subway.count).to eq 1
+    expect(Station.count).to eq 1
   end
 end

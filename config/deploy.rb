@@ -41,7 +41,7 @@ set :puma_init_active_record, true
 
 set :linked_dirs, %w(log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system)
 
-set :linked_files, %w(config/database.yml config/secrets.yml)
+set :linked_files, %w(config/database.yml config/master.key)
 
 set :sidekiq_config, "config/sidekiq.yml"
 

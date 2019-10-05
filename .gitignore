@@ -26,10 +26,10 @@
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 /config/database.yml
-
 /config/wechat.yml
 /config/map.yml
 /config/storage.yml
+/config/application.yml
 
 /public/system/
 

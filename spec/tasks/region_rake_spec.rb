@@ -118,6 +118,17 @@ describe 'region:tasks' do
         ]
       }
     ])
+
+    allow_any_instance_of(Map).to receive(:search_point).and_return([
+      {
+        "pname" => "广东省",
+        "cityname" => "惠州市",
+        "adname" => "惠城区",
+        "address" => "江畔花园",
+        "location" => "123.22,23.122"
+      }
+    ])
+
     expect{
       Rake::Task["region:sync_subways"].execute
     }.to change(Subway, :count).by(1)
@@ -126,5 +137,6 @@ describe 'region:tasks' do
 
     expect(Subway.count).to eq 1
     expect(Station.count).to eq 1
+    expect(Location.count).to eq 1
   end
 end

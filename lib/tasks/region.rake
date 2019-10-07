@@ -107,7 +107,7 @@ namespace :region do
 
             next if station.location.present?
             ActiveRecord::Base.transaction do
-              if point = map.search_point({ keywords: station.name, types: '150500', city: region.name }).first
+              if point = map.search_point({ keywords: station.name, types: '150500', city: region.name }).try(:first)
                 longitude, latitude = point["location"].split(",")
                 location_attrs = {
                   country_id:   Region::Province.find_by(name: point["pname"]).try(:country_id),

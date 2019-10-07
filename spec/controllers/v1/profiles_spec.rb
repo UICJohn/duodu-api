@@ -17,10 +17,8 @@ RSpec.describe 'Profile', :type => :request do
           dob: '2019-12-01',
           location_attributes: {
             id: @user.location.id,
-            city: 'xian',
-            country: 'CN',
-            province: 'shanxi',
-            suburb: 'xincheng',  
+            latitude: 45.21,
+            longitude: 123.23
           }
         }
       }, headers: @headers
@@ -28,10 +26,10 @@ RSpec.describe 'Profile', :type => :request do
       @user.reload
       expect(response).to be_successful
       expect(@user.intro).to eq 'introduction'
-      expect(@user.location.city).to eq 'xian'
-      expect(@user.location.country).to eq 'CN'
-      expect(@user.location.province).to eq 'shanxi'
-      expect(@user.location.suburb).to eq 'xincheng'
+      expect(@user.location.city.name).to eq '惠州市'
+      expect(@user.location.country.name).to eq '中国'
+      expect(@user.location.province.name).to eq '广东省'
+      expect(@user.location.suburb.name).to eq '惠城区'
       expect(@user.gender).to eq 'male'
       expect(@user.occupation).to eq 'programmer'
       expect(@user.dob).to eq Date.new(2019, 12, 1)
@@ -56,10 +54,10 @@ RSpec.describe 'Profile', :type => :request do
       @user.reload
       expect(response).not_to be_successful
       expect(@user.intro).to eq nil
-      expect(@user.location.city).to eq 'huizhou'
-      expect(@user.location.country).to eq 'CN'
-      expect(@user.location.province).to eq 'guangdong'
-      expect(@user.location.suburb).to eq 'huicheng'
+      expect(@user.location.city.name).to eq '惠州市'
+      expect(@user.location.country.name).to eq '中国'
+      expect(@user.location.province.name).to eq '广东省'
+      expect(@user.location.suburb.name).to eq '惠城区'
       expect(@user.gender).to eq '0'
       expect(@user.occupation).to eq '程序员'
       expect(@user.dob).to eq nil

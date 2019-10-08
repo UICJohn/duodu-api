@@ -229,7 +229,7 @@ ActiveRecord::Schema.define(version: 2019_09_26_163115) do
   create_table "stations_subways", id: false, force: :cascade do |t|
     t.bigint "subway_id", null: false
     t.bigint "station_id", null: false
-    t.index ["subway_id", "station_id"], name: "index_stations_subways_on_subway_id_and_station_id"
+    t.index ["subway_id", "station_id"], name: "index_stations_subways_on_subway_id_and_station_id", unique: true
   end
 
   create_table "subway_translations", force: :cascade do |t|

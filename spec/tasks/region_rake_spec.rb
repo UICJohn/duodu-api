@@ -91,7 +91,6 @@ describe 'region:tasks' do
     expect(Subway.count).to eq 1
   end
 
-
   it 'should not create duplicate stations' do
     Region::Base.create(name: '北京市', baidu_id: 'adfajasdjflkaf')
     allow_any_instance_of(Map).to receive(:fetch_subways_by).and_return([
@@ -138,5 +137,50 @@ describe 'region:tasks' do
     expect(Subway.count).to eq 1
     expect(Station.count).to eq 1
     expect(Location.count).to eq 1
+  end
+
+
+  it 'should not create duplicate stations' do
+    Region::Base.create(name: '北京市', baidu_id: 'adfajasdjflkaf')
+    allow_any_instance_of(Map).to receive(:fetch_subways_by).and_return([
+      {
+        "line_name"=>"地铁s1线(石厂-金安桥)",
+        "line_uid"=>"8e08d3bb7043c9149e95de7a",
+        "pair_line_uid"=>"2e868a270a6a144a08ccdde1",
+        "stops" => [
+          {
+            "uid" => '3e08d3bb7043c9149e25d47v',
+            "name" => '西苑'
+          }
+        ]
+      },
+      {
+        "line_name" => "地铁s1线(金安桥-石厂)",
+        "pair_line_uid"=>"8e08d3bb7043c9149e95de7a",
+        "line_uid"=>"2e868a270a6a144a08ccdde1",
+        "stops" => [
+          {
+            "uid" => '3e08d3bb7043c9149e25d47v',
+            "name" => '西苑'
+          }
+        ]
+      }
+    ])
+
+    allow_any_instance_of(Map).to receive(:search_point).and_return([
+      {
+        "pname" => "广东省",
+        "cityname" => "惠州市",
+        "adname" => "惠城区",
+        "address" => "江畔花园",
+        "location" => "123.22,23.122"
+      }
+    ])
+
+    Rake::Task["region:sync_subways"].execute
+    Rake::Task["region:sync_subways"].execute
+    expect(Subway.count).to eq 1
+    expect(Subway.first.stations.count).to eq 1
+    expect(Station.count).to eq 1
   end
 end

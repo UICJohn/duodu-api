@@ -103,7 +103,7 @@ namespace :region do
               source_id: json_station["uid"]
             }, key: "source_id")
 
-            subway.stations << station
+            subway.stations << station unless subway.stations.include?(station)
 
             next if station.location.present?
             ActiveRecord::Base.transaction do

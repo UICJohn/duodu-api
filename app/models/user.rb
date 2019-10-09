@@ -36,7 +36,8 @@ class User < ApplicationRecord
 
   enum password_status: [:weak, :good, :strong]
   # enum current_step: [:signup, :details]
-  enum age: ["00后", "90后", "80后", "70后", "60后"]
+  # enum age: ["00后", "90后", "80后", "70后", "60后"]
+  enum gender: ['male', 'female', 'unisex']
 
   accepts_nested_attributes_for :preference, :location
 

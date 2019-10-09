@@ -34,3 +34,5 @@
 /public/system/
 
 aliyun_sdk.log
+
+/spec/storage

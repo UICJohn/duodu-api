@@ -2,7 +2,7 @@ json.user do
   json.email @user.hidden_email
   json.phone @user.hidden_phone
   json.username @user.username
-  json.avatar URI.join(request.url, @user.avatar.try(:url)) if @user.avatar.attached?
+  json.avatar rails_blob_url(@user.avatar) if @user.avatar.attached?
   json.location do
     json.country @user.location.country
     json.city @user.location.city

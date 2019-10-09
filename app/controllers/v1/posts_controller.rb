@@ -1,12 +1,14 @@
 class V1::PostsController < ApplicationController
+  include ApplicationHelper
+
   respond_to :json
 
   before_action :authenticate_user!
-  before_action :set_filters
 
   def index
     @page = params[:page] || 1
-    @posts = @filters.present? ? Post.where(@filters).page(@page) : Post.page(@page)
+    filters = generate_filters(filters_params.to_h)
+    @posts = filters.present? ? Post::Base.search(filters).page(@page) : Post::Base.page(@page)
   end
 
   def create
@@ -31,6 +33,7 @@ class V1::PostsController < ApplicationController
   private
   def posts_params
     params.require(:post).permit(
+      :post_type,
       :title,
       :body, 
       :post_type,
@@ -42,16 +45,15 @@ class V1::PostsController < ApplicationController
       :toilets,
       :min_rent, 
       :max_rent, 
-      :payment_type, 
-      :lease_type, 
+      :payment_type,  
       :available_from,
-      :has_sofa,
-      :has_bed,
+
       :has_air_conditioner,
       :has_elevator,
-      :has_washing_machine,
+      :has_appliance,
       :has_cook_top,
-      :has_fridge,
+      :has_furniture,
+
       location_attributes: [
         :longitude,
         :latitude,
@@ -60,7 +62,24 @@ class V1::PostsController < ApplicationController
     )
   end
 
-  def set_filters
-    @filters = {}
+  def filters_params
+    params.permit(
+      :page,
+      :filters => [
+        :min_rent,
+        :max_rent,
+        :post_types,
+        :has_elevator,
+        :has_cook_top,
+        :has_furniture,
+        :has_appliance,
+        :gender,
+        :rooms,
+        :livings,
+        :toilets,
+        :city,
+        :suburb
+      ]
+    )
   end
 end

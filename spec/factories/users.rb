@@ -1,11 +1,11 @@
 FactoryBot.define do
   factory :user do
     username {'john'}
-    gender {'0'}
+    gender { 'male' }
     occupation {'程序员'}
     factory :web_user do
       password {'123458910'}
-      phone { rand(10**11) } 
+      phone {"1#{(1..10).map{rand(1..9)}.join}"}
     end
 
     factory :wechat_user do
@@ -15,6 +15,7 @@ FactoryBot.define do
     end
 
     after :create do |user|
+      # user.avatar.attach fixture_file_upload(Rails.root.join('spec', 'fixtures', 'assets', 'test.jpg'), 'image/jpg')
       create :location, target: user
     end
   end

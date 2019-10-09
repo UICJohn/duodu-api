@@ -15,3 +15,7 @@ aliyun:
 local:
   service: Disk
   root: <%= Rails.root.join("storage") %>
+
+test:
+  service: Disk
+  root: <%= Rails.root.join("tmp/storage") %>

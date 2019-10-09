@@ -12,7 +12,7 @@ RSpec.describe 'Profile', :type => :request do
       put '/v1/profiles', params: {
         profiles: {
           intro: 'introduction', 
-          gender: 'male', 
+          gender: 'female', 
           occupation: 'programmer', 
           dob: '2019-12-01',
           location_attributes: {
@@ -30,7 +30,7 @@ RSpec.describe 'Profile', :type => :request do
       expect(@user.location.country.name).to eq '中国'
       expect(@user.location.province.name).to eq '广东省'
       expect(@user.location.suburb.name).to eq '惠城区'
-      expect(@user.gender).to eq 'male'
+      expect(@user.gender).to eq 'female'
       expect(@user.occupation).to eq 'programmer'
       expect(@user.dob).to eq Date.new(2019, 12, 1)
     end
@@ -39,7 +39,7 @@ RSpec.describe 'Profile', :type => :request do
       put '/v1/profiles', params: {
         profiles: {
           intro: 'introduction', 
-          gender: 'male', 
+          gender: 'female', 
           occupation: 'programmer', 
           dob: '2019-12-01',
           location_attributes: {
@@ -58,7 +58,7 @@ RSpec.describe 'Profile', :type => :request do
       expect(@user.location.country.name).to eq '中国'
       expect(@user.location.province.name).to eq '广东省'
       expect(@user.location.suburb.name).to eq '惠城区'
-      expect(@user.gender).to eq '0'
+      expect(@user.gender).to eq 'male'
       expect(@user.occupation).to eq '程序员'
       expect(@user.dob).to eq nil
     end

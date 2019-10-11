@@ -52,16 +52,16 @@ Rails.application.configure do
   config.log_level = :debug
 
   # Prepend all log lines with the following tags.
-  config.log_tags = [ :request_id ]
+  config.log_tags = [:request_id]
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
   config.cache_store = :redis_store, {
-    host: "localhost",
+    host: 'localhost',
     port: 6379,
     db: 0,
-    password: "34688f5da12d845c99d2fc760fdfbd78a75a808b12ec0a9812cfeac2846cce3ed101d6cbdf05ea0dd47870c95a139e47bbcaefd24761088a08d5053db72bb6ba",
-    namespace: "cache"
+    password: '34688f5da12d845c99d2fc760fdfbd78a75a808b12ec0a9812cfeac2846cce3ed101d6cbdf05ea0dd47870c95a139e47bbcaefd24761088a08d5053db72bb6ba',
+    namespace: 'cache'
   }
 
   # Use a real queuing backend for Active Job (and separate queues per environment)
@@ -89,23 +89,23 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: 'www.duodusystem.com', protocol: 'https' }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    :address => "smtp.exmail.qq.com",
-    :port => 465,
-    :domain => "exmail.qq.com",
-    :authentication => :login,
-    :user_name => "noreply@duoduculture.com",
-    :password => "4C1414db0091b1b63d05a3f4E",
-    :ssl => true
+    address: 'smtp.exmail.qq.com',
+    port: 465,
+    domain: 'exmail.qq.com',
+    authentication: :login,
+    user_name: 'noreply@duoduculture.com',
+    password: '4C1414db0091b1b63d05a3f4E',
+    ssl: true
   }
 
   config.middleware.use ExceptionNotification::Rack,
-    :email => {
-      :email_prefix => "[Duodu Backend]",
-      :sender_address => 'noreply@duoduculture.com',
-      :exception_recipients => ['lin.tang@duoduculture.com', 'gaoyifei@duoduculture.com']
-    }
+                        email: {
+                          email_prefix: '[Duodu Backend]',
+                          sender_address: 'noreply@duoduculture.com',
+                          exception_recipients: ['lin.tang@duoduculture.com', 'gaoyifei@duoduculture.com']
+                        }
 
-  if ENV["RAILS_LOG_TO_STDOUT"].present?
+  if ENV['RAILS_LOG_TO_STDOUT'].present?
     logger           = ActiveSupport::Logger.new(STDOUT)
     logger.formatter = config.log_formatter
     config.logger    = ActiveSupport::TaggedLogging.new(logger)

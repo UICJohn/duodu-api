@@ -1,9 +1,9 @@
 class Users::SessionsController < Devise::SessionsController
-  respond_to :json  
+  respond_to :json
   def wechat_auth
     if params[:code]
       response = Wechat::API.new.auth(params[:code])
-      if @user = User.from_wechat({provider: 'wechat', uid: response["openid"], session_key: response["session_key"]})
+      if (@user = User.from_wechat(provider: 'wechat', uid: response['openid'], session_key: response['session_key']))
         sign_in @user
       end
     end
@@ -18,5 +18,4 @@ class Users::SessionsController < Devise::SessionsController
   def respond_to_on_destroy
     head :no_content
   end
-
 end

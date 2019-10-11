@@ -1,8 +1,8 @@
 # config valid for current version and patch releases of Capistrano
-lock "~> 3.11.0"
+lock '~> 3.11.0'
 
-set :application, "duodu-api"
-set :repo_url, "git@github.com:UICJohn/duodu-api.git"
+set :application, 'duodu-api'
+set :repo_url, 'git@github.com:UICJohn/duodu-api.git'
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
@@ -39,11 +39,11 @@ set :repo_url, "git@github.com:UICJohn/duodu-api.git"
 # set :ssh_options, verify_host_key: :secure
 set :puma_init_active_record, true
 
-set :linked_dirs, %w(log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system)
+set :linked_dirs, %w[log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system]
 
-set :linked_files, %w(config/database.yml config/master.key config/map.yml config/wechat.yml)
+set :linked_files, %w[config/database.yml config/master.key config/map.yml config/wechat.yml]
 
-set :sidekiq_config, "config/sidekiq.yml"
+set :sidekiq_config, 'config/sidekiq.yml'
 
 namespace :deploy do
   after :restart, 'sidekiq:restart'

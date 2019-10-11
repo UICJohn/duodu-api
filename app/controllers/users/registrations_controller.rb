@@ -14,7 +14,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     else
       clean_up_passwords resource
       set_minimum_password_length
-      error!({error: resource.errors})
+      error!(error: resource.errors)
     end
   end
 
@@ -22,17 +22,18 @@ class Users::RegistrationsController < Devise::RegistrationsController
     user = User.new(verification_params)
     if user.valid?
       SendVerificationCodeWorker.perform_async(phone)
-      success!({message: '验证码已发送'})
+      success!(message: '验证码已发送')
     else
-      error!()
+      error!
     end
   end
 
-  def after_inactive_sign_up_path_for(resource)
+  def after_inactive_sign_up_path_for(_resource)
     users_wait_for_activation_path
   end
 
   private
+
   def verification_params
     params.permit(:phone, :email, :verification_code)
   end

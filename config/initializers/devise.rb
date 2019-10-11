@@ -266,10 +266,9 @@ Devise.setup do |config|
   # change the failure app, you can configure them inside the config.warden block.
   #
 
-   config.warden do |manager|
+  config.warden do |manager|
     manager.failure_app = AuthFailure
   end
-
 
   # ==> Mountable engine configurations
   # When using Devise inside an engine, let's call it `MyEngine`, and this engine
@@ -299,9 +298,9 @@ Devise.setup do |config|
   # config.sign_in_after_change_password = true
   config.skip_session_storage = [:http_auth]
   config.jwt do |jwt|
-    jwt.secret = ENV['DEVISE_JWT_SECRET_KEY'] || "699f26bcdeaff72666790a38f71bd1c95572fdc16765bdb994c2397a4f19a48e82059e71c31dd7ffdf07f78cd5b99a27ba3035685f565f64750b4479d8c9ee43"
+    jwt.secret = ENV['DEVISE_JWT_SECRET_KEY'] || '699f26bcdeaff72666790a38f71bd1c95572fdc16765bdb994c2397a4f19a48e82059e71c31dd7ffdf07f78cd5b99a27ba3035685f565f64750b4479d8c9ee43'
     jwt.dispatch_requests = [
-      ['POST', %r{^/users/wechat_auth$}],
+      ['POST', %r{^/users/wechat_auth$}]
     ]
   end
 end

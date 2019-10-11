@@ -5,7 +5,8 @@ class Friendship < ApplicationRecord
   after_create :create_reverse_connection
 
   private
+
   def create_reverse_connection
-    FriendShip.create(friend: self.user, user: self.friend)
+    FriendShip.create(friend: user, user: friend)
   end
 end

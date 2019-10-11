@@ -1,8 +1,8 @@
 FactoryBot.define do
-  factory :sharehouse,  class: Post::ShareHouse do
-    title {'blablabl'}
-    body  {'blablabl'}
-    available_from {Time.now.to_date}
+  factory :sharehouse, class: Post::ShareHouse do
+    title { 'blablabl' }
+    body  { 'blablabl' }
+    available_from { Time.now.to_date }
     user { create :wechat_user }
     rent { 2000 }
     payment_type { 0 }

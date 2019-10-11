@@ -14,14 +14,13 @@ class V1::ProfilesController < ApplicationController
     @user = current_user
   end
 
-
   def update_email
     @user = current_user
     @user.update_key_attr = :email
     if @user.update_attributes(email_params)
       render :show
     else
-      error!({error: @user.errors}, 400)
+      error!({ error: @user.errors }, 400)
     end
   end
 
@@ -31,7 +30,7 @@ class V1::ProfilesController < ApplicationController
     if @user.update_attributes(phone_params)
       render :show
     else
-      error!({error: @user.errors}, 400)
+      error!({ error: @user.errors }, 400)
     end
   end
 
@@ -57,15 +56,15 @@ class V1::ProfilesController < ApplicationController
   #       if @user.save
   #         render :show
   #       else
-  #         error!({error: @user.errors})    
+  #         error!({error: @user.errors})
   #       end
   #     else
   #       error!({error: '标签已添加'})
   #     end
   #   else
-  #     error!({error: '哎呀，出错了！'}) 
+  #     error!({error: '哎呀，出错了！'})
   #   end
-    
+
   # end
 
   # def delete_tag
@@ -84,7 +83,6 @@ class V1::ProfilesController < ApplicationController
   #   end
   # end
 
-
   # def update_password
   #   @user = current_user
   #   if params[:user][:current_password].present?
@@ -97,52 +95,52 @@ class V1::ProfilesController < ApplicationController
   #       error!({error: {current_password: "密码不正确"}})
   #     end
   #   else
-  #     error!({error: {current_password: "请输入原密码"}})      
+  #     error!({error: {current_password: "请输入原密码"}})
   #   end
   # end
 
   private
 
   def email_params
-    params.permit(:email, :code).reject!{ |attr| params[attr].blank? }
+    params.permit(:email, :code).reject! { |attr| params[attr].blank? }
   end
 
   def phone_params
-    params.permit(:code, :phone).reject!{ |attr| params[attr].blank? }
+    params.permit(:code, :phone).reject! { |attr| params[attr].blank? }
   end
 
   def profiles_params
     params.require(:profiles).permit(
       :intro,
       :gender,
-      :occupation, 
-      :username, 
-      :avatar,  
-      :first_name, 
-      :last_name, 
-      :major, 
-      :school, 
+      :occupation,
+      :username,
+      :avatar,
+      :first_name,
+      :last_name,
+      :major,
+      :school,
       :email,
       :avatar_url,
       :company,
       :dob,
-      preference_attributes: [
-        :id,
-        :show_privacy_data,
-        :share_location,
-        :receive_all_message
+      preference_attributes: %i[
+        id
+        show_privacy_data
+        share_location
+        receive_all_message
       ],
-      location_attributes: [
-        :id,
-        :country,
-        :city,
-        :suburb,
-        :province,
-        :longitude,
-        :latitude,
-        :name,
-        :address
+      location_attributes: %i[
+        id
+        country
+        city
+        suburb
+        province
+        longitude
+        latitude
+        name
+        address
       ]
     )
-  end  
+  end
 end

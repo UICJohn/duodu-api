@@ -15,7 +15,7 @@ class ApplicationController < ActionController::API
       e.set_backtrace(exception.backtrace)
       # ExceptionNotifier.notify_exception(e, env: request.env)
       if Rails.env.production?
-        error!({msg: "Oops, something went wrong."})
+        error!(msg: 'Oops, something went wrong.')
       else
         raise exception
       end
@@ -24,12 +24,13 @@ class ApplicationController < ActionController::API
 
   def set_platform
     agent = request.env['HTTP_USER_AGENT']
-    return nil unless agent.present?   
-    if _match = agent[/MicroMessenger\/([\d\.]+)/i, 1]
-      @platform = :wechat
-    else
-      @platform = :web
-    end
+    return nil unless agent.present?
+
+    @platform = if agent[%r{MicroMessenger/([\d\.]+)}i, 1]
+                  :wechat
+                else
+                  :web
+                end
   end
 
   def error!(msg = {}, code = 200)
@@ -43,11 +44,13 @@ class ApplicationController < ActionController::API
   end
 
   protected
+
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:username, :email, :phone, :verification_code, :password, :role])
+    devise_parameter_sanitizer.permit(:sign_up, keys: %i[username email phone verification_code password role])
   end
 
   private
+
   def set_storage_host
     ActiveStorage::Current.host = request.base_url
   end

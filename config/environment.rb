@@ -5,5 +5,5 @@ require_relative 'application'
 Rails.application.initialize!
 
 if Rails.env.development?
-  Rails.application.routes.default_url_options[:host] = "localhost"
+  Rails.application.routes.default_url_options[:host] = 'localhost'
 end

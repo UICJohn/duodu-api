@@ -1,17 +1,17 @@
 require_relative 'boot'
 
-require "rails"
+require 'rails'
 # Pick the frameworks you want:
-require "active_model/railtie"
-require "active_job/railtie"
-require "active_record/railtie"
-require "active_storage/engine"
-require "action_controller/railtie"
-require "action_mailer/railtie"
-require "action_view/railtie"
-require "action_cable/engine"
-require "sprockets/railtie"
-require "rails/test_unit/railtie"
+require 'active_model/railtie'
+require 'active_job/railtie'
+require 'active_record/railtie'
+require 'active_storage/engine'
+require 'action_controller/railtie'
+require 'action_mailer/railtie'
+require 'action_view/railtie'
+require 'action_cable/engine'
+require 'sprockets/railtie'
+require 'rails/test_unit/railtie'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -35,13 +35,13 @@ module DuoduApi
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::CookieStore
 
-    if Rails.env.development?
-      config.action_controller.asset_host = 'http://192.168.31.224'
-    else
-      config.action_controller.asset_host = 'https://duodu.oss-cn-beijing.aliyuncs.com'
-    end
+    config.action_controller.asset_host = if Rails.env.development?
+                                            'http://192.168.31.224'
+                                          else
+                                            'https://duodu.oss-cn-beijing.aliyuncs.com'
+                                          end
 
-    config.time_zone = "Asia/Shanghai"
+    config.time_zone = 'Asia/Shanghai'
 
     config.autoload_paths << Rails.root.join('lib')
 
@@ -49,27 +49,27 @@ module DuoduApi
 
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins "*"
-        resource "*",
-          :headers => :any,
-          :expose  => [
-            "X-Requested-With",
-            "Content-Type",
-            "Authorization",
-            "Accept",
-            "Client-Security-Token",
-            "Accept-Encoding",
-            "iat",
-            "exp",
-            "jti"
-          ],
-          :methods => [:get, :post, :options, :delete, :put, :head]
+        origins '*'
+        resource '*',
+                 headers: :any,
+                 expose: %w[
+                   X-Requested-With
+                   Content-Type
+                   Authorization
+                   Accept
+                   Client-Security-Token
+                   Accept-Encoding
+                   iat
+                   exp
+                   jti
+                 ],
+                 methods: %i[get post options delete put head]
       end
     end
     config.autoload_paths << Rails.root.join('lib')
-    config.i18n.available_locales = [:"zh-CN", :en]
+    config.i18n.available_locales = %i[zh-CN en]
     # config.i18n.default_locale = :en
-    config.i18n.fallbacks = [:'zh-CN', :en]
+    config.i18n.fallbacks = %i[zh-CN en]
     config.i18n.default_locale = :"zh-CN"
   end
 end

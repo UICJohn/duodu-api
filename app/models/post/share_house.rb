@@ -3,5 +3,5 @@ class Post::ShareHouse < Post::Base
 
   validates :payment_type, :rent, presence: true
   validates_numericality_of :rent
-  validates :attachments, :length => { :maximum => 9 }
+  validates :attachments, length: { maximum: 9 }
 end

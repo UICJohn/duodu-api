@@ -3,12 +3,14 @@ json.user do
   json.phone @user.hidden_phone
   json.username @user.username
   json.avatar rails_blob_url(@user.avatar) if @user.avatar.attached?
-  json.location do
-    json.country @user.location.country
-    json.city @user.location.city
-    json.province @user.location.province
-    json.suburb @user.location.suburb
-  end if @user.location.present?
+  if @user.location.present?
+    json.location do
+      json.country @user.location.country
+      json.city @user.location.city
+      json.province @user.location.province
+      json.suburb @user.location.suburb
+    end
+  end
   json.into @user.intro
   json.company @user.company
   json.gender @user.gender

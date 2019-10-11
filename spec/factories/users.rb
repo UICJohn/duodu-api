@@ -1,17 +1,17 @@
 FactoryBot.define do
   factory :user do
-    username {'john'}
+    username { 'john' }
     gender { 'male' }
-    occupation {'程序员'}
+    occupation { '程序员' }
     factory :web_user do
-      password {'123458910'}
-      phone {"1#{(1..10).map{rand(1..9)}.join}"}
+      password { '123458910' }
+      phone { "1#{(1..10).map { rand(1..9) }.join}" }
     end
 
     factory :wechat_user do
-      sequence(:uid) { |n| "yinoF5krflF1n33LsoMU92&bsn#{n}"}
-      provider {'wechat'}
-      password {'1234568910'}
+      sequence(:uid) { |n| "yinoF5krflF1n33LsoMU92&bsn#{n}" }
+      provider { 'wechat' }
+      password { '1234568910' }
     end
 
     after :create do |user|

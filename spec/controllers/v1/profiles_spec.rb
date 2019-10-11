@@ -1,19 +1,19 @@
 require 'rails_helper'
 require 'devise/jwt/test_helpers'
 
-RSpec.describe 'Profile', :type => :request do
+RSpec.describe 'Profile', type: :request do
   describe '#update' do
     before do
       @user = create :wechat_user
-      @headers = Devise::JWT::TestHelpers.auth_headers({'Accept' => 'application/json' }, @user)
+      @headers = Devise::JWT::TestHelpers.auth_headers({ 'Accept' => 'application/json' }, @user)
     end
 
     it 'should update user profile' do
       put '/v1/profiles', params: {
         profiles: {
-          intro: 'introduction', 
-          gender: 'female', 
-          occupation: 'programmer', 
+          intro: 'introduction',
+          gender: 'female',
+          occupation: 'programmer',
           dob: '2019-12-01',
           location_attributes: {
             id: @user.location.id,
@@ -38,15 +38,15 @@ RSpec.describe 'Profile', :type => :request do
     it 'should not allow user to update profile' do
       put '/v1/profiles', params: {
         profiles: {
-          intro: 'introduction', 
-          gender: 'female', 
-          occupation: 'programmer', 
+          intro: 'introduction',
+          gender: 'female',
+          occupation: 'programmer',
           dob: '2019-12-01',
           location_attributes: {
-            city: 'xian', 
-            country: 'CN', 
-            province: 'shanxi', 
-            suburb: 'xincheng',  
+            city: 'xian',
+            country: 'CN',
+            province: 'shanxi',
+            suburb: 'xincheng'
           }
         }
       }
@@ -63,7 +63,6 @@ RSpec.describe 'Profile', :type => :request do
       expect(@user.dob).to eq nil
     end
 
-
     it 'should enqueue avartar worker' do
       put '/v1/profiles', params: {
         profiles: {
@@ -75,10 +74,9 @@ RSpec.describe 'Profile', :type => :request do
   end
 
   describe '#update_email' do
-
     before do
       @user = create :wechat_user
-      @headers = Devise::JWT::TestHelpers.auth_headers({'Accept' => 'application/json' }, @user)
+      @headers = Devise::JWT::TestHelpers.auth_headers({ 'Accept' => 'application/json' }, @user)
     end
 
     it 'should update email' do
@@ -121,7 +119,7 @@ RSpec.describe 'Profile', :type => :request do
   describe '#update_phone' do
     before do
       @user = create :wechat_user
-      @headers = Devise::JWT::TestHelpers.auth_headers({'Accept' => 'application/json' }, @user)
+      @headers = Devise::JWT::TestHelpers.auth_headers({ 'Accept' => 'application/json' }, @user)
     end
 
     it 'should update phone' do

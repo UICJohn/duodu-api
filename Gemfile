@@ -36,38 +36,38 @@ gem 'bootsnap', '>= 1.1.0', require: false
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'rubocop', require: false
 end
 
 group :development do
   gem 'listen', '>= 3.0.5', '< 3.2'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem 'capistrano', '~> 3.10', require: false
+  gem 'capistrano-bundler'
+  gem 'capistrano-rails', '~> 1.4', require: false
+  gem 'capistrano-rvm'
+  gem 'capistrano-sidekiq'
+  gem 'capistrano3-puma'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
-  gem "capistrano", "~> 3.10", require: false
-  gem "capistrano-rails", "~> 1.4", require: false
-  gem 'capistrano-rvm'
-  gem 'capistrano-bundler'
-  gem 'capistrano3-puma'
-  gem 'capistrano-sidekiq'
 end
 
 group :test do
-  gem 'mock_redis'
   gem 'factory_bot_rails'
+  gem 'mock_redis'
   gem 'rspec-rails'
   gem 'rspec-sidekiq'
 end
 
-
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
 gem 'sidekiq'
 
 gem 'redis-rails'
 
-gem "devise-async"
+gem 'devise-async'
 
 gem 'kaminari'
 
@@ -87,7 +87,7 @@ gem 'exception_notification'
 
 gem 'globalize'
 
-gem "omniauth-wechat-oauth2"
+gem 'omniauth-wechat-oauth2'
 
 gem 'hiredis'
 
@@ -95,4 +95,4 @@ gem 'aliyun-sdk'
 
 gem 'activestorage-aliyun'
 
-gem "strip_attributes"
+gem 'strip_attributes'

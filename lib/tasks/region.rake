@@ -80,8 +80,8 @@ namespace :region do
         next if Subway.find_by(source_id: json_subway['pair_line_uid'])
 
         subway = Subway.create_or_update({
-                                           name: json_subway['line_name'].split('(').first,
-          source_id: json_subway['line_uid']
+                                            name: json_subway['line_name'].split('(').first,
+                                            source_id: json_subway['line_uid']
                                          }, key: 'source_id')
 
         next unless subway.valid?

@@ -5,9 +5,9 @@ class ApplicationRecord < ActiveRecord::Base
     key_attrs = key.present? ? { key.to_s => attributes[key.to_sym] } : attributes
     if (obj = find_by(key_attrs))
       obj.update_attributes(attributes)
-      return obj
+      obj
     else
-      return create(attributes)
+      create(attributes)
     end
   end
 end

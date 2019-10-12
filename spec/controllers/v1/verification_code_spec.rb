@@ -18,7 +18,7 @@ RSpec.describe 'Verification Code', type: :request do
 
     it 'should enqueue code worker' do
       create :web_user
-      headers = Devise::JWT::TestHelpers.auth_headers({ 'Accept' => 'application/json' }, user)
+      headers = Devise::JWT::TestHelpers.auth_headers({ 'Accept' => 'application/json' }, @user)
 
       post '/v1/verification_code', params: {
         email: 'user@duodu.com'

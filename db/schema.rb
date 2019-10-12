@@ -229,6 +229,7 @@ ActiveRecord::Schema.define(version: 2019_09_26_163115) do
     t.string "source_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "active", default: false
   end
 
   create_table "stations_subways", id: false, force: :cascade do |t|

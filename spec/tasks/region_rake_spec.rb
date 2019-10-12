@@ -201,5 +201,6 @@ describe 'region:tasks' do
     expect(Subway.count).to eq 1
     expect(Subway.first.stations.count).to eq 1
     expect(Station.count).to eq 1
+    expect(Station.first.active).to eq true
   end
 end

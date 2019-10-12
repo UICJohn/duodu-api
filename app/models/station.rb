@@ -5,5 +5,5 @@ class Station < ApplicationRecord
   has_one :location, as: :target, dependent: :destroy
 
   validates :source_id, presence: true, uniqueness: true
-  default_scope { where(active: true) }
+  scope :active, -> { where(active: true) }
 end

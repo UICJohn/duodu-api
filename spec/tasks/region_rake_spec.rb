@@ -153,29 +153,29 @@ describe 'region:tasks' do
   it 'should not create duplicate stations' do
     Region::Base.create(name: '北京市', baidu_id: 'adfajasdjflkaf')
     allow(Map).to receive(:fetch_subways_by).and_return([
-                                                                          {
-                                                                            'line_name' => '地铁s1线(石厂-金安桥)',
-                                                                            'line_uid' => '8e08d3bb7043c9149e95de7a',
-                                                                            'pair_line_uid' => '2e868a270a6a144a08ccdde1',
-                                                                            'stops' => [
-                                                                              {
-                                                                                'uid' => '3e08d3bb7043c9149e25d47v',
-                                                                                'name' => '西苑'
-                                                                              }
-                                                                            ]
-                                                                          },
-                                                                          {
-                                                                            'line_name' => '地铁s1线(金安桥-石厂)',
-                                                                            'pair_line_uid' => '8e08d3bb7043c9149e95de7a',
-                                                                            'line_uid' => '2e868a270a6a144a08ccdde1',
-                                                                            'stops' => [
-                                                                              {
-                                                                                'uid' => '3e08d3bb7043c9149e25d47v',
-                                                                                'name' => '西苑'
-                                                                              }
-                                                                            ]
-                                                                          }
-                                                                        ])
+                                                          {
+                                                            'line_name' => '地铁s1线(石厂-金安桥)',
+                                                            'line_uid' => '8e08d3bb7043c9149e95de7a',
+                                                            'pair_line_uid' => '2e868a270a6a144a08ccdde1',
+                                                            'stops' => [
+                                                              {
+                                                                'uid' => '3e08d3bb7043c9149e25d47v',
+                                                                'name' => '西苑'
+                                                              }
+                                                            ]
+                                                          },
+                                                          {
+                                                            'line_name' => '地铁s1线(金安桥-石厂)',
+                                                            'pair_line_uid' => '8e08d3bb7043c9149e95de7a',
+                                                            'line_uid' => '2e868a270a6a144a08ccdde1',
+                                                            'stops' => [
+                                                              {
+                                                                'uid' => '3e08d3bb7043c9149e25d47v',
+                                                                'name' => '西苑'
+                                                              }
+                                                            ]
+                                                          }
+                                                        ])
 
     allow(Map).to receive(:search_point).and_return({
                                                       "id"=>"10003897110323961921",

@@ -94,6 +94,7 @@ ActiveRecord::Schema.define(version: 2019_09_26_163115) do
     t.decimal "latitude", precision: 10, scale: 6
     t.bigint "target_id"
     t.string "target_type"
+    t.boolean "active"
     t.index ["city_id"], name: "index_locations_on_city_id"
     t.index ["country_id"], name: "index_locations_on_country_id"
     t.index ["province_id"], name: "index_locations_on_province_id"
@@ -108,27 +109,32 @@ ActiveRecord::Schema.define(version: 2019_09_26_163115) do
   end
 
   create_table "posts", force: :cascade do |t|
+    t.string "type"
     t.string "title"
     t.text "body"
-    t.integer "property_id"
-    t.integer "range"
-    t.integer "min_rent"
-    t.integer "max_rent"
-    t.integer "rent"
     t.integer "payment_type"
     t.integer "user_id"
-    t.integer "tenants"
     t.datetime "available_from"
-    t.string "type"
+    t.integer "rent"
     t.integer "livings"
     t.integer "rooms"
     t.integer "toilets"
     t.integer "cover_image_id"
-    t.boolean "has_furniture"
-    t.boolean "has_appliance"
-    t.boolean "has_air_conditioner"
-    t.boolean "has_elevator"
-    t.boolean "has_cook_top"
+    t.integer "property_type"
+    t.integer "tenants"
+    t.boolean "has_furniture", default: false
+    t.boolean "has_appliance", default: false
+    t.boolean "has_network", default: false
+    t.boolean "has_air_conditioner", default: false
+    t.boolean "has_elevator", default: false
+    t.boolean "has_cook_top", default: false
+    t.boolean "has_pets", default: false
+    t.boolean "pets_allow", default: false
+    t.boolean "smoke_allow", default: false
+    t.integer "tenants_gender", default: 2
+    t.integer "area_ids", default: [], array: true
+    t.integer "min_rent", default: 0
+    t.integer "max_rent", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["livings"], name: "index_posts_on_livings"
@@ -227,9 +233,9 @@ ActiveRecord::Schema.define(version: 2019_09_26_163115) do
 
   create_table "stations", force: :cascade do |t|
     t.string "source_id"
+    t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "active", default: false
   end
 
   create_table "stations_subways", id: false, force: :cascade do |t|
@@ -305,6 +311,7 @@ ActiveRecord::Schema.define(version: 2019_09_26_163115) do
     t.string "major"
     t.integer "password_status"
     t.text "intro"
+    t.boolean "smoker", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "tags", default: [], array: true

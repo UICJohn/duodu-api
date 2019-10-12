@@ -3,6 +3,10 @@ FactoryBot.define do
     title { 'blablabl' }
     body  { 'blablabl' }
     available_from { Time.now.to_date }
+    livings {1}
+    rooms {2}
+    toilets {1}
+    property_type {0}
     payment_type { 0 }
     user { create :wechat_user }
     rent { 2000 }

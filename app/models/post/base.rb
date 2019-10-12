@@ -1,48 +1,39 @@
 class Post::Base < ApplicationRecord
+  self.table_name = 'posts'
+
   include TimeTrackable
+  searchkick
 
   attr_accessor :post_type
 
-  self.table_name = 'posts'
-
   belongs_to :user
-  has_one :location, as: :target
 
   validates :title, :body, :available_from, presence: true
-  validates_presence_of :location
-
-  accepts_nested_attributes_for :location
 
   delegate :country, :city, :suburb, :name, :longitude, :latitude, to: :location
 
-  before_save :set_type
+  before_save :set_type, on: :create
 
-  def self.search(filters, _location_filters)
-    relation = self
-    filters.each do |k, v|
-      if k.is_a?(String)
-        relation = relation.where(k, v)
-      elsif k.is_a?(Symbol)
-        relation = relation.where(k => v)
-      end
-    end
-    relation
-  end
+  enum post_type: ['take_house', 'share_house', 'house_mate']
+
+
+  # def search_data
+  #   %w[title body tenants range livings rooms toilets min_rent max_rent 
+  #     has_air_conditioner has_elevator has_appliance has_cook_top has_furniture
+  #     available_from].map { |key| [key, send(key)] }.to_h.merge({
+  #       location: {
+  #         lat: latitude,
+  #         lon: longitude
+  #       }
+  #     })
+  # end
 
   private
 
   def set_type
+    raise "Post Type Invalid" if post_type.nil? and self.type == 'Post::Base'
     if post_type.present?
-      self.type = case post_type
-                  when 0
-                    'Post::TakeHouse'
-                  when 1
-                    'Post::ShareHouse'
-                  when 2
-                    'Post::Housemate'
-                  else
-                    raise 'Post Type Error'
-                  end
+      self.type = "Post::#{post_type.camelcase}"
     end
   end
 end

@@ -10,7 +10,7 @@ class Post::Base < ApplicationRecord
 
   validates :title, :body, :available_from, presence: true
 
-  before_save :set_type, on: :create
+  before_save :set_type, if: :new_record?
 
   enum post_type: ['take_house', 'share_house', 'house_mate']
 

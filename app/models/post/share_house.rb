@@ -4,7 +4,7 @@ class Post::ShareHouse < Post::Base
 
   validates_numericality_of :rent
   validates_presence_of :location
-  validates :attachments, length: { maximum: 8 }
+  validates :attachments, limit: { max: 8 }
   validates :payment_type, :rent, :livings, :rent, :toilets, :rooms, :tenants, :property_type, presence: true
   validate  :can_active?
 

@@ -2,15 +2,15 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# Note that this schema.rb definition is the authoritative source for your
-# database schema. If you need to create the application database on another
-# system, you should be using db:schema:load, not running all the migrations
-# from scratch. The latter is a flawed and unsustainable approach (the more migrations
-# you'll amass, the slower it'll run and the greater likelihood for issues).
+# This file is the source Rails uses to define your schema when running `rails
+# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# be faster and is potentially less error prone than running all of your
+# migrations from scratch. Old migrations may fail to apply correctly if those
+# migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_26_163115) do
+ActiveRecord::Schema.define(version: 2019_10_14_083952) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(version: 2019_09_26_163115) do
     t.string "filename", null: false
     t.string "content_type"
     t.text "metadata"
+    t.string "service_name", null: false
     t.bigint "byte_size", null: false
     t.string "checksum", null: false
     t.datetime "created_at", null: false
@@ -46,8 +47,8 @@ ActiveRecord::Schema.define(version: 2019_09_26_163115) do
   create_table "category_translations", force: :cascade do |t|
     t.bigint "category_id", null: false
     t.string "locale", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.string "name"
     t.index ["category_id"], name: "index_category_translations_on_category_id"
     t.index ["locale"], name: "index_category_translations_on_locale"
@@ -121,7 +122,7 @@ ActiveRecord::Schema.define(version: 2019_09_26_163115) do
     t.integer "toilets"
     t.integer "cover_image_id"
     t.integer "property_type"
-    t.integer "tenants"
+    t.integer "tenants", default: 0
     t.boolean "has_furniture", default: false
     t.boolean "has_appliance", default: false
     t.boolean "has_network", default: false
@@ -152,6 +153,8 @@ ActiveRecord::Schema.define(version: 2019_09_26_163115) do
     t.boolean "share_location", default: false
     t.boolean "receive_all_message", default: true
     t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_preferences_on_user_id"
   end
 
@@ -174,8 +177,8 @@ ActiveRecord::Schema.define(version: 2019_09_26_163115) do
   create_table "region_translations", force: :cascade do |t|
     t.bigint "region_id", null: false
     t.string "locale", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.string "name"
     t.index ["locale"], name: "index_region_translations_on_locale"
     t.index ["region_id"], name: "index_region_translations_on_region_id"
@@ -225,8 +228,8 @@ ActiveRecord::Schema.define(version: 2019_09_26_163115) do
   create_table "station_translations", force: :cascade do |t|
     t.bigint "station_id", null: false
     t.string "locale", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.string "name"
     t.index ["locale"], name: "index_station_translations_on_locale"
     t.index ["station_id"], name: "index_station_translations_on_station_id"
@@ -248,8 +251,8 @@ ActiveRecord::Schema.define(version: 2019_09_26_163115) do
   create_table "subway_translations", force: :cascade do |t|
     t.bigint "subway_id", null: false
     t.string "locale", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.string "name"
     t.index ["locale"], name: "index_subway_translations_on_locale"
     t.index ["subway_id"], name: "index_subway_translations_on_subway_id"
@@ -265,8 +268,8 @@ ActiveRecord::Schema.define(version: 2019_09_26_163115) do
   create_table "tag_translations", force: :cascade do |t|
     t.bigint "tag_id", null: false
     t.string "locale", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.string "name"
     t.index ["locale"], name: "index_tag_translations_on_locale"
     t.index ["tag_id"], name: "index_tag_translations_on_tag_id"

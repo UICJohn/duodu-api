@@ -46,7 +46,7 @@ Rails.application.configure do
 
   config.action_mailer.default_url_options = { host: 'localhost:3000' }
 
-  config.cache_store = :redis_store, {
+  config.cache_store = :redis_cache_store, {
     host: '127.0.0.1',
     port: 6379,
     db: 0,

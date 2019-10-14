@@ -12,7 +12,7 @@ class LocationDetailWorker
       res = Map.search_point(keyword: station.name, boundary: "region(#{region.name}, 0)") \
             || Map.search_point({ keywords: station.name, city: region.name }, service: 'gaode')
 
-      location.update_attributes(
+      location.update(
         country_id:  Region::Country.find_by(name: res['nation']).id,
         province_id: Region::Province.find_by(name: res['province']).id,
         city_id:     Region::City.find_by(name: res['city']).id,

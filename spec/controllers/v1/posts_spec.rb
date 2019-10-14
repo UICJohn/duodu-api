@@ -344,7 +344,7 @@ RSpec.describe 'Post', type: :request do
         attachment: fixture_file_upload(Rails.root.join('spec', 'fixtures', 'assets', 'test.txt'), 'text/plain')
       }, headers: @headers
       post.reload
-      expect(post.attachments).not_to be_present
+      expect(post.attachments).not_to be_attached
       expect(post.active?).to eq false
     end
   end

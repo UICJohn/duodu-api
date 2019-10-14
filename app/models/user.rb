@@ -18,7 +18,7 @@ class User < ApplicationRecord
   # validates :avatar, blob: { content_type: %r{^image/} }
   validates_format_of :email, with: Devise.email_regexp, allow_blank: true
 
-  before_save :set_password_status, on: %i[create update]
+  before_save :set_password_status
   before_save :fetch_avatar
   after_create :setup_user
   has_one  :location, as: :target

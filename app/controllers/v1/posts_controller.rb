@@ -21,7 +21,7 @@ class V1::PostsController < ApplicationController
     end
   end
 
-  def upload_images    
+  def upload_images
     if (params[:attachment].present? && @post = current_user.posts.find_by(id: params[:post_id]))
       if attachment = @post.attachments.attach(params[:attachment])
         @post.active = true

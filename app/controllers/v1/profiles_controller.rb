@@ -3,7 +3,7 @@ class V1::ProfilesController < ApplicationController
 
   def update
     @user = current_user
-    if @user.update_attributes!(profiles_params)
+    if @user.update(profiles_params)
       render :show
     else
       error!(current_user.errors)
@@ -17,7 +17,7 @@ class V1::ProfilesController < ApplicationController
   def update_email
     @user = current_user
     @user.update_key_attr = :email
-    if @user.update_attributes(email_params)
+    if @user.update(email_params)
       render :show
     else
       error!({ error: @user.errors }, 400)
@@ -27,7 +27,7 @@ class V1::ProfilesController < ApplicationController
   def update_phone
     @user = current_user
     @user.update_key_attr = :phone
-    if @user.update_attributes(phone_params)
+    if @user.update(phone_params)
       render :show
     else
       error!({ error: @user.errors }, 400)

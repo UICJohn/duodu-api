@@ -63,7 +63,7 @@ namespace :region do
         baidu_id: data['code']
       }
       if (region = Region::Base.find_by(name: attrs[:name]))
-        region.update_attributes!(attrs)
+        region.update!(attrs)
       end
     end
 
@@ -108,7 +108,7 @@ namespace :region do
                 longitude:    point['location']['lng'].to_f,
                 target:       station
               )
-              station.update_attributes(active: true)
+              station.update(active: true)
             elsif (point = Map.search_point({ keywords: station.name, types: '150500', city: region.name }, service: 'gaode'))
               longitude, latitude = point['location'].split(',')
               Location.create(
@@ -120,7 +120,7 @@ namespace :region do
   longitude:    longitude.to_f,
   target:       station
               )
-              station.update_attributes(active: true)
+              station.update(active: true)
             end
           end
         end

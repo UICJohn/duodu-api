@@ -5,7 +5,7 @@ class CreatePreference < ActiveRecord::Migration[5.2]
       t.boolean :share_location, default: false
       t.boolean :receive_all_message, default: true
       t.references :user
-      t.timestamp
+      t.timestamps
     end
   end
 end

@@ -51,6 +51,7 @@ group :development do
   gem 'capistrano3-puma'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'byebug'
 end
 
 group :test do
@@ -96,3 +97,5 @@ gem 'aliyun-sdk'
 gem 'activestorage-aliyun'
 
 gem 'strip_attributes'
+
+gem 'active_storage_validations'

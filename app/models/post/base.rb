@@ -2,7 +2,7 @@ class Post::Base < ApplicationRecord
   self.table_name = 'posts'
 
   include TimeTrackable
-  searchkick
+  searchkick callbacks: :async
 
   attr_accessor :post_type
 
@@ -10,12 +10,9 @@ class Post::Base < ApplicationRecord
 
   validates :title, :body, :available_from, presence: true
 
-  delegate :country, :city, :suburb, :name, :longitude, :latitude, to: :location
-
   before_save :set_type, on: :create
 
   enum post_type: ['take_house', 'share_house', 'house_mate']
-
 
   # def search_data
   #   %w[title body tenants range livings rooms toilets min_rent max_rent 

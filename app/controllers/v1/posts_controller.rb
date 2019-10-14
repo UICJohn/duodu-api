@@ -3,7 +3,7 @@ class V1::PostsController < ApplicationController
   respond_to :json
 
   before_action :authenticate_user!, except: [:index]
-  before_action :set_params_name, only: [:create]
+  before_action :preprocess_params, only: [:create]
 
   def index
     @page = params[:page] || 1
@@ -12,7 +12,8 @@ class V1::PostsController < ApplicationController
   end
 
   def create
-    @post = current_user.posts.new(self.send(@params_name))
+    @post = "Post::#{@post_type}".constantize.new(self.send(@params_name))
+    @post.user = current_user
     if @post.save!
       render :show
     else
@@ -20,10 +21,13 @@ class V1::PostsController < ApplicationController
     end
   end
 
-  def upload_images
-    if (@post = current_user.posts.find_by(id: params[:post_id]))
-      attachment = @post.attachments.attach(params[:attachment]).first
-      @post.update_attributes(cover_image_id: attachment.id) if params[:cover_image]
+  def upload_images    
+    if (params[:attachment].present? && @post = current_user.posts.find_by(id: params[:post_id]))
+      if attachment = @post.attachments.attach(params[:attachment])
+        @post.active = true
+        @post.cover_image_id = attachment.id if params[:cover_image]
+        @post.save
+      end
       render :show
     else
       error!(error: 'bad request')
@@ -32,15 +36,16 @@ class V1::PostsController < ApplicationController
 
   private
 
-  def set_params_name
-    @param_name = if %i[0 1].include?(params[:post_type])
-      "house_post_params"
-    elsif params[:post_type] == 2
-      "housemate_post_params"
+  def preprocess_params
+    @post_type = if %i[take_house share_house house_mate].include?(params[:post][:post_type].to_sym)
+      params[:post][:post_type].camelize
+    end
+
+    @params_name = if @post_type.present?
+      params[:post][:post_type] == 'house_mate' ? "housemate_post_params" : "house_post_params"
     else
       error!(error: 'bad request')
     end
-
   end
 
   def house_post_params
@@ -57,6 +62,7 @@ class V1::PostsController < ApplicationController
       :has_furniture,
       :has_appliance,
       :has_network,
+      :property_type,
       :has_air_conditioner,
       :has_elevator,
       :has_cook_top,
@@ -78,9 +84,7 @@ class V1::PostsController < ApplicationController
       :body,
       :available_from,
       :tenants,
-
       :has_pets,
-
       :min_rent,
       :max_rent,
       :area_ids,

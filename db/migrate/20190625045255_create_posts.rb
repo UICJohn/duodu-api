@@ -36,6 +36,9 @@ class CreatePosts < ActiveRecord::Migration[5.2]
       t.integer :min_rent, default: 0
       t.integer :max_rent, default: 0
 
+      # active
+      t.boolean :active, default: false
+
       t.timestamps
     end
 

@@ -2,12 +2,12 @@ require 'rails_helper'
 require 'devise/jwt/test_helpers'
 
 RSpec.describe 'Post', type: :request do
-  before do
-    @user = create :wechat_user
-    @headers = Devise::JWT::TestHelpers.auth_headers({ 'Accept' => 'application/json' }, @user)    
-  end
 
   describe 'index' do
+    before do
+      @user = create :wechat_user
+      @headers = Devise::JWT::TestHelpers.auth_headers({ 'Accept' => 'application/json' }, @user)
+    end
 
     before do
       cities = %w(深圳市 惠州市 广州市).map{ |name| create :city, name: name }
@@ -240,10 +240,15 @@ RSpec.describe 'Post', type: :request do
   end
 
   describe 'create' do
+    before do
+      @user = create :wechat_user
+      @headers = Devise::JWT::TestHelpers.auth_headers({ 'Accept' => 'application/json' }, @user)
+    end
+
     it 'should not create house posts if not authencatied' do
       expect{
-        post "/v1/posts", params: { posts: {
-          post_type: 0,
+        post "/v1/posts", params: { post: {
+          post_type: 'take_house',
           title: 'blablabla',
           body: 'blablabla',
           rooms: 1,
@@ -272,8 +277,75 @@ RSpec.describe 'Post', type: :request do
       expect(response).not_to be_successful
     end
 
-    it 'should return bad request error' do
+    it 'should crete take house posts' do
+      expect{
+        post "/v1/posts", params: { post: {
+          title: "asdfasf",
+          body: "asdfasdf",
+          rent: "2000",
+          rooms: "2",
+          livings: "2",
+          toilets: "1",
+          property_type: "house",
+          payment_type: "0",
+          available_from: "2019-10-12",
+          location_attributes: {
+            name: "西安市发改委",
+            address: "陕西省西安市未央区凤城八路",
+            longitude: 108.93984,
+            latitude: 34.34127
+          },
+          post_type: "take_house",
+          has_air_conditioner: false,
+          has_furniture: false,
+          has_elevator: false,
+          has_cook_top: false,
+          has_appliance: false,
+          has_network: false,
+        }}, headers: @headers
+      }.to change(Post::TakeHouse, :count).by 1
+      expect(response).to be_successful
+      post = JSON.parse response.body
+      expect(post["post"]).to be_present
+      expect(Post::TakeHouse.first.active?).to eq false
+    end
+  end
 
+  describe "#upload_images" do
+
+    before do
+      @user = create :wechat_user
+      @headers = Devise::JWT::TestHelpers.auth_headers({ 'Accept' => 'application/json' }, @user)
+    end
+
+    it 'should update image' do
+      post = create :takehouse, user_id: @user.id
+      put "/v1/posts/#{post.id}/upload_images", params: {
+        attachment: fixture_file_upload(Rails.root.join('spec', 'fixtures', 'assets', 'test.jpg'), 'image/jpg')
+      }, headers: @headers
+      post.reload
+      expect(post.attachments).to be_present
+      expect(post.active?).to eq true
+    end
+
+    it 'should not update image' do
+      post = create :takehouse, user_id: (create :wechat_user).id
+      put "/v1/posts/#{post.id}/upload_images", params: {
+        attachment: fixture_file_upload(Rails.root.join('spec', 'fixtures', 'assets', 'test.jpg'), 'image/jpg')
+      }, headers: @headers
+      post.reload
+      expect(post.attachments).not_to be_present
+      expect(post.active?).to eq false
+    end
+
+    it 'should not update image' do
+      post = create :takehouse, user_id: @user.id
+      put "/v1/posts/#{post.id}/upload_images", params: {
+        attachment: fixture_file_upload(Rails.root.join('spec', 'fixtures', 'assets', 'test.txt'), 'text/plain')
+      }, headers: @headers
+      post.reload
+      expect(post.attachments).not_to be_present
+      expect(post.active?).to eq false
     end
   end
 end

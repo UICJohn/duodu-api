@@ -135,6 +135,7 @@ ActiveRecord::Schema.define(version: 2019_09_26_163115) do
     t.integer "area_ids", default: [], array: true
     t.integer "min_rent", default: 0
     t.integer "max_rent", default: 0
+    t.boolean "active", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["livings"], name: "index_posts_on_livings"

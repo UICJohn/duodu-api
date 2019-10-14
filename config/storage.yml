@@ -3,7 +3,16 @@
 #   root: <%= Rails.root.join("tmp/storage") %>
 
 
-aliyun:
+development:
+  service: Aliyun
+  access_key_id: LTAIGt0BBAlKBUv9
+  access_key_secret: mjMc6mI3rBjvWE9MTIrw71Ydpqfoio
+  bucket: duodu
+  path: dev
+  endpoint: https://oss-cn-beijing.aliyuncs.com
+  mode: private
+
+staging: 
   service: Aliyun
   access_key_id: LTAIGt0BBAlKBUv9
   access_key_secret: mjMc6mI3rBjvWE9MTIrw71Ydpqfoio
@@ -11,10 +20,6 @@ aliyun:
   path: systems
   endpoint: https://oss-cn-beijing.aliyuncs.com
   mode: private
-
-local:
-  service: Disk
-  root: <%= Rails.root.join("storage") %>
 
 test:
   service: Disk

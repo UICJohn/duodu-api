@@ -12,8 +12,7 @@ FactoryBot.define do
     rent { 2000 }
     payment_type { 0 }
     before :create do |post|
-      file = fixture_file_upload(Rails.root.join('spec', 'fixtures', 'assets', 'test.jpg'), 'image/jpg')
-      post.attachments.attach file
+      # post.attachments.attach fixture_file_upload(Rails.root.join('spec', 'fixtures', 'assets', 'test.jpg'), 'image/jpg')
       post.location = build :location
     end
   end

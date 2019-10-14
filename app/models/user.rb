@@ -4,13 +4,8 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable and :omniauthable
   attr_accessor :code, :avatar_url, :update_key_attr
 
-  # devise :database_authenticatable, :async, :registerable, :trackable, :validatable, :jwt_authenticatable,
-  #        jwt_revocation_strategy: JWTBlacklist, :authentication_keys => [:phone]
-
   devise :database_authenticatable, :async, :recoverable, :registerable, :trackable, :validatable, :jwt_authenticatable, jwt_revocation_strategy: JWTBlacklist,
           authentication_keys: [:login]
-
-  searchkick callbacks: :async
 
   has_one_attached :avatar
 
@@ -20,8 +15,8 @@ class User < ApplicationRecord
   validates :code, presence: true, if: :update_key_attr
   validates :email, uniqueness: true, allow_blank: true
   validates :phone, format: { with: /\A[0-9]{11}\z/, message: '手机号不正确' }, uniqueness: true, allow_blank: true
+  # validates :avatar, blob: { content_type: %r{^image/} }
   validates_format_of :email, with: Devise.email_regexp, allow_blank: true
-  # validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\z/
 
   before_save :set_password_status, on: %i[create update]
   before_save :fetch_avatar
@@ -32,39 +27,12 @@ class User < ApplicationRecord
   has_many :pending_friends, through: :friend_requests, source: :friend
   has_many :friendships
   has_many :friends, through: :friendships, source: :user
-  has_many :posts
+  has_many :posts, class_name: "Post::Base"
 
   enum password_status: %i[weak good strong]
-  # enum current_step: [:signup, :details]
-  # enum age: ["00后", "90后", "80后", "70后", "60后"]
   enum gender: %w[male female unisex]
 
   accepts_nested_attributes_for :preference, :location
-
-  def search_data
-    data = {
-      usernmae:   username,
-      gender:     gender,
-      occupation: occupation,
-      first_name: first_name,
-      last_name:  last_name,
-      major:      major,
-      school:     school,
-      share_location: preference.share_location,
-      show_privacy_data: preference.show_privacy_data,
-      receive_all_message: preference.receive_all_message
-    }
-
-    if location.present?
-      data.merge!(
-        country:    location.country,
-        province:   location.province,
-        city:       location.city
-      )
-    end
-
-    data
-  end
 
   def limited_tags
     errors.add(:tags, '标签不能超过10个') if tags.size > 10

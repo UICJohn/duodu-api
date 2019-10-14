@@ -5,7 +5,7 @@ class V1::SubwaysController < ApplicationController
     if params[:region].present? && (region = Region::Base.find_by(name: params[:region]))
       @subways = Subway.find_by_region(region)
     else
-      error!({ error: 'bad request' }, 400)
+      error!({ error: 'bad request' })
     end
   end
 end

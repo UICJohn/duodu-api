@@ -45,6 +45,39 @@ class Map
       response['content']
     end
 
+    def geocode(options, &block)
+      return nil if options[:address].nil?
+
+      safe_env do
+        url = 'https://apis.map.qq.com/ws/geocoder/v1/'
+        params = request_params(%w[address region key output], options)
+        params.merge!(key: ENV['tmap_key']) unless params[:key].present?
+        res = dispatch_request(url, method: 'GET', package: params)
+        raise res['message'] unless res['status'].zero?
+        if block
+          block.call(res['result'])
+        else
+          return res['result']
+        end
+      end
+    end
+
+    def reverse_geocode(options, &block)
+      return nil if options[:location].nil?
+      safe_env do
+        url = 'https://apis.map.qq.com/ws/geocoder/v1/'
+        params = request_params(%w[location get_poi poi_options key output], options)
+        params.merge!(key: ENV['tmap_key']) unless params[:key].present?
+        res = dispatch_request(url, method: 'GET', package: params)
+        raise res['message'] if res['status'] != 0
+        if block
+          block.call(res['result'])
+        else
+          return res['result']
+        end
+      end
+    end
+
     private
 
     def gaode_search(options)
@@ -78,33 +111,6 @@ class Map
       response['data'].first
     end
 
-    def geocode(options)
-      return nil if options[:address].nil?
-
-      safe_env do
-        url = 'https://apis.map.qq.com/ws/geocoder/v1/'
-        params = request_params(%w[address region key output], options)
-        params.merge!(key: ENV['tmap_key']) unless params[:key].present?
-        res = dispatch_request(url, method: 'GET', package: params)
-        raise res['message'] unless res['status'].zero?
-
-        return res['result']['ad_info']
-      end
-    end
-
-    def reverse_geocode(options)
-      return nil if options[:locaiton].nil?
-
-      safe_env do
-        url = 'https://apis.map.qq.com/ws/geocoder/v1/'
-        params = request_params(%w[location get_poi poi_options key output], options)
-        params.merge!(key: ENV['tmap_key']) unless params[:key].present?
-        res = dispatch_request(url, method: 'GET', package: params)
-        raise res['message'] if res['status'] != 0
-
-        return res['result']['ad_info']
-      end
-    end
 
     def request_params(list, options, &block)
       list.map do |key|

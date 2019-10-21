@@ -94,4 +94,6 @@ gem 'activestorage-aliyun'
 
 gem 'strip_attributes'
 
-gem 'active_storage_validations'
+gem 'active_storage_validations', git: "git@github.com:UICJohn/active_storage_validations.git"
+
+gem 'geocoder'

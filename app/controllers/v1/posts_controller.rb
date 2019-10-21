@@ -23,9 +23,9 @@ class V1::PostsController < ApplicationController
 
   def upload_images
     if (params[:attachment].present? && @post = current_user.posts.find_by(id: params[:post_id]))
-      if attachment = @post.attachments.attach(params[:attachment])
+      if image = @post.images.attach(params[:attachment])
         @post.active = true
-        @post.cover_image_id = attachment.id if params[:cover_image]
+        @post.cover_image_id = image.id if params[:cover_image]
         @post.save
       end
       render :show
@@ -68,11 +68,13 @@ class V1::PostsController < ApplicationController
       :has_cook_top,
       :pets_allow,
       :smoke_allow,
+      :tenants,
       :tenants_gender,
       location_attributes: %i[
+        name
+        address
         longitude
         latitude
-        address
       ]
     )
   end

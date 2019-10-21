@@ -5,20 +5,22 @@ class LocationDetailWorker
   include Sidekiq::Worker
   sidekiq_options retry: 2
 
-  def perform(location_id)
-    if (location = Location.find_by(id: location_id))
-      region = Region::Base.where(id: %w[country_id province_id city_id suburb_id].map { |key| location.send(key) })
-
-      res = Map.search_point(keyword: station.name, boundary: "region(#{region.name}, 0)") \
-            || Map.search_point({ keywords: station.name, city: region.name }, service: 'gaode')
-
-      location.update(
-        country_id:  Region::Country.find_by(name: res['nation']).id,
-        province_id: Region::Province.find_by(name: res['province']).id,
-        city_id:     Region::City.find_by(name: res['city']).id,
-        suburb_id:   Region::Suburb.find_by(name: res['district']).id,
-        name:        res['name']
-      )
+  def perform(location_id, reverse: false)
+    return if (location = Location.find_by(id: location_id))
+    if reverse
+      Map.reverse_geocode({ location: "#{location.latitude},#{location.longitude}" }) do |res|
+        location.suburb_id = Region::Suburb.find_by(name: res["address_component"]['district']).try(:id)
+        location.name = res['formatted_addresses']["recommend"] unless location.name
+        location.address = res["address"] unless location.address
+      end
+    else
+      Map.geocode({ address: location.address, region: location.try(:city).try(:name) }) do |res|
+        if res['location'].present?
+          location.longitude = res['location']['lng']
+          location.latitude = res['location']['lat']
+        end
+      end
     end
+    location.save
   end
 end

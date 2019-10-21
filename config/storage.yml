@@ -7,7 +7,7 @@ development:
   service: Aliyun
   access_key_id: LTAIGt0BBAlKBUv9
   access_key_secret: mjMc6mI3rBjvWE9MTIrw71Ydpqfoio
-  bucket: duodu
+  bucket: duodu-storage
   path: dev
   endpoint: https://oss-cn-beijing.aliyuncs.com
   mode: private
@@ -16,7 +16,7 @@ staging:
   service: Aliyun
   access_key_id: LTAIGt0BBAlKBUv9
   access_key_secret: mjMc6mI3rBjvWE9MTIrw71Ydpqfoio
-  bucket: duodu
+  bucket: duodu-storage
   path: systems
   endpoint: https://oss-cn-beijing.aliyuncs.com
   mode: private

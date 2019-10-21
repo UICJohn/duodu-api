@@ -10,8 +10,7 @@ FactoryBot.define do
     payment_type { 0 }
     user { create :wechat_user }
     rent { 2000 }
-    before :create do |post|
-      # post.attachments.attach fixture_file_upload(Rails.root.join('spec', 'fixtures', 'assets', 'test.jpg'), 'image/jpg')
+    before :create do |post|      
       post.location = build :location
     end
   end

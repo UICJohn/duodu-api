@@ -28,7 +28,7 @@ Rails.application.routes.draw do
     resources :tags, only: [:index]
 
     resources :posts, only: %i[index create] do
-      put '/upload_images' => 'posts#upload_images'
+      post '/upload_images' => 'posts#upload_images'
     end
 
     resources :verification_code, only: [:create]

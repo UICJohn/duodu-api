@@ -10,15 +10,14 @@ RSpec.describe Post, type: :model do
       )
       expect(post.persisted?).to eq false
       expect(post.errors.messages.map{ |k, v| k}).to eq [
-        :user, 
-        :available_from, 
-        :rent, 
-        :location, 
-        :attachments, 
-        :payment_type, 
-        :livings, 
+        :user,
+        :available_from,
+        :rent,
+        :location,
+        :payment_type,
+        :livings,
         :toilets, 
-        :rooms, 
+        :rooms,
         :property_type
       ]
     end
@@ -34,13 +33,12 @@ RSpec.describe Post, type: :model do
         :available_from,
         :rent,
         :location,
-        :attachments,
         :payment_type,
         :livings,
         :toilets,
         :rooms,
-        :tenants,
-        :property_type
+        :property_type,
+        :tenants
       ]
     end
 
@@ -55,6 +53,50 @@ RSpec.describe Post, type: :model do
         :available_from,
         :area_ids
       ]
+    end
+  end
+
+  describe "images" do
+    it 'should not upload more than 8 images' do
+      post = create :takehouse
+      (0...9).each { post.images.attach(fixture_file_upload(Rails.root.join('spec', 'fixtures', 'assets', 'test.jpg'), 'image/jpg')) }
+      expect(post.valid?).to eq false
+      expect(post.images_blobs.count).to eq 8
+    end
+
+    it 'should not upload more than 8 images' do
+      post = create :sharehouse
+      (0...9).each { post.images.attach(fixture_file_upload(Rails.root.join('spec', 'fixtures', 'assets', 'test.jpg'), 'image/jpg')) }
+      expect(post.valid?).to eq false
+      expect(post.images_blobs.count).to eq 8
+    end
+  end
+
+  describe "can_active?" do
+    it 'should not able to be actived' do
+      post = create :takehouse
+      post.update(active: true)
+      expect(post.valid?).to eq false
+    end
+
+    it 'should able to be active' do
+      post = create :takehouse
+      post.images.attach(fixture_file_upload(Rails.root.join('spec', 'fixtures', 'assets', 'test.jpg'), 'image/jpg'))
+      post.update(active: true)
+      expect(post.valid?).to eq true
+    end
+
+    it 'should not able to be actived' do
+      post = create :sharehouse
+      post.update(active: true)
+      expect(post.valid?).to eq false
+    end
+
+    it 'should able to be active' do
+      post = create :sharehouse
+      post.images.attach(fixture_file_upload(Rails.root.join('spec', 'fixtures', 'assets', 'test.jpg'), 'image/jpg'))
+      post.update(active: true)
+      expect(post.valid?).to be true
     end
   end
 

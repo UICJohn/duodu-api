@@ -1,14 +1,17 @@
 class Post::TakeHouse < Post::Base
   has_one :location, as: :target
-  has_many_attached :attachments
+  has_many_attached :images
 
   validates_numericality_of :rent
   validates_presence_of :location
-  validates :attachments, limit: { max: 8 }, content_type: /\Aimage\/.*\z/
+  validates :images, limit: { max: 8 }, content_type: /\Aimage\/.*\z/
+  validates :images, attached: true, if: :active?
   validates :payment_type, :rent, :livings, :rent, :toilets, :rooms, :property_type, presence: true
   validate  :can_active?
 
   enum property_type: [:house, :apartment, :studio]
+
+  # enum property_type: {'house' => 0, 'apartment' => 1, 'studio' => 2}
 
   accepts_nested_attributes_for :location
 
@@ -18,8 +21,8 @@ class Post::TakeHouse < Post::Base
 
   private
   def can_active?
-    if active? and attachments.blank?
-      errors.add(:attachments, 'you need to upload attachments')
+    if active? and images.blank?
+      errors.add(:images, 'you need to upload images')
     end
   end
 end

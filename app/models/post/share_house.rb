@@ -1,11 +1,13 @@
 class Post::ShareHouse < Post::Base
   has_one :location, as: :target
-  has_many_attached :attachments
+  has_many_attached :images
 
   validates_numericality_of :rent
   validates_presence_of :location
-  validates :attachments, limit: { max: 8 }
-  validates :payment_type, :rent, :livings, :rent, :toilets, :rooms, :tenants, :property_type, presence: true
+  validates :images, limit: { max: 8 }, content_type: /\Aimage\/.*\z/
+  validates :images, attached: true, if: :active?
+  validates :payment_type, :rent, :livings, :rent, :toilets, :rooms, :property_type, presence: true
+  validates :tenants, numericality: { greater_than: 0 }
   validate  :can_active?
 
   enum property_type: [:house, :apartment, :studio]
@@ -17,9 +19,10 @@ class Post::ShareHouse < Post::Base
   scope :active, -> { where(active: true) }
 
   private
+
   def can_active?
-    if active? and attachments.blank?
-      errors.add(:attachments, 'you need to upload attachments')
+    if active? and images.blank?
+      errors.add(:images, 'you need to upload images')
     end
   end
 end

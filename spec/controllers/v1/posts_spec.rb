@@ -320,31 +320,44 @@ RSpec.describe 'Post', type: :request do
 
     it 'should update image' do
       post = create :takehouse, user_id: @user.id
-      put "/v1/posts/#{post.id}/upload_images", params: {
+      post "/v1/posts/#{post.id}/upload_images", params: {
         attachment: fixture_file_upload(Rails.root.join('spec', 'fixtures', 'assets', 'test.jpg'), 'image/jpg')
       }, headers: @headers
       post.reload
-      expect(post.attachments).to be_present
+      expect(post.images).to be_present
       expect(post.active?).to eq true
     end
 
     it 'should not update image' do
       post = create :takehouse, user_id: (create :wechat_user).id
-      put "/v1/posts/#{post.id}/upload_images", params: {
+      post "/v1/posts/#{post.id}/upload_images", params: {
         attachment: fixture_file_upload(Rails.root.join('spec', 'fixtures', 'assets', 'test.jpg'), 'image/jpg')
       }, headers: @headers
       post.reload
-      expect(post.attachments).not_to be_present
+      expect(post.images).not_to be_present
       expect(post.active?).to eq false
     end
 
     it 'should not update image' do
       post = create :takehouse, user_id: @user.id
-      put "/v1/posts/#{post.id}/upload_images", params: {
+      post "/v1/posts/#{post.id}/upload_images", params: {
         attachment: fixture_file_upload(Rails.root.join('spec', 'fixtures', 'assets', 'test.txt'), 'text/plain')
       }, headers: @headers
       post.reload
-      expect(post.attachments).not_to be_attached
+      expect(post.images).not_to be_attached
+      expect(post.active?).to eq false
+    end
+
+    it 'should not update image' do
+      post = create :takehouse, user_id: @user.id
+      (0...8).each {
+        post.images.attach(fixture_file_upload(Rails.root.join('spec', 'fixtures', 'assets', 'test.jpg'), 'image/jpg'))
+      }
+      post.reload
+      post "/v1/posts/#{post.id}/upload_images", params: {
+        attachment: fixture_file_upload(Rails.root.join('spec', 'fixtures', 'assets', 'test.jpg'), 'image/jpg')
+      }, headers: @headers
+      expect(post.images.attachments.count).to eq 8
       expect(post.active?).to eq false
     end
   end

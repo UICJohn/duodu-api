@@ -26,10 +26,10 @@ json.posts do
 
     json.timestamp post.trace_on_create
     unless post.is_a?(Post::HouseMate)
-      json.attachments do
-        json.array! post.attachments.limit(4) do |attachment|
-          json.id attachment.id
-          json.url rails_blob_url(attachment)
+      json.images do
+        json.array! post.images.limit(4) do |image|
+          json.id image.id
+          json.url rails_blob_url(image)
         end
       end
     end

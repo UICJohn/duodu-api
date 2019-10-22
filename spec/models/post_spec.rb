@@ -51,7 +51,7 @@ RSpec.describe Post, type: :model do
       expect(post.errors.messages.map{ |k, v| k}).to eq [
         :user,
         :available_from,
-        :area_ids
+        :locations
       ]
     end
   end

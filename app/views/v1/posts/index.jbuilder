@@ -14,14 +14,26 @@ json.posts do
       )
       json.location do
         json.call(post.location, :name, :address)
+        json.country post.location.country.name
+        json.province post.location.province.name
+        json.city post.location.city.name
+        json.suburb post.location.suburb.name
       end
     elsif post.post_type == "house_mate"
       json.call(
         post,
         :min_rent,
-        :max_rent,
-        :areas,        
+        :max_rent
       )
+      json.locations do 
+        json.array! post.locations do |location|
+          json.call(location, :name, :address)
+          json.country location.country.name
+          json.province location.province.name
+          json.city location.city.name
+          json.suburb location.suburb.name
+        end
+      end
     end
 
     json.timestamp post.trace_on_create

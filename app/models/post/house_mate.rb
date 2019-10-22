@@ -1,8 +1,17 @@
 class Post::HouseMate < Post::Base
-  validates :area_ids, presence: true
-  validates_numericality_of :min_rent, :max_rent, allow_blank: true
+  has_many :locations, as: :target, dependent: :destroy
 
-  def areas
-    Region::Suburb.where(id: area_ids).map(&:name)
+  validates_numericality_of :min_rent, :max_rent, allow_blank: true
+  validates_presence_of :locations
+  validates :locations, length: { maximum: 4 }
+
+  before_create :actived
+
+  accepts_nested_attributes_for :locations, :allow_destroy => true
+
+  private
+
+  def actived
+    active = true
   end
 end

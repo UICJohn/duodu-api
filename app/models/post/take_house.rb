@@ -1,5 +1,5 @@
 class Post::TakeHouse < Post::Base
-  has_one :location, as: :target
+  has_one :location, as: :target, dependent: :destroy
   has_many_attached :images
 
   validates_numericality_of :rent
@@ -11,9 +11,7 @@ class Post::TakeHouse < Post::Base
 
   enum property_type: [:house, :apartment, :studio]
 
-  # enum property_type: {'house' => 0, 'apartment' => 1, 'studio' => 2}
-
-  accepts_nested_attributes_for :location
+  accepts_nested_attributes_for :location, :allow_destroy => true
 
   delegate :country, :city, :suburb, :name, :longitude, :latitude, to: :location
 

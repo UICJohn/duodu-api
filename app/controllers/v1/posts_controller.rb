@@ -14,7 +14,7 @@ class V1::PostsController < ApplicationController
   def create
     @post = "Post::#{@post_type}".constantize.new(self.send(@params_name))
     @post.user = current_user
-    if @post.save!
+    if @post.save
       render :show
     else
       error!(error: @post.errors)
@@ -39,6 +39,8 @@ class V1::PostsController < ApplicationController
   def preprocess_params
     @post_type = if %i[take_house share_house house_mate].include?(params[:post][:post_type].to_sym)
       params[:post][:post_type].camelize
+    else
+      error!(error: 'bad_request')
     end
 
     @params_name = if @post_type.present?
@@ -86,17 +88,26 @@ class V1::PostsController < ApplicationController
       :body,
       :available_from,
       :tenants,
+      :smoker,
       :has_pets,
       :min_rent,
       :max_rent,
-      :area_ids,
+      :locations_attributes,
       :tenants_gender,
       :smoke_allow,
+      :smoker,
       :has_air_conditioner,
-      :has_elevator,
-      :has_appliance,
-      :has_cook_top,
       :has_furniture,
+      :has_elevator,
+      :has_cook_top,
+      :has_appliance,
+      :has_network,
+      locations_attributes: %i[
+        name
+        address
+        longitude
+        latitude
+      ]
     )
   end
 

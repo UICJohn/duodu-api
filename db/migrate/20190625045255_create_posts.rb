@@ -26,7 +26,7 @@ class CreatePosts < ActiveRecord::Migration[5.2]
       t.boolean :has_elevator,        default: false
       t.boolean :has_cook_top,        default: false
       t.boolean :has_pets,            default: false
-
+      t.boolean :smoker,              default: false
       # requirement
       t.boolean :pets_allow, default: false
       t.boolean :smoke_allow, default: false

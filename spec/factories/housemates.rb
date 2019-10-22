@@ -4,5 +4,8 @@ FactoryBot.define do
     body  { 'blablabl' }
     available_from { Time.now.to_date }
     user { create :wechat_user }
+    before :create do |post|
+      post.locations << build(:location)
+    end
   end
 end

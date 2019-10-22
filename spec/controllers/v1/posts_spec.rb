@@ -14,7 +14,7 @@ RSpec.describe 'Post', type: :request do
       suburbs = %w(南山区 龙岗区).map{ |name| create :suburb, name: name }
       4.times { create :takehouse }
       4.times { create :sharehouse }
-      4.times { create :housemate, area_ids: suburbs.map(&:id) }
+      4.times { create :housemate}
     end
 
     it 'should success' do
@@ -290,11 +290,11 @@ RSpec.describe 'Post', type: :request do
           payment_type: "0",
           available_from: "2019-10-12",
           location_attributes: {
-            name: "西安市发改委",
-            address: "陕西省西安市未央区凤城八路",
-            longitude: 108.93984,
-            latitude: 34.34127
-          },
+                                  name: "西安市发改委",
+                                  address: "陕西省西安市未央区凤城八路",
+                                  longitude: 108.93984,
+                                  latitude: 34.34127
+                                },
           post_type: "take_house",
           has_air_conditioner: false,
           has_furniture: false,
@@ -308,6 +308,140 @@ RSpec.describe 'Post', type: :request do
       post = JSON.parse response.body
       expect(post["post"]).to be_present
       expect(Post::TakeHouse.first.active?).to eq false
+    end
+
+    it 'should create house mate post' do
+      expect{
+        post "/v1/posts", params: {
+                                    post: {
+                                            title: "sdfsf", 
+                                            body: "sdfsdfd", 
+                                            locations_attributes: [
+                                                                    {
+                                                                      name: "腾讯众创空间(西安)", 
+                                                                      address: "陕西省西安市碑林区南二环西段69号西安创新设计中心", 
+                                                                      longitude: 108.93462, 
+                                                                      latitude: 34.23055
+                                                                    },
+                                                                    {
+                                                                      name: "腾讯众创空间(西安)", 
+                                                                      address: "陕西省西安市碑林区南二环西段69号西安创新设计中心", 
+                                                                      longitude: 108.93462, 
+                                                                      latitude: 34.23055
+                                                                    },
+                                                                    {
+                                                                      name: "西安绥德商会", 
+                                                                      address: "陕西省西安市未央区风景御园18号楼", 
+                                                                      longitude: 108.939588, 
+                                                                      latitude: 34.340366
+                                                                    }
+                                                                  ],
+                                            available_from: "2019-10-23", 
+                                            min_rent: nil, 
+                                            max_rent: nil, 
+                                            range: nil, 
+                                            post_type: "house_mate", 
+                                            tenants: nil, 
+                                            has_air_conditioner: false, 
+                                            has_furniture: false, 
+                                            has_elevator: false, 
+                                            has_cook_top: false, 
+                                            has_appliance: false, 
+                                            has_network: false
+                                          }
+                                  }, headers: @headers
+      }.to change(Post::HouseMate, :count).by 1
+      expect(response).to be_successful
+      post = JSON.parse response.body
+      expect(post["post"]).to be_present
+      housemate = Post::HouseMate.first
+      expect(housemate.active?).to eq false
+      expect(housemate.locations.count).to eq 3
+    end
+
+    it 'should not create house mate post if more than 4 locations' do
+      expect{
+        post "/v1/posts", params: {
+                                    post: {
+                                            title: "sdfsf", 
+                                            body: "sdfsdfd", 
+                                            locations_attributes: [
+                                                                    {
+                                                                      name: "腾讯众创空间(西安)", 
+                                                                      address: "陕西省西安市碑林区南二环西段69号西安创新设计中心", 
+                                                                      longitude: 108.93462, 
+                                                                      latitude: 34.23055
+                                                                    },
+                                                                    {
+                                                                      name: "腾讯众创空间(西安)", 
+                                                                      address: "陕西省西安市碑林区南二环西段69号西安创新设计中心", 
+                                                                      longitude: 108.93462, 
+                                                                      latitude: 34.23055
+                                                                    },
+                                                                    {
+                                                                      name: "西安绥德商会", 
+                                                                      address: "陕西省西安市未央区风景御园18号楼", 
+                                                                      longitude: 108.939588, 
+                                                                      latitude: 34.340366
+                                                                    },
+                                                                    {
+                                                                      name: "西安绥德商会", 
+                                                                      address: "陕西省西安市未央区风景御园18号楼", 
+                                                                      longitude: 108.919588, 
+                                                                      latitude: 34.340366
+                                                                    },
+                                                                    {
+                                                                      name: "西安绥德商会", 
+                                                                      address: "陕西省西安市未央区风景御园18号楼", 
+                                                                      longitude: 108.929588, 
+                                                                      latitude: 34.340366
+                                                                    }
+                                                                  ],
+                                            available_from: "2019-10-23", 
+                                            min_rent: nil, 
+                                            max_rent: nil, 
+                                            range: nil, 
+                                            post_type: "house_mate", 
+                                            tenants: nil, 
+                                            has_air_conditioner: false, 
+                                            has_furniture: false, 
+                                            has_elevator: false, 
+                                            has_cook_top: false, 
+                                            has_appliance: false, 
+                                            has_network: false
+                                          }
+                                  }, headers: @headers
+      }.to change(Post::HouseMate, :count).by 0
+      expect(response).to be_successful
+      res = JSON.parse response.body
+      expect(res["error"].has_key?("locations")).to eq true
+    end
+
+    it 'should not create house mate post if more than 4 locations' do
+      expect{
+        post "/v1/posts", params: {
+                                    post: {
+                                            title: "sdfsf", 
+                                            body: "sdfsdfd", 
+                                            locations_attributes: [],
+                                            available_from: "2019-10-23", 
+                                            min_rent: nil, 
+                                            max_rent: nil, 
+                                            range: nil, 
+                                            post_type: "house_mate", 
+                                            tenants: nil, 
+                                            has_air_conditioner: false, 
+                                            has_furniture: false, 
+                                            has_elevator: false, 
+                                            has_cook_top: false, 
+                                            has_appliance: false, 
+                                            has_network: false
+                                          }
+                                  }, headers: @headers
+      }.to change(Post::HouseMate, :count).by 0
+      expect(response).to be_successful
+      res = JSON.parse response.body
+      expect(res["error"].has_key?("locations")).to eq true
     end
   end
 

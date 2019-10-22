@@ -130,6 +130,7 @@ ActiveRecord::Schema.define(version: 2019_10_14_083952) do
     t.boolean "has_elevator", default: false
     t.boolean "has_cook_top", default: false
     t.boolean "has_pets", default: false
+    t.boolean "smoker", default: false
     t.boolean "pets_allow", default: false
     t.boolean "smoke_allow", default: false
     t.integer "tenants_gender", default: 2
@@ -315,7 +316,6 @@ ActiveRecord::Schema.define(version: 2019_10_14_083952) do
     t.string "major"
     t.integer "password_status"
     t.text "intro"
-    t.boolean "smoker", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "tags", default: [], array: true

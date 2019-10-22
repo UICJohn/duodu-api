@@ -50,7 +50,6 @@ class DeviseCreateUsers < ActiveRecord::Migration[5.2]
       t.string  :major
       t.integer :password_status
       t.text    :intro
-      t.boolean :smoker, default: false
       t.timestamps null: false
     end
 

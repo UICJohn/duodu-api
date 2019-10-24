@@ -95,7 +95,7 @@ namespace :region do
           subway.stations << station unless subway.stations.include?(station)
 
           next if station.location.present?
-
+          sleep(1)
           ActiveRecord::Base.transaction do
             if (point = Map.search_point(keyword: station.name.to_s, filter: 'category=地铁站', boundary: "region(#{region.name}, 0)"))
               Location.create!(
@@ -113,12 +113,12 @@ namespace :region do
               longitude, latitude = point['location'].split(',')
               Location.create(
                 country_id:   Region::Province.find_by(name: point['pname']).try(:country_id),
-  province_id:  Region::Province.find_by(name: point['pname']).try(:id),
-  city_id:      Region::City.find_by(name: point['cityname']).try(:id),
-  suburb_id:    Region::Suburb.find_by(name: point['adname']).try(:id),
-  latitude:     latitude.to_f,
-  longitude:    longitude.to_f,
-  target:       station
+                province_id:  Region::Province.find_by(name: point['pname']).try(:id),
+                city_id:      Region::City.find_by(name: point['cityname']).try(:id),
+                suburb_id:    Region::Suburb.find_by(name: point['adname']).try(:id),
+                latitude:     latitude.to_f,
+                longitude:    longitude.to_f,
+                target:       station
               )
               station.update(active: true)
             end

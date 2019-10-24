@@ -21,9 +21,9 @@ class Location < ApplicationRecord
   def fetch_location_detail
     if %i[address name country city suburb province].any? { |col| public_send("#{col}").nil? } \
       && %i[latitude longitude].all? { |col| public_send("#{col}").present? }
-      LocationDetailWorker.perform_async(id, true)
+      LocationDetailWorker.perform_in(5.seconds, id, true)
     elsif %i[latitude longitude].any? { |col| public_send("#{col}").blank? } && address.present?
-      LocationDetailWorker.perform_async(id)
+      LocationDetailWorker.perform_in(5.seconds, id)
     end
   end
 end

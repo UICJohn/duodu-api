@@ -10,8 +10,6 @@ class Post::ShareHouse < Post::Base
   validates :tenants, numericality: { greater_than: 0 }
   validate  :can_active?
 
-  enum property_type: [:house, :apartment, :studio]
-
   accepts_nested_attributes_for :location, :allow_destroy => true
 
   delegate :country, :city, :suburb, :name, :longitude, :latitude, to: :location

@@ -9,8 +9,6 @@ class Post::TakeHouse < Post::Base
   validates :payment_type, :rent, :livings, :rent, :toilets, :rooms, :property_type, presence: true
   validate  :can_active?
 
-  enum property_type: [:house, :apartment, :studio]
-
   accepts_nested_attributes_for :location, :allow_destroy => true
 
   delegate :country, :city, :suburb, :name, :longitude, :latitude, to: :location

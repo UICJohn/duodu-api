@@ -5,7 +5,7 @@ FactoryBot.define do
     available_from { Time.now.to_date }
     user { create :wechat_user }
     before :create do |post|
-      post.locations << build(:location)
+      post.locations << build(:location_with_regions)
     end
   end
 end

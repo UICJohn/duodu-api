@@ -9,7 +9,7 @@ development:
   access_key_secret: mjMc6mI3rBjvWE9MTIrw71Ydpqfoio
   bucket: duodu-storage
   path: dev
-  endpoint: https://oss-cn-beijing.aliyuncs.com
+  endpoint: https://oss-cn-zhangjiakou.aliyuncs.com
   mode: private
 
 staging: 
@@ -18,7 +18,7 @@ staging:
   access_key_secret: mjMc6mI3rBjvWE9MTIrw71Ydpqfoio
   bucket: duodu-storage
   path: systems
-  endpoint: https://oss-cn-beijing.aliyuncs.com
+  endpoint: https://oss-cn-zhangjiakou.aliyuncs.com
   mode: private
 
 test:

@@ -33,7 +33,7 @@ zh-CN:
   activerecord:
     errors:
       models:
-        user: 
+        user:
           attributes:
             phone:
               taken: '该手机号码已注册'

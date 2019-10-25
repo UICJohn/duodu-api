@@ -11,7 +11,7 @@ class CreateLocations < ActiveRecord::Migration[5.2]
       t.decimal :latitude, precision: 10, scale: 6
       t.bigint  :target_id
       t.string  :target_type
-      t.boolean :active
+      # t.boolean :active
     end
 
     add_index :locations, :country_id, using: :btree

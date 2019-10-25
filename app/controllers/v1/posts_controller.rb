@@ -13,7 +13,7 @@ class V1::PostsController < ApplicationController
 
   def create
     @post = "Post::#{@post_type}".constantize.new(self.send(@params_name))
-    @post.user = current_user
+    @post.user = current_user 
     if @post.save
       render :show
     else
@@ -23,9 +23,9 @@ class V1::PostsController < ApplicationController
 
   def upload_images
     if (params[:attachment].present? && @post = current_user.posts.find_by(id: params[:post_id]))
-      if image = @post.images.attach(params[:attachment])
+      if @post.images.attach(params[:attachment])
         @post.active = true
-        @post.cover_image_id = image.id if params[:cover_image]
+        @post.cover_image_id = @post.images.last.id if params[:cover_image]
         @post.save
       end
       render :show
@@ -37,14 +37,9 @@ class V1::PostsController < ApplicationController
   private
 
   def preprocess_params
-    @post_type = if %i[take_house share_house house_mate].include?(params[:post][:post_type].to_sym)
-      params[:post][:post_type].camelize
-    else
-      error!(error: 'bad_request')
-    end
-
-    @params_name = if @post_type.present?
-      params[:post][:post_type] == 'house_mate' ? "housemate_post_params" : "house_post_params"
+    @params_name = if %i[take_house share_house house_mate].include?(params[:post][:type].to_sym)
+      @post_type = params[:post][:type].camelize
+      params[:post][:type] == 'house_mate' ? "housemate_post_params" : "house_post_params"
     else
       error!(error: 'bad request')
     end
@@ -52,7 +47,6 @@ class V1::PostsController < ApplicationController
 
   def house_post_params
     params.require(:post).permit(
-      :post_type,
       :title,
       :body,
       :rooms,
@@ -83,7 +77,6 @@ class V1::PostsController < ApplicationController
 
   def housemate_post_params
     params.require(:post).permit(
-      :post_type,
       :title,
       :body,
       :available_from,

@@ -10,9 +10,7 @@ RSpec.describe 'Post', type: :request do
     end
 
     before do
-      cities = %w(深圳市 惠州市 广州市).map{ |name| create :city, name: name }
-      suburbs = %w(南山区 龙岗区).map{ |name| create :suburb, name: name }
-      4.times { create :takehouse }
+      4.times { create :takehouse}
       4.times { create :sharehouse }
       4.times { create :housemate}
     end
@@ -248,7 +246,7 @@ RSpec.describe 'Post', type: :request do
     it 'should not create house posts if not authencatied' do
       expect{
         post "/v1/posts", params: { post: {
-          post_type: 'take_house',
+          type: 'take_house',
           title: 'blablabla',
           body: 'blablabla',
           rooms: 1,
@@ -289,13 +287,13 @@ RSpec.describe 'Post', type: :request do
           property_type: "house",
           payment_type: "0",
           available_from: "2019-10-12",
+          type: "take_house",
           location_attributes: {
                                   name: "西安市发改委",
                                   address: "陕西省西安市未央区凤城八路",
                                   longitude: 108.93984,
                                   latitude: 34.34127
                                 },
-          post_type: "take_house",
           has_air_conditioner: false,
           has_furniture: false,
           has_elevator: false,
@@ -340,7 +338,7 @@ RSpec.describe 'Post', type: :request do
                                             min_rent: nil, 
                                             max_rent: nil, 
                                             range: nil, 
-                                            post_type: "house_mate", 
+                                            type: "house_mate", 
                                             tenants: nil, 
                                             has_air_conditioner: false, 
                                             has_furniture: false, 
@@ -365,6 +363,7 @@ RSpec.describe 'Post', type: :request do
                                     post: {
                                             title: "sdfsf", 
                                             body: "sdfsdfd", 
+                                            type: 'house_mate',
                                             locations_attributes: [
                                                                     {
                                                                       name: "腾讯众创空间(西安)", 
@@ -428,7 +427,7 @@ RSpec.describe 'Post', type: :request do
                                             min_rent: nil, 
                                             max_rent: nil, 
                                             range: nil, 
-                                            post_type: "house_mate", 
+                                            type: "house_mate", 
                                             tenants: nil, 
                                             has_air_conditioner: false, 
                                             has_furniture: false, 

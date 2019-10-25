@@ -1,6 +1,6 @@
 json.post do
   json.id @post.id
-  json.call(@post, :title, :body, :post_type, :available_from)
+  json.call(@post, :title, :body, :type, :available_from)
   if @post.is_a?(Post::HouseMate)
     json.call(
                 @post, 

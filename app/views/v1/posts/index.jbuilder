@@ -1,8 +1,8 @@
 json.page @page
 json.posts do
   json.array! @posts do |post|
-    json.call(post, :body, :title, :user_id, :post_type)
-    if ["take_house", "share_house"].include?(post.post_type)
+    json.call(post, :body, :title, :user_id, :type)
+    if post.type == 'Post::TakeHouse'
       json.call(
         post,
         :payment_type,
@@ -14,12 +14,10 @@ json.posts do
       )
       json.location do
         json.call(post.location, :name, :address)
-        json.country post.location.country.name
-        json.province post.location.province.name
-        json.city post.location.city.name
-        json.suburb post.location.suburb.name
+        json.city post.location.try(:city).try(:name)
+        json.suburb post.location.try(:suburb).try(:name)
       end
-    elsif post.post_type == "house_mate"
+    elsif post.type == "Post::HouseMate"
       json.call(
         post,
         :min_rent,
@@ -28,11 +26,24 @@ json.posts do
       json.locations do 
         json.array! post.locations do |location|
           json.call(location, :name, :address)
-          json.country location.country.name
-          json.province location.province.name
-          json.city location.city.name
-          json.suburb location.suburb.name
+          json.city location.try(:city).try(:name)
+          json.suburb location.try(:suburb).try(:name)
         end
+      end
+    else
+      json.call(
+        post,
+        :payment_type,
+        :rent,
+        :livings,
+        :rooms,
+        :toilets,
+        :property_type,      
+      )
+      json.location do
+        json.call(post.location, :name, :address)
+        json.city post.location.try(:city).try(:name)
+        json.suburb post.location.try(:suburb).try(:name)
       end
     end
 

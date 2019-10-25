@@ -30,7 +30,7 @@ class User < ApplicationRecord
   has_many :posts, class_name: "Post::Base"
 
   enum password_status: %i[weak good strong]
-  enum gender: %w[male female unisex]
+  enum gender: %w[female male unisex]
 
   accepts_nested_attributes_for :preference, :location
 

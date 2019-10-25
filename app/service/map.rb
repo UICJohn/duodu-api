@@ -54,6 +54,7 @@ class Map
         params.merge!(key: ENV['tmap_key']) unless params[:key].present?
         res = dispatch_request(url, method: 'GET', package: params)
         raise res['message'] unless res['status'].zero?
+
         if block
           block.call(res['result'])
         else
@@ -64,12 +65,14 @@ class Map
 
     def reverse_geocode(options, &block)
       return nil if options[:location].nil?
+
       safe_env do
         url = 'https://apis.map.qq.com/ws/geocoder/v1/'
         params = request_params(%w[location get_poi poi_options key output], options)
         params.merge!(key: ENV['tmap_key']) unless params[:key].present?
         res = dispatch_request(url, method: 'GET', package: params)
         raise res['message'] if res['status'] != 0
+
         if block
           block.call(res['result'])
         else
@@ -110,7 +113,6 @@ class Map
 
       response['data'].first
     end
-
 
     def request_params(list, options, &block)
       list.map do |key|

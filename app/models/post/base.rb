@@ -9,4 +9,6 @@ class Post::Base < ApplicationRecord
 
   validates :title, :body, :available_from, presence: true
 
+  delegate :gender,   to: :user, prefix: true
+  delegate :username, to: :user
 end

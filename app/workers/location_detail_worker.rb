@@ -7,13 +7,14 @@ class LocationDetailWorker
 
   def perform(location_id, reverse = false)
     return unless (location = Location.find_by(id: location_id))
+
     if reverse
-      res = Map.reverse_geocode({ location: "#{location.latitude},#{location.longitude}" })
-      location.suburb_id = Region::Suburb.find_by(name: res["address_component"]['district']).try(:id)
-      location.name = res['formatted_addresses']["recommend"] unless location.name.present?
-      location.address = res["address"] unless location.address.present?
+      res = Map.reverse_geocode(location: "#{location.latitude},#{location.longitude}")
+      location.suburb_id = Region::Suburb.find_by(name: res['address_component']['district']).try(:id)
+      location.name = res['formatted_addresses']['recommend'] unless location.name.present?
+      location.address = res['address'] unless location.address.present?
     else
-      res = Map.geocode({ address: location.address, region: location.try(:city).try(:name) })
+      res = Map.geocode(address: location.address, region: location.try(:city).try(:name))
       if res['location'].present?
         location.longitude = res['location']['lng']
         location.latitude = res['location']['lat']

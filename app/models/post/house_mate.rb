@@ -7,11 +7,11 @@ class Post::HouseMate < Post::Base
 
   before_create :actived
 
-  accepts_nested_attributes_for :locations, :allow_destroy => true
+  accepts_nested_attributes_for :locations, allow_destroy: true
 
   private
 
   def actived
-    active = true
+    self.active = true
   end
 end

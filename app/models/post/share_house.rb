@@ -4,13 +4,13 @@ class Post::ShareHouse < Post::Base
 
   validates_numericality_of :rent
   validates_presence_of :location
-  validates :images, limit: { max: 8 }, content_type: /\Aimage\/.*\z/
+  validates :images, limit: { max: 8 }, content_type: %r{\Aimage/.*\z}
   validates :images, attached: true, if: :active?
   validates :payment_type, :rent, :livings, :rent, :toilets, :rooms, :property_type, presence: true
   validates :tenants, numericality: { greater_than: 0 }
   validate  :can_active?
 
-  accepts_nested_attributes_for :location, :allow_destroy => true
+  accepts_nested_attributes_for :location, allow_destroy: true
 
   delegate :country, :city, :suburb, :name, :longitude, :latitude, to: :location
 
@@ -19,7 +19,7 @@ class Post::ShareHouse < Post::Base
   private
 
   def can_active?
-    if active? and images.blank?
+    if active? && images.blank?
       errors.add(:images, 'you need to upload images')
     end
   end

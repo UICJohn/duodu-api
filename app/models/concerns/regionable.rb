@@ -10,12 +10,13 @@ module Regionable
 
       idx = REGION_ATTRIBUTES.index(region)
       return if idx == (REGION_ATTRIBUTES.length - 1)
-      return unless (region_record = public_send("#{region}"))
+      return unless (region_record = public_send(region.to_s))
 
-      REGION_ATTRIBUTES[idx+1 .. -1].each do |parent_region|
+      REGION_ATTRIBUTES[idx + 1..-1].each do |parent_region|
         next if public_send("#{parent_region}_id_changed?")
+
         public_send("#{parent_region}_id=", \
-          region_record.public_send("#{parent_region}").try(:id))
+                    region_record.public_send(parent_region.to_s).try(:id))
       end
     end
   end

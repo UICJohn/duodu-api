@@ -12,8 +12,8 @@ class V1::PostsController < ApplicationController
   end
 
   def create
-    @post = "Post::#{@post_type}".constantize.new(self.send(@params_name))
-    @post.user = current_user 
+    @post = "Post::#{@post_type}".constantize.new(send(@params_name))
+    @post.user = current_user
     if @post.save
       render :show
     else
@@ -22,7 +22,7 @@ class V1::PostsController < ApplicationController
   end
 
   def upload_images
-    if (params[:attachment].present? && @post = current_user.posts.find_by(id: params[:post_id]))
+    if params[:attachment].present? && (@post = current_user.posts.find_by(id: params[:post_id]))
       if @post.images.attach(params[:attachment])
         @post.active = true
         @post.cover_image_id = @post.images.last.id if params[:cover_image]
@@ -38,11 +38,11 @@ class V1::PostsController < ApplicationController
 
   def preprocess_params
     @params_name = if %i[take_house share_house house_mate].include?(params[:post][:type].to_sym)
-      @post_type = params[:post][:type].camelize
-      params[:post][:type] == 'house_mate' ? "housemate_post_params" : "house_post_params"
-    else
-      error!(error: 'bad request')
-    end
+                     @post_type = params[:post][:type].camelize
+                     params[:post][:type] == 'house_mate' ? 'housemate_post_params' : 'house_post_params'
+                   else
+                     error!(error: 'bad request')
+                   end
   end
 
   def house_post_params

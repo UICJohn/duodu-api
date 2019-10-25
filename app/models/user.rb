@@ -27,7 +27,7 @@ class User < ApplicationRecord
   has_many :pending_friends, through: :friend_requests, source: :friend
   has_many :friendships
   has_many :friends, through: :friendships, source: :user
-  has_many :posts, class_name: "Post::Base"
+  has_many :posts, class_name: 'Post::Base'
 
   enum password_status: %i[weak good strong]
   enum gender: %w[female male unisex]
@@ -107,7 +107,6 @@ class User < ApplicationRecord
   end
 
   def setup_user
-    # self.current_step = 0
     self.preference = Preference.create
   end
 end

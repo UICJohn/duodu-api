@@ -48,7 +48,7 @@ group :development do
   gem 'capistrano-bundler'
   gem 'capistrano-rails', '~> 1.4', require: false
   gem 'capistrano-rvm'
-  gem 'capistrano-sidekiq'
+  gem 'capistrano-sidekiq', github: 'seuros/capistrano-sidekiq'
   gem 'capistrano3-puma'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.1'

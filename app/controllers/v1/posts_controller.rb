@@ -37,7 +37,7 @@ class V1::PostsController < ApplicationController
   private
 
   def preprocess_params
-    @params_name = if %i[take_house share_house house_mate].include?(params[:post][:type].to_sym)
+    @params_name = if params[:post][:type].present? && %i[take_house share_house house_mate].include?(params[:post][:type].to_sym)
                      @post_type = params[:post][:type].camelize
                      params[:post][:type] == 'house_mate' ? 'housemate_post_params' : 'house_post_params'
                    else

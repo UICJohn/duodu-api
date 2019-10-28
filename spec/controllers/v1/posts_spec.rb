@@ -353,7 +353,7 @@ RSpec.describe 'Post', type: :request do
       post = JSON.parse response.body
       expect(post["post"]).to be_present
       housemate = Post::HouseMate.first
-      expect(housemate.active?).to eq false
+      expect(housemate.active?).to eq true
       expect(housemate.locations.count).to eq 3
     end
 

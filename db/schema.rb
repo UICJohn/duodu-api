@@ -95,7 +95,6 @@ ActiveRecord::Schema.define(version: 2019_10_14_083952) do
     t.decimal "latitude", precision: 10, scale: 6
     t.bigint "target_id"
     t.string "target_type"
-    t.boolean "active"
     t.index ["city_id"], name: "index_locations_on_city_id"
     t.index ["country_id"], name: "index_locations_on_country_id"
     t.index ["province_id"], name: "index_locations_on_province_id"

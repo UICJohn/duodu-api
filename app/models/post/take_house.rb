@@ -1,4 +1,6 @@
 class Post::TakeHouse < Post::Base
+  include  PostImageable
+
   has_one :location, as: :target, dependent: :destroy
   has_many_attached :images
 
@@ -7,7 +9,6 @@ class Post::TakeHouse < Post::Base
   validates :images, limit: { max: 8 }, content_type: %r{\Aimage/.*\z}
   validates :images, attached: true, if: :active?
   validates :payment_type, :rent, :livings, :rent, :toilets, :rooms, :property_type, presence: true
-  validate  :can_active?
 
   accepts_nested_attributes_for :location, allow_destroy: true
 
@@ -15,11 +16,4 @@ class Post::TakeHouse < Post::Base
 
   scope :active, -> { where(active: true) }
 
-  private
-
-  def can_active?
-    if active? && images.blank?
-      errors.add(:images, 'you need to upload images')
-    end
-  end
 end

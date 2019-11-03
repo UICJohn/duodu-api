@@ -3,5 +3,5 @@ ENV['ELASTICSEARCH_URL'] = if Rails.env.production?
                            elsif Rails.env.staging?
                              'http://localhost:9200'
                            else
-                             'http://localhost:9200'
+                             'http://192.168.31.78:9200'
                            end

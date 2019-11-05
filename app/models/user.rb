@@ -16,7 +16,7 @@ class User < ApplicationRecord
   validates :email, uniqueness: true, allow_blank: true
   validates :phone, format: { with: /\A[0-9]{11}\z/, message: '手机号不正确' }, uniqueness: true, allow_blank: true
   # validates :avatar, blob: { content_type: %r{^image/} }
-  validates_format_of :email, with: Devise.email_regexp, allow_blank: true
+  validates :email, format: { with: Devise.email_regexp, allow_blank: true }
 
   before_save :set_password_status
   before_save :fetch_avatar
@@ -29,8 +29,8 @@ class User < ApplicationRecord
   has_many :friends, through: :friendships, source: :user
   has_many :posts, class_name: 'Post::Base'
 
-  enum password_status: %i[weak good strong]
-  enum gender: %w[female male unisex]
+  enum password_status: { weak: 0, good: 1, strong: 2 }
+  enum gender: { 'female' => 0, 'male' => 1, 'unisex' => 2 }
 
   accepts_nested_attributes_for :preference, :location
 
@@ -85,11 +85,11 @@ class User < ApplicationRecord
   end
 
   def set_password_status
-    return unless password.present?
+    return if password.blank?
 
-    self.password_status = if password.match(/^(?=.*[a-zA-Z])(?=.*[0-9]).{10,}$/)
+    self.password_status = if /^(?=.*[a-zA-Z])(?=.*[0-9]).{10,}$/.match?(password)
                              :strong
-                           elsif password.match(/^(?=.*[a-zA-Z])(?=.*[0-9]).{6,}$/)
+                           elsif /^(?=.*[a-zA-Z])(?=.*[0-9]).{6,}$/.match?(password)
                              :good
                            else
                              :weak

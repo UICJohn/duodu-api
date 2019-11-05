@@ -11,8 +11,8 @@ class LocationDetailWorker
     if reverse
       res = Map.reverse_geocode(location: "#{location.latitude},#{location.longitude}")
       location.suburb_id = Region::Suburb.find_by(name: res['address_component']['district']).try(:id)
-      location.name = res['formatted_addresses']['recommend'] unless location.name.present?
-      location.address = res['address'] unless location.address.present?
+      location.name = res['formatted_addresses']['recommend'] if location.name.blank?
+      location.address = res['address'] if location.address.blank?
     else
       res = Map.geocode(address: location.address, region: location.try(:city).try(:name))
       if res['location'].present?

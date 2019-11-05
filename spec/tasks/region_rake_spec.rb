@@ -120,24 +120,24 @@ describe 'region:tasks' do
                                                           }
                                                         ])
 
-    allow(Map).to receive(:search_point).and_return({
-                                                      "id"=>"10003897110323961921",
-                                                      "title"=>"西苑[地铁站]",
-                                                      "address"=>"地铁4号线大兴线,地铁16号线",
-                                                      "tel"=>" ",
-                                                      "category"=>"基础设施:交通设施:地铁站",
-                                                      "type"=>2,
-                                                      "location"=>{
-                                                                    "lat"=>39.99839,
-                                                                    "lng"=>116.290711
-                                                                  },
-                                                      "ad_info"=>{
-                                                                    "adcode"=>110108,
-                                                                    "province"=>"北京市",
-                                                                    "city"=>"北京市",
-                                                                    "district"=>"海淀区"
-                                                                  }
-                                                    })
+    allow(Map).to receive(:search_point).and_return(
+      'id' => '10003897110323961921',
+      'title' => '西苑[地铁站]',
+      'address' => '地铁4号线大兴线,地铁16号线',
+      'tel' => ' ',
+      'category' => '基础设施:交通设施:地铁站',
+      'type' => 2,
+      'location' => {
+        'lat' => 39.99839,
+                    'lng' => 116.290711
+      },
+      'ad_info' => {
+        'adcode' => 110_108,
+                    'province' => '北京市',
+                    'city' => '北京市',
+                    'district' => '海淀区'
+      }
+    )
 
     expect do
       Rake::Task['region:sync_subways'].execute
@@ -177,24 +177,24 @@ describe 'region:tasks' do
                                                           }
                                                         ])
 
-    allow(Map).to receive(:search_point).and_return({
-                                                      "id"=>"10003897110323961921",
-                                                      "title"=>"西苑[地铁站]",
-                                                      "address"=>"地铁4号线大兴线,地铁16号线",
-                                                      "tel"=>" ",
-                                                      "category"=>"基础设施:交通设施:地铁站",
-                                                      "type"=>2,
-                                                      "location"=>{
-                                                                    "lat"=>39.99839,
-                                                                    "lng"=>116.290711
-                                                                  },
-                                                      "ad_info"=>{
-                                                                    "adcode"=>110108,
-                                                                    "province"=>"北京市",
-                                                                    "city"=>"北京市",
-                                                                    "district"=>"海淀区"
-                                                                  }
-                                                    })
+    allow(Map).to receive(:search_point).and_return(
+      'id' => '10003897110323961921',
+      'title' => '西苑[地铁站]',
+      'address' => '地铁4号线大兴线,地铁16号线',
+      'tel' => ' ',
+      'category' => '基础设施:交通设施:地铁站',
+      'type' => 2,
+      'location' => {
+        'lat' => 39.99839,
+                    'lng' => 116.290711
+      },
+      'ad_info' => {
+        'adcode' => 110_108,
+                    'province' => '北京市',
+                    'city' => '北京市',
+                    'district' => '海淀区'
+      }
+    )
 
     Rake::Task['region:sync_subways'].execute
     Rake::Task['region:sync_subways'].execute

@@ -11,4 +11,6 @@ class Post::Base < ApplicationRecord
 
   delegate :gender,   to: :user, prefix: true
   delegate :username, to: :user
+
+  scope :active, -> { where(active: true) }
 end

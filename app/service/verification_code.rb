@@ -52,7 +52,7 @@ class VerificationCode
     record = fetch
     return true if record.nil?
 
-    (Time.now - record['created_at'].to_time) > 1.minutes
+    (Time.zone.now - record['created_at'].to_time) > 1.minute
   end
 
   def generate_code
@@ -70,7 +70,7 @@ class VerificationCode
   end
 
   def cache(code)
-    $redis.set(record_name, { code: code, created_at: Time.now }.to_json, ex: @expiries_in)
+    $redis.set(record_name, { code: code, created_at: Time.zone.now }.to_json, ex: @expiries_in)
   end
 
   def fetch

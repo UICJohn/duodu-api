@@ -32,7 +32,7 @@ module Wechat
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       http.set_debug_output($stdout) if Rails.env.development?
 
-      path = ((method.downcase == 'get') && package.present?) ? "#{uri.path}?".concat(package.map { |k, v| "#{k}=#{CGI.escape(v)}" }.join('&')) : uri.path
+      path = (method.casecmp('get').zero? && package.present?) ? "#{uri.path}?".concat(package.map { |k, v| "#{k}=#{CGI.escape(v)}" }.join('&')) : uri.path
 
       request = "Net::HTTP::#{method.capitalize}".constantize.new(path, 'Content-Type' => 'application/x-www-form-urlencoded')
       request.set_form_data(package) if package.present?

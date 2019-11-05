@@ -51,11 +51,11 @@ RSpec.describe VerificationCode, type: :model do
 
     describe '#fetch' do
       it 'should fetch correct record' do
-        allow(Time).to receive(:now).and_return Time.new(2019, 1, 1)
+        allow(Time).to receive(:now).and_return Time.zone.local(2019, 1, 1)
         allow_any_instance_of(VerificationCode).to receive(:generate_code).and_return('D-4560446')
         code_service = VerificationCode.new('phone' => '18382830192')
         code_service.issue
-        expect(code_service.send('fetch')).to eq('code' => 'D-4560446', 'created_at' => JSON.parse(Time.now.to_json))
+        expect(code_service.send('fetch')).to eq('code' => 'D-4560446', 'created_at' => JSON.parse(Time.zone.now.to_json))
       end
 
       it 'should not fetch record' do

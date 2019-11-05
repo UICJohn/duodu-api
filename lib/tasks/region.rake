@@ -19,7 +19,7 @@ namespace :region do
 
     provinces, cities, suburbs = Map.fetch_regions
 
-    return unless provinces.present?
+    return if provinces.blank?
 
     provinces.each do |json_province|
       # p json_province
@@ -80,7 +80,7 @@ namespace :region do
         next if Subway.find_by(source_id: json_subway['pair_line_uid'])
 
         subway = Subway.create_or_update({
-                                            name: json_subway['line_name'].split('(').first,
+                                           name: json_subway['line_name'].split('(').first,
                                             source_id: json_subway['line_uid']
                                          }, key: 'source_id')
 
@@ -95,6 +95,7 @@ namespace :region do
           subway.stations << station unless subway.stations.include?(station)
 
           next if station.location.present?
+
           sleep(1)
           ActiveRecord::Base.transaction do
             if (point = Map.search_point(keyword: station.name.to_s, filter: 'category=地铁站', boundary: "region(#{region.name}, 0)"))

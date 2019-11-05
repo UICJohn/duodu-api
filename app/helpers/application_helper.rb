@@ -2,7 +2,7 @@ module ApplicationHelper
   private
 
   def generate_filters(options = {})
-    return unless options.present?
+    return if options.blank?
 
     filters = {}
     location_filters = {}

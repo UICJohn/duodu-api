@@ -111,7 +111,7 @@ GEM
     aliyun-sms (1.1.1)
       typhoeus
     ast (2.4.0)
-    bcrypt (3.1.13)
+    bcrypt (3.1.12)
     bootsnap (1.4.5)
       msgpack (~> 1.0)
     builder (3.2.3)
@@ -265,6 +265,8 @@ GEM
       omniauth-oauth2 (>= 1.1.1)
     orm_adapter (0.5.0)
     parallel (1.18.0)
+    parallel_tests (2.29.2)
+      parallel
     parser (2.6.5.0)
       ast (~> 2.4.0)
     pg (1.1.4)
@@ -340,6 +342,13 @@ GEM
       rainbow (>= 2.2.2, < 4.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 1.7)
+    rubocop-performance (1.5.0)
+      rubocop (>= 0.71.0)
+    rubocop-rails (2.3.2)
+      rack (>= 1.1)
+      rubocop (>= 0.72.0)
+    rubocop-rspec (1.36.0)
+      rubocop (>= 0.68.1)
     ruby-progressbar (1.10.1)
     searchkick (4.1.0)
       activemodel (>= 5)
@@ -419,6 +428,7 @@ DEPENDENCIES
   listen (>= 3.2.0)
   mock_redis
   omniauth-wechat-oauth2
+  parallel_tests
   pg
   puma (~> 4.2.1)
   rack-cors
@@ -428,6 +438,9 @@ DEPENDENCIES
   rspec-rails
   rspec-sidekiq
   rubocop
+  rubocop-performance
+  rubocop-rails
+  rubocop-rspec
   searchkick
   sidekiq
   spring

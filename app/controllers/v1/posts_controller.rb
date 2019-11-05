@@ -8,7 +8,7 @@ class V1::PostsController < ApplicationController
   def index
     @page = params[:page] || 1
     filters = generate_filters(filters_params.to_h)
-    @posts = filters.present? ? Post::Base.search(filters).page(@page) : Post::Base.page(@page)
+    @posts = filters.present? ? Post::Base.search(filters).page(@page) : Post::Base.active.page(@page).order('created_at DESC')
   end
 
   def create
@@ -24,8 +24,8 @@ class V1::PostsController < ApplicationController
   def upload_images
     if params[:attachment].present? && (@post = current_user.posts.find_by(id: params[:post_id]))
       if @post.images.attach(params[:attachment])
-        @post.active = true
         @post.cover_image_id = @post.images.last.id if params[:cover_image]
+        @post.active = true
         @post.save
       end
       render :show

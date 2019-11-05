@@ -3,7 +3,7 @@ class V1::SubwaysController < ApplicationController
 
   def index
     if params[:region].present? && (region = Region::Base.find_by(name: params[:region]))
-      @subways = Subway.find_by_region(region)
+      @subways = Subway.find_by(region: region)
     else
       error!(error: 'bad request')
     end

@@ -51,12 +51,12 @@ class Map
       safe_env do
         url = 'https://apis.map.qq.com/ws/geocoder/v1/'
         params = request_params(%w[address region key output], options)
-        params.merge!(key: ENV['tmap_key']) unless params[:key].present?
+        params[:key] = ENV['tmap_key'] if params[:key].blank?
         res = dispatch_request(url, method: 'GET', package: params)
         raise res['message'] unless res['status'].zero?
 
         if block
-          block.call(res['result'])
+          yield(res['result'])
         else
           return res['result']
         end
@@ -69,12 +69,12 @@ class Map
       safe_env do
         url = 'https://apis.map.qq.com/ws/geocoder/v1/'
         params = request_params(%w[location get_poi poi_options key output], options)
-        params.merge!(key: ENV['tmap_key']) unless params[:key].present?
+        params[:key] = ENV['tmap_key'] if params[:key].blank?
         res = dispatch_request(url, method: 'GET', package: params)
         raise res['message'] if res['status'] != 0
 
         if block
-          block.call(res['result'])
+          yield(res['result'])
         else
           return res['result']
         end
@@ -86,7 +86,7 @@ class Map
     def gaode_search(options)
       url = 'https://restapi.amap.com/v3/place/text'
       params = request_params(%w[keywords types city citylimit children offset page extensions sig output key], options)
-      params.merge!(key: ENV['gmap_key']) unless params[:key].present?
+      params[:key] = ENV['gmap_key'] if params[:key].blank?
       response = dispatch_request(url, method: 'GET', package: params)
       return nil unless ActiveRecord::Type::Boolean.new.cast(response['status'])
 
@@ -107,7 +107,7 @@ class Map
         end
       end
 
-      params.merge!(key: ENV['tmap_key']) unless params[:key].present?
+      params[:key] = ENV['tmap_key'] if params[:key].blank?
       response = dispatch_simple_request(url, params: params)
       raise response['message'] if response['status'] != 0
 
@@ -116,10 +116,10 @@ class Map
 
     def request_params(list, options, &block)
       list.map do |key|
-        next unless options[key.to_sym].present?
+        next if options[key.to_sym].blank?
 
         if block
-          block.call(key.to_sym, options[key.to_sym])
+          yield(key.to_sym, options[key.to_sym])
         else
           [key.to_sym, options[key.to_sym]]
         end

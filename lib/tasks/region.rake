@@ -3,7 +3,6 @@ require 'net/http'
 namespace :region do
   task sync: :environment do
     def create_or_update_region(data, parent = nil, type = 'province')
-      # Globalize.with_locale(:'zh-CN') do
       model = "Region::#{type.capitalize}".constantize
       attrs = {
         name: data['fullname'],
@@ -12,7 +11,6 @@ namespace :region do
         parent_id: parent.try(:id)
       }
       model.create_or_update(attrs)
-      # end
     end
 
     country = Region::Country.find_by(code: 'CN')

@@ -1,5 +1,7 @@
 require 'rails_helper'
 require 'devise/jwt/test_helpers'
+require 'rake'
+load File.join(Rails.root, 'lib', 'tasks', 'posts.rake')
 
 RSpec.describe 'Post', type: :request do
   describe 'index' do
@@ -8,20 +10,31 @@ RSpec.describe 'Post', type: :request do
       @headers = Devise::JWT::TestHelpers.auth_headers({ 'Accept' => 'application/json' }, @user)
     end
 
-    before do
-      4.times { create :takehouse }
-      4.times { create :sharehouse }
-      4.times { create :housemate }
-    end
-
     it 'should success' do
+      4.times do
+        post = create :takehouse
+        post.images.attach(fixture_file_upload(Rails.root.join('spec', 'fixtures', 'assets', 'test.jpg'), 'image/jpg'))
+      end
+      4.times do
+        post = create :sharehouse
+        post.images.attach(fixture_file_upload(Rails.root.join('spec', 'fixtures', 'assets', 'test.jpg'), 'image/jpg'))
+      end
+      4.times { create :housemate }
+      create :takehouse
+      create :sharehouse
+
+      Rake::Task['posts:activate'].execute
       get '/v1/posts', params: {}, headers: @headers
       expect(response).to be_successful
       posts = JSON.parse(response.body)['posts']
-      expect(posts.count).to eq 4
+      expect(posts.count).to eq 10
     end
 
     it 'should success' do
+      4.times { create :takehouse }
+      4.times { create :sharehouse }
+      4.times { create :housemate }
+
       get '/v1/posts', params: { page: 2 }, headers: @headers
       expect(response).to be_successful
       posts = JSON.parse(response.body)['posts']
@@ -352,7 +365,7 @@ RSpec.describe 'Post', type: :request do
       post = JSON.parse response.body
       expect(post['post']).to be_present
       housemate = Post::HouseMate.first
-      expect(housemate.active?).to eq true
+      expect(housemate.active?).to eq false
       expect(housemate.locations.count).to eq 3
     end
 
@@ -456,7 +469,7 @@ RSpec.describe 'Post', type: :request do
       }, headers: @headers
       post.reload
       expect(post.images).to be_present
-      expect(post.active?).to eq true
+      expect(post.active?).to eq false
     end
 
     it 'should not update image' do

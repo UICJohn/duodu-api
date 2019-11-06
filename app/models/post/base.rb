@@ -13,4 +13,14 @@ class Post::Base < ApplicationRecord
   delegate :username, to: :user
 
   scope :active, -> { where(active: true) }
+
+  def can_active?
+    if is_a?(Post::HouseMate) && locations.any?{ |location| %i[city_id suburb_id].all? { |col| location.send(col).present? } }
+      true
+    elsif %i[city_id suburb_id].all? { |col| location.send(col).present? && images.attached? }
+      true
+    else
+      false
+    end
+  end
 end

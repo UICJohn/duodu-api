@@ -25,7 +25,6 @@ class V1::PostsController < ApplicationController
     if params[:attachment].present? && (@post = current_user.posts.find_by(id: params[:post_id]))
       if @post.images.attach(params[:attachment])
         @post.cover_image_id = @post.images.last.id if params[:cover_image]
-        @post.active = true
         @post.save
       end
       render :show

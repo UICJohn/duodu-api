@@ -46,6 +46,16 @@ set :linked_files, %w[config/database.yml config/master.key config/map.yml confi
 set :sidekiq_config, 'config/sidekiq.yml'
 
 namespace :deploy do
+  desc "Update crontab with whenever"
+    task :update_cron do
+      on roles(:app) do
+        within current_path do
+          execute :bundle, :exec, "whenever --update-crontab #{fetch(:application)}"
+        end
+      end
+    end
+  end
   after :restart, 'sidekiq:restart'
   after :restart, 'puma:restart'
+  after :finishing, 'deploy:update_cron'
 end

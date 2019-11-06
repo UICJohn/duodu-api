@@ -20,14 +20,6 @@ gem 'jbuilder', '~> 2.9.1'
 
 # Use Redis adapter to run Action Cable in production
 gem 'redis'
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-
-# Use ActiveStorage variant
-# gem 'mini_magick', '~> 4.8'
-
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.5', require: false
@@ -101,3 +93,5 @@ gem 'strip_attributes'
 gem 'active_storage_validations', github: 'igorkasyanchuk/active_storage_validations'
 
 gem 'geocoder'
+
+gem 'whenever', :require => false

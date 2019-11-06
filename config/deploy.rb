@@ -3,6 +3,7 @@ lock '~> 3.11.0'
 
 set :application, 'duodu-api'
 set :repo_url, 'git@github.com:UICJohn/duodu-api.git'
+set :rails_env, fetch(:stage)
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
@@ -49,7 +50,7 @@ namespace :deploy do
   task :update_cron do
     on roles(:app) do
       within current_path do
-        execute :bundle, :exec, "whenever --set 'environment=#{Rails.env}' --update-crontab #{fetch(:application)}"
+        execute :bundle, :exec, "whenever --set 'environment=#{fetch(:rails_env)}' --update-crontab #{fetch(:application)}"
       end
     end
   end  

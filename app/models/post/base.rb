@@ -6,6 +6,7 @@ class Post::Base < ApplicationRecord
   searchkick callbacks: :async
 
   belongs_to :user
+  has_many :post_collections
 
   validates :title, :body, :available_from, presence: true
 

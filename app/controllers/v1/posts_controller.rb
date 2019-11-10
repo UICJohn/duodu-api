@@ -33,6 +33,26 @@ class V1::PostsController < ApplicationController
     end
   end
 
+  def like
+    if (post = Post::Base.find_by(id: params[:post_id]))
+      unless current_user.like_post_ids.include?(post.id)
+        current_user.post_collections << PostCollection.create(post_id: post.id, user_id: current_user.id)
+      end
+      success!
+    else
+      error!(error: 'Post Not Found')
+    end
+  end
+
+  def dislike
+    if (record = current_user.post_collections.find_by(post_id: params[:post_id]))
+      record.destroy
+      success!
+    else
+      error!(error: 'Post Not Found')
+    end
+  end
+
   private
 
   def preprocess_params

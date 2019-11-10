@@ -505,4 +505,46 @@ RSpec.describe 'Post', type: :request do
       expect(post.active?).to eq false
     end
   end
+
+  describe '#like' do
+    before do
+      @user = create :wechat_user
+      @headers = Devise::JWT::TestHelpers.auth_headers({ 'Accept' => 'application/json' }, @user)
+    end
+
+    it 'should create post_collections for user' do
+      posts = 4.times.map do
+        post = create :takehouse
+        post.images.attach(fixture_file_upload(Rails.root.join('spec', 'fixtures', 'assets', 'test.jpg'), 'image/jpg'))
+        post
+      end
+      expect{
+        post "/v1/posts/#{posts.first.id}/like", headers: @headers
+      }.to change(PostCollection, :count).by 1
+      expect(response).to be_successful
+    end
+
+    it 'should not create post_collections for user' do
+      posts = 4.times.map do
+        post = create :takehouse
+        post.images.attach(fixture_file_upload(Rails.root.join('spec', 'fixtures', 'assets', 'test.jpg'), 'image/jpg'))
+        post
+      end
+      PostCollection.create(post_id: posts.first.id, user_id: @user.id)
+      expect{
+        post "/v1/posts/#{posts.first.id}/like", headers: @headers
+      }.to change(PostCollection, :count).by 0
+      expect(response).to be_successful
+    end
+
+    it 'should response with error msg' do
+      expect{
+        post "/v1/posts/#{1}/like", headers: @headers
+      }.to change(PostCollection, :count).by 0
+      expect(response).to be_successful
+      body = JSON.parse(response.body)
+      expect(body).to eq({"error"=>"Post Not Found"})
+    end
+
+  end
 end

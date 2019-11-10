@@ -29,6 +29,8 @@ Rails.application.routes.draw do
 
     resources :posts, only: %i[index create] do
       post '/upload_images' => 'posts#upload_images'
+      post '/like' => 'posts#like'
+      delete '/dislike' => 'posts#dislike'
     end
 
     resources :verification_code, only: [:create]

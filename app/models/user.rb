@@ -15,12 +15,10 @@ class User < ApplicationRecord
   validates :code, presence: true, if: :update_key_attr
   validates :email, uniqueness: true, allow_blank: true
   validates :phone, format: { with: /\A[0-9]{11}\z/, message: '手机号不正确' }, uniqueness: true, allow_blank: true
-  # validates :avatar, blob: { content_type: %r{^image/} }
+  validates :avatar, content_type: %r{\Aimage/.*\z}
   validates :email, format: { with: Devise.email_regexp, allow_blank: true }
 
-  before_save :set_password_status
-  before_save :fetch_avatar
-  after_create :setup_user
+
   has_one  :location, as: :target
   has_one  :preference
   has_many :friend_requests, dependent: :destroy
@@ -28,11 +26,17 @@ class User < ApplicationRecord
   has_many :friendships
   has_many :friends, through: :friendships, source: :user
   has_many :posts, class_name: 'Post::Base'
+  has_many :post_collections
+  has_many :like_posts, through: :post_collections, source: :post
+
+  before_save :set_password_status
+  before_save :fetch_avatar
+  after_create :setup_user
+
+  accepts_nested_attributes_for :preference, :location
 
   enum password_status: { weak: 0, good: 1, strong: 2 }
   enum gender: { 'female' => 0, 'male' => 1, 'unisex' => 2 }
-
-  accepts_nested_attributes_for :preference, :location
 
   def limited_tags
     errors.add(:tags, '标签不能超过10个') if tags.size > 10

@@ -49,7 +49,7 @@ class V1::PostsController < ApplicationController
       record.destroy
       success!
     else
-      error!(error: 'Post Not Found')
+      error!(error: 'Bad Request')
     end
   end
 

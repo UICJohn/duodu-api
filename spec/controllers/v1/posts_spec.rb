@@ -547,4 +547,32 @@ RSpec.describe 'Post', type: :request do
     end
 
   end
+
+  describe '#dislike' do
+    before do
+      @user = create :wechat_user
+      @headers = Devise::JWT::TestHelpers.auth_headers({ 'Accept' => 'application/json' }, @user)
+    end
+
+    it 'should delete user post_collections' do
+      post = create :takehouse
+      post.images.attach(fixture_file_upload(Rails.root.join('spec', 'fixtures', 'assets', 'test.jpg'), 'image/jpg'))
+      PostCollection.create(post_id: post.id, user_id: @user.id)
+      expect{
+        delete "/v1/posts/#{post.id}/dislike", headers: @headers
+      }.to change(PostCollection, :count).by(-1)
+      expect(response).to be_successful
+    end
+
+    it 'should not delete user post_collections' do
+      post = create :takehouse
+      post.images.attach(fixture_file_upload(Rails.root.join('spec', 'fixtures', 'assets', 'test.jpg'), 'image/jpg'))
+      expect{
+        delete "/v1/posts/#{post.id}/dislike", headers: @headers
+      }.to change(PostCollection, :count).by(0)
+      expect(response).to be_successful
+      body = JSON.parse(response.body)
+      expect(body).to eq({"error"=>"Bad Request"})
+    end
+  end
 end

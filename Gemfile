@@ -12,6 +12,7 @@ gem 'puma', '~> 3.11'
 
 gem 'devise-jwt'
 # gem 'devise'
+gem "devise", ">= 4.7.1"
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 
@@ -79,6 +80,6 @@ gem 'exception_notification'
 
 gem 'globalize'
 
-gem "omniauth-wechat-oauth2"
+# gem "omniauth-wechat-oauth2"
 
 gem 'hiredis'

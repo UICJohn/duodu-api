@@ -257,17 +257,8 @@ ActiveRecord::Schema.define(version: 2019_11_09_124047) do
     t.index ["subway_id", "station_id"], name: "index_stations_subways_on_subway_id_and_station_id", unique: true
   end
 
-  create_table "subway_translations", force: :cascade do |t|
-    t.bigint "subway_id", null: false
-    t.string "locale", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "name"
-    t.index ["locale"], name: "index_subway_translations_on_locale"
-    t.index ["subway_id"], name: "index_subway_translations_on_subway_id"
-  end
-
   create_table "subways", force: :cascade do |t|
+    t.string "name"
     t.string "source_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

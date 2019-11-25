@@ -3,7 +3,7 @@ json.posts do
   json.array! @posts do |post|
     json.call(post, :id, :body, :title)
     json.type post.type.split('::').last.underscore
-    json.like current_user.like_post_ids.include?(post.id)
+    json.like current_user.like_post_ids.include?(post.id) if current_user.present?
     json.available_from post.available_from.to_date
     if post.type == 'Post::HouseMate'
       json.call(post, :min_rent, :max_rent)

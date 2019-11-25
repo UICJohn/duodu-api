@@ -1,6 +1,4 @@
 class Subway < ApplicationRecord
-  translates :name
-
   validates :name, presence: true
   validates :source_id, presence: true, uniqueness: true
 

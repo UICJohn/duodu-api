@@ -7,6 +7,6 @@ if File.exist?(wechat_config)
   end
 end
 
-Rails.application.config.middleware.use OmniAuth::Builder do
-  provider :wechat, ENV['wechat_app_id'], ENV['wechat_app_secrets']
-end
+# Rails.application.config.middleware.use OmniAuth::Builder do
+#   provider :wechat, ENV['wechat_app_id'], ENV['wechat_app_secrets']
+# end

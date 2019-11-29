@@ -234,17 +234,8 @@ ActiveRecord::Schema.define(version: 2019_11_09_124047) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "station_translations", force: :cascade do |t|
-    t.bigint "station_id", null: false
-    t.string "locale", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "name"
-    t.index ["locale"], name: "index_station_translations_on_locale"
-    t.index ["station_id"], name: "index_station_translations_on_station_id"
-  end
-
   create_table "stations", force: :cascade do |t|
+    t.string "name"
     t.string "source_id"
     t.boolean "active", default: true
     t.datetime "created_at", null: false

@@ -7,8 +7,9 @@ class V1::PostsController < ApplicationController
 
   def index
     @page = params[:page] || 1
-    filters = generate_filters(filters_params.to_h)
-    @posts = filters.present? ? Post::Base.search(filters).page(@page) : Post::Base.active.page(@page).order('created_at DESC')
+    # filters = generate_filters(filters_params.to_h)
+    # @posts = filters.present? ? Post::Base.search(filters).page(@page) : Post::Base.active.page(@page).order('created_at DESC')
+    @posts = Post::Base.all
   end
 
   def create

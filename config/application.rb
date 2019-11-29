@@ -35,11 +35,7 @@ module DuoduApi
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::CookieStore
 
-    config.action_controller.asset_host = if Rails.env.development?
-                                            'http://192.168.31.224'
-                                          else
-                                            'https://duodu.oss-cn-beijing.aliyuncs.com'
-                                          end
+    config.action_controller.asset_host = 'https://duodu.oss-cn-beijing.aliyuncs.com'
 
     config.time_zone = 'Asia/Shanghai'
 
@@ -52,17 +48,8 @@ module DuoduApi
         origins '*'
         resource '*',
                  headers: :any,
-                 expose: %w[
-                   X-Requested-With
-                   Content-Type
-                   Authorization
-                   Accept
-                   Client-Security-Token
-                   Accept-Encoding
-                   iat
-                   exp
-                   jti
-                 ],
+                 expose: %w(Authorization),
+                 max_age: 600,
                  methods: %i[get post options delete put head]
       end
     end

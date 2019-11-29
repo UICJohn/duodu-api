@@ -27,7 +27,7 @@ module ApplicationHelper
       filters['has_appliance = ?'] = options[:has_appliance]
     end
 
-    if options[:city].present? && (city = Region::City.find_by(name: options[:city]))
+    if options[:region].present? && (city = Region::City.find_by(name: options[:region]))
       location_filters[:city_id] = city.id
     end
 

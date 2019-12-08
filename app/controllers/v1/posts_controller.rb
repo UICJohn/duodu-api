@@ -22,6 +22,10 @@ class V1::PostsController < ApplicationController
     end
   end
 
+  def show
+    @post = Post::Base.find_by(id: params[:id])
+  end
+
   def upload_images
     if params[:attachment].present? && (@post = current_user.posts.find_by(id: params[:post_id]))
       if @post.images.attach(params[:attachment])

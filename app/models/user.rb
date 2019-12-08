@@ -74,6 +74,10 @@ class User < ApplicationRecord
     end
   end
 
+  def age
+    Date.today.year - (dob&.year || 2000)
+  end
+
   private
 
   def confirmation_required?

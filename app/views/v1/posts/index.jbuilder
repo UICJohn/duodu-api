@@ -25,12 +25,12 @@ json.posts do
     end
 
     if !post.is_a?(Post::HouseMate) && (image = post.cover_image).present?
-      json.image rails_blob_url(image)
+      json.image image.service_url
     end
 
     json.user do
       json.username post.user.username
-      json.avatar rails_blob_url(post.user.avatar) if post.user.avatar.attached?
+      json.avatar post.user.avatar.service_url if post.user.avatar.attached?
       json.gender post.user_gender
     end
     json.timestamp post.trace_on_create

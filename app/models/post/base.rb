@@ -6,7 +6,7 @@ class Post::Base < ApplicationRecord
   searchkick callbacks: :async
 
   belongs_to :user
-  has_many :post_collections
+  has_many :post_collections, foreign_key: 'post_id'
 
   validates :title, :body, :available_from, presence: true
 

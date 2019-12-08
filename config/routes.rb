@@ -27,7 +27,7 @@ Rails.application.routes.draw do
 
     resources :tags, only: [:index]
 
-    resources :posts, only: %i[index create] do
+    resources :posts, only: %i[index create show] do
       post '/upload_images' => 'posts#upload_images'
       post '/like' => 'posts#like'
       delete '/dislike' => 'posts#dislike'

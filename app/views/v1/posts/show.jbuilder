@@ -43,7 +43,7 @@ json.post do
     )
     json.images do
       json.array! @post.images do |image|
-        json.url image.service_url if image.id != @post.cover_image_id
+        json.url image.service_url
       end
     end
 

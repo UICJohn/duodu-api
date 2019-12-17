@@ -1,3 +1,5 @@
 class Comment < ApplicationRecord
-  has_many :attachement, as: :attachable, dependent: :destroy
+  belongs_to :target, polymorphic: true
+  belongs_to :user
+  has_many :sub_comments, as: :target, dependent: :destroy
 end

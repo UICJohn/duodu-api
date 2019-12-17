@@ -7,6 +7,7 @@ class Post::Base < ApplicationRecord
 
   belongs_to :user
   has_many :post_collections, foreign_key: 'post_id'
+  has_many :comments, as: :target
 
   validates :title, :body, :available_from, presence: true
 

@@ -23,7 +23,9 @@ class V1::PostsController < ApplicationController
   end
 
   def show
-    @post = Post::Base.find_by(id: params[:id])
+    unless @post = Post::Base.find_by(id: params[:id])
+      error!(error: 'bad request')
+    end
   end
 
   def upload_images
@@ -76,6 +78,7 @@ class V1::PostsController < ApplicationController
       :rooms,
       :rent,
       :livings,
+      :type,
       :toilets,
       :payment_type,
       :available_from,

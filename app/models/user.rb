@@ -28,6 +28,7 @@ class User < ApplicationRecord
   has_many :posts, class_name: 'Post::Base'
   has_many :post_collections
   has_many :like_posts, through: :post_collections, source: :post
+  has_many :comments
 
   before_save :set_password_status
   before_save :fetch_avatar

@@ -55,9 +55,12 @@ ActiveRecord::Schema.define(version: 2019_11_09_124047) do
   end
 
   create_table "comments", force: :cascade do |t|
+    t.bigint "target_id"
+    t.string "target_type"
     t.integer "user_id"
     t.text "body"
-    t.integer "parent_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "friend_requests", force: :cascade do |t|

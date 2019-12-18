@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :friend_requests
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   require 'sidekiq/web'
   if Rails.env.staging? || Rails.env.development?
@@ -28,16 +27,20 @@ Rails.application.routes.draw do
     resources :tags, only: [:index]
 
     resources :posts, only: %i[index create show] do
-      post '/upload_images' => 'posts#upload_images'
-      post '/like' => 'posts#like'
-      delete '/dislike' => 'posts#dislike'
+      post :upload_images
+      post :like
+      delete :dislike
     end
 
     resources :verification_code, only: [:create]
     resources :schools, only: [:index]
-    # resources :occupations, only: [:index]
     resources :suburbs, only: [:index]
     resources :subways, only: [:index]
+    resources :post_comments, only: %i[create show destroy] do
+      member do
+        post :reply
+      end
+    end
   end
 
   scope format: true, constraints: { format: /jpg|png|gif|PNG/ } do

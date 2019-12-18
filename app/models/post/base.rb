@@ -1,5 +1,5 @@
 class Post::Base < ApplicationRecord
-  include TimeTrackable
+  include Traceable
 
   self.table_name = 'posts'
 

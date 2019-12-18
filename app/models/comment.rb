@@ -1,5 +1,12 @@
 class Comment < ApplicationRecord
-  belongs_to :target, polymorphic: true
+  include Traceable
+
+  validates :body, presence: true
+
   belongs_to :user
-  has_many :sub_comments, as: :target, dependent: :destroy
+  belongs_to :target, polymorphic: true
+
+  def sub_comments
+    Comment.where(target: self)
+  end
 end

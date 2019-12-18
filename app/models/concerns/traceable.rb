@@ -1,7 +1,7 @@
-module TimeTrackable
+module Traceable
   extend ActiveSupport::Concern
 
-  def trace_on_create
+  def tracer
     return 'unknown' unless created_at?
 
     (1..7).each do |range|

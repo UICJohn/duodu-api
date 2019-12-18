@@ -78,7 +78,6 @@ class V1::PostsController < ApplicationController
       :rooms,
       :rent,
       :livings,
-      :type,
       :toilets,
       :payment_type,
       :available_from,

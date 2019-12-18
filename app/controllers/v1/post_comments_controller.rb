@@ -1,25 +1,29 @@
 class V1::PostCommentsController < ApplicationController
   before_action :authenticate_user!
 
-  def index
-    if (post = Post::Base.find_by(id: params[:id])).present?
-      @comments = Comment.where(target: post)
-    else
-      error!(error: 'bad request')
-    end
-  end
+  # def index
+  #   if (post = Post::Base.find_by(id: params[:id])).present?
+  #     @comments = Comment.where(target: post)
+  #   else
+  #     error!(error: 'bad request')
+  #   end
+  # end
 
   def create
     if(post = Post::Base.find_by(id: params[:comment][:post_id])).present?
-      @comment = Comment.create(body: params[:comment][:body], target: post)
+      if @comment = current_user.comments.create(body: params[:comment][:body], target: post)
+        render :show
+      else
+        error!(error: @comment.errors.full_message)
+      end
     else
       error!(error: 'bad request')
     end
   end
 
   def reply
-    if(source_comment = Comment.find_by(id: params[:comment][:id])).present?
-      @comment = Comment.create(body: params[:comment][:body], target: source_comment)
+    if(source_comment = Comment.find_by(id: params[:id])).present?
+      @comment = current_user.comments.create(body: params[:comment][:body], target: source_comment)
     else
       error!(error: 'bad request')
     end

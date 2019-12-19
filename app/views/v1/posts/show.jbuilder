@@ -14,7 +14,7 @@ json.post do
 
   json.user do
     json.username @post.user.username
-    json.avatar @post.user.avatar.service_url if @post.user.avatar.attached?
+    json.avatar @post.user.avatar.url if @post.user.avatar.attached?
     json.gender @post.user_gender
     json.age    @post.user.age
   end
@@ -51,13 +51,11 @@ json.post do
     )
     json.images do
       json.array! @post.images do |image|
-        json.url image.service_url
+        json.url image.url
       end
     end
 
-    unless @post.is_a?(Post::HouseMate)
-      json.cover_image @post.cover_image&.service_url
-    end
+    json.cover_image @post.cover_image_url    
 
     json.location do
       json.call(@post.location, :country, :name, :address, :city, :longitude, :latitude, :suburb)

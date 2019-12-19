@@ -33,14 +33,19 @@ Rails.application.routes.draw do
     end
 
     resources :verification_code, only: [:create]
+
     resources :schools, only: [:index]
+
     resources :suburbs, only: [:index]
+
     resources :subways, only: [:index]
-    resources :post_comments, only: %i[create show destroy] do
+
+    resources :post_comments, only: %i[index create show destroy] do
       member do
         post :reply
       end
     end
+
   end
 
   scope format: true, constraints: { format: /jpg|png|gif|PNG/ } do

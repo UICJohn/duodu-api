@@ -2,7 +2,7 @@ class V1::PostCommentsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    unless (@post = Post::Base.find_by(id: params[:id])).present?
+    unless (@post = Post::Base.find_by(id: params[:post_id])).present?
       error!(error: 'bad request')
     end
   end
@@ -22,7 +22,7 @@ class V1::PostCommentsController < ApplicationController
   def reply
     if(source_comment = Comment.find_by(id: params[:id])).present?
       if comment = current_user.comments.create(body: params[:comment][:body], target: source_comment)
-        @post = comment.target
+        @post = source_comment.target
         render :index
       else
         error!(error: comment.errors.full_message)
@@ -33,7 +33,7 @@ class V1::PostCommentsController < ApplicationController
   end
 
   def destroy
-    if(comment = current_user.comments.find_by(id: params[:comment][:id])).present?
+    if(comment = current_user.comments.find_by(id: params[:id])).present?
       comment.sub_comments.destroy_all
       comment.destroy
       success!('deleted')

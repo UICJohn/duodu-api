@@ -37,7 +37,6 @@ RSpec.describe Post, type: :model do
         toilets
         rooms
         property_type
-        tenants
       ]
     end
 

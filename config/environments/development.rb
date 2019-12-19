@@ -64,6 +64,8 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = { address: '127.0.0.1', port: 1025 }
   config.action_mailer.raise_delivery_errors = false
+  
+  config.action_controller.asset_host = 'https://duodu.oss-cn-beijing.aliyuncs.com'
 end
 
 Rails.application.routes.default_url_options[:host] = 'http://localhost:3000'

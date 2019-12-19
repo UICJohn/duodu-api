@@ -1,6 +1,4 @@
 class Post::ShareHouse < Post::Base
-  include PostImageable
-
   has_one :location, as: :target, dependent: :destroy
   has_many_attached :images
 

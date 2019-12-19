@@ -1,4 +1,5 @@
 class Post::Base < ApplicationRecord
+  include PostImageable
   include Traceable
 
   self.table_name = 'posts'

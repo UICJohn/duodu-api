@@ -35,8 +35,6 @@ module DuoduApi
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::CookieStore
 
-    config.action_controller.asset_host = 'https://duodu.oss-cn-beijing.aliyuncs.com'
-
     config.time_zone = 'Asia/Shanghai'
 
     config.autoload_paths << Rails.root.join('lib')

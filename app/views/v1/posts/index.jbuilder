@@ -24,13 +24,11 @@ json.posts do
       json.tenants post.tenants if post.type == 'Post::ShareHouse'
     end
 
-    unless post.is_a?(Post::HouseMate)
-      json.cover_image post.cover_image&.service_url
-    end
+    json.cover_image post.cover_image_url
 
     json.user do
       json.username post.user.username
-      json.avatar post.user.avatar.service_url if post.user.avatar.attached?
+      json.avatar post.user.avatar.url if post.user.avatar.attached?
       json.gender post.user_gender
     end
     json.timestamp post.tracer

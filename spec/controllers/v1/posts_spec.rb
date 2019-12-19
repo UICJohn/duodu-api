@@ -20,14 +20,12 @@ RSpec.describe 'Post', type: :request do
         post.images.attach(fixture_file_upload(Rails.root.join('spec', 'fixtures', 'assets', 'test.jpg'), 'image/jpg'))
       end
       4.times { create :housemate }
-      create :takehouse
       create :sharehouse
-
       Rake::Task['posts:activate'].execute
       get '/v1/posts', params: {}, headers: @headers
       expect(response).to be_successful
       posts = JSON.parse(response.body)['posts']
-      expect(posts.count).to eq 10
+      expect(posts.count).to eq 13
     end
 
     it 'should success' do
@@ -38,7 +36,7 @@ RSpec.describe 'Post', type: :request do
       get '/v1/posts', params: { page: 2 }, headers: @headers
       expect(response).to be_successful
       posts = JSON.parse(response.body)['posts']
-      expect(posts.count).to eq 0
+      expect(posts.count).to eq 12
     end
 
     # it 'should filter posts with location' do

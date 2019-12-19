@@ -6,6 +6,8 @@ class ApplicationController < ActionController::API
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :set_platform
 
+  before_action :set_storage_host
+
   respond_to :json
 
   if Rails.env.production? || Rails.env.test?
@@ -53,5 +55,9 @@ class ApplicationController < ActionController::API
 
   def set_storage_host
     ActiveStorage::Current.host = request.base_url
+  end
+
+  def set_storage_host
+    ActiveStorage::Current.host = 'https://localhost:3000' if Rails.env.test?
   end
 end

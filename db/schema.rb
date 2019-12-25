@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_09_124047) do
+ActiveRecord::Schema.define(version: 2019_12_25_120640) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -102,6 +102,24 @@ ActiveRecord::Schema.define(version: 2019_11_09_124047) do
     t.index ["country_id"], name: "index_locations_on_country_id"
     t.index ["province_id"], name: "index_locations_on_province_id"
     t.index ["suburb_id"], name: "index_locations_on_suburb_id"
+  end
+
+  create_table "notification_templates", force: :cascade do |t|
+    t.integer "tag"
+    t.string "title"
+    t.text "body"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "notifications", force: :cascade do |t|
+    t.integer "user_id"
+    t.bigint "target_id"
+    t.string "target_type"
+    t.integer "template_id"
+    t.integer "status"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "occupations", force: :cascade do |t|

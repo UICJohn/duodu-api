@@ -6,9 +6,9 @@ json.post do
   json.timestamp @post.tracer
 
   json.comments @post.comments do |comment|
-    json.partial! 'comment', comment: comment
+    json.partial! '/v1/post_comments/comment', comment: comment
     json.sub_comments comment.sub_comments do |sub_comment|
-      json.partial! 'comment', comment: sub_comment
+      json.partial! '/v1/post_comments/comment', comment: sub_comment
     end
   end
 
@@ -50,9 +50,7 @@ json.post do
       :tenants_gender
     )
     json.images do
-      json.array! @post.images do |image|
-        json.url image.url
-      end
+      json.array! @post.images.map(&:url)
     end
 
     json.cover_image @post.cover_image_url    

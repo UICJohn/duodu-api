@@ -4,9 +4,12 @@ module Traceable
   def tracer
     return 'unknown' unless created_at?
 
-    (1..7).each do |range|
-      return "#{range}天前" if created_at < range.days.ago.end_of_day
+    if (Time.now.to_date - created_at.to_date).to_i.zero?
+      created_at.strftime('%H:%M')
+    elsif created_at.year == Time.now.year
+      created_at.strftime('%m-%d %H:%M')
+    else
+      "#{Time.now.year - created_at.year}年前"
     end
-    created_at.strftime('%H:%M')
   end
 end

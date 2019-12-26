@@ -1,7 +1,11 @@
 json.post do
   json.id @post.id
   json.call(@post, :title, :body, :type, :available_from, :tenants)
+
+  json.view_count Warehouse::PostFact.count_view_for(@post)
+  json.comments_count @post.comments_count
   json.like_count @post.post_collections.count('distinct user_id')
+
   json.like current_user.like_post_ids.include?(@post.id) if current_user.present?
   json.timestamp @post.tracer
 

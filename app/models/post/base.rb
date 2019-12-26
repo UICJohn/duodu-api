@@ -26,4 +26,8 @@ class Post::Base < ApplicationRecord
       false
     end
   end
+
+  def comments_count
+    comments.count + (comments.map{ |comment| comment.sub_comments.count }.inject(:+) || 0)
+  end
 end

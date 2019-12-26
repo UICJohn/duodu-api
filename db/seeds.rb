@@ -26,17 +26,17 @@ I18n.locale = :"zh-CN"
 
 # end
 
-Region::Country.create(name:'中国', code: 'CN')
+Region::Country.first_or_create(name:'中国', code: 'CN')
 
 # comment notification template
-NotificationTemplate.create(
+NotificationTemplate.first_or_create(
   title: "有人@你了",
   body: '#{user.username}评论了你的帖子',
   tag: 'comment'
 )
 
 # reply notification template
-NotificationTemplate.create(
+NotificationTemplate.first_or_create(
   title: "有人@你了",
   body: '#{user.username}回复了你的评论',
   tag: 'reply'
@@ -46,3 +46,7 @@ NotificationTemplate.create(
 #   title: "欢迎加入多度"，
 #   body: '#{user.username}回复了你的评论'
 # )
+
+(3.month.ago.to_date ... Time.now.to_date).each do |date|
+  Warehouse::DateDimension.find_dimension_for(date)
+end

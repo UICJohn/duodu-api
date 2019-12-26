@@ -97,4 +97,18 @@ RSpec.describe Post, type: :model do
       expect(post.valid?).to be true
     end
   end
+
+  describe '#comments_count' do
+    it 'should count comments' do
+      post = create :sharehouse
+
+      comment = create :comment, target: post
+      comment1 = create :comment, target: post
+
+      sub_comment = create :comment, target: comment
+      create :comment, target: sub_comment
+
+      expect(post.comments_count).to eq 4
+    end
+  end
 end

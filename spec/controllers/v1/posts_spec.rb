@@ -520,6 +520,7 @@ RSpec.describe 'Post', type: :request do
         post "/v1/posts/#{posts.first.id}/like", headers: @headers
       }.to change(PostCollection, :count).by 1
       expect(response).to be_successful
+      expect(Warehouse::PostFact.count_like_for(posts.first)).to eq 1
     end
 
     it 'should not create post_collections for user' do
@@ -560,6 +561,7 @@ RSpec.describe 'Post', type: :request do
         delete "/v1/posts/#{post.id}/dislike", headers: @headers
       }.to change(PostCollection, :count).by(-1)
       expect(response).to be_successful
+      expect(Warehouse::PostFact.count_dislike_for(post)).to eq 1
     end
 
     it 'should not delete user post_collections' do
@@ -571,6 +573,20 @@ RSpec.describe 'Post', type: :request do
       expect(response).to be_successful
       body = JSON.parse(response.body)
       expect(body).to eq({"error"=>"Bad Request"})
+    end
+  end
+
+  describe '#show' do
+    before do
+      @user = create :wechat_user
+      @headers = Devise::JWT::TestHelpers.auth_headers({ 'Accept' => 'application/json' }, @user)
+      @post = create :takehouse
+    end
+    it 'should show post' do
+      expect{
+        get "/v1/posts/#{@post.id}", headers: @headers
+      }.to change(Warehouse::PostFact, :count).by 1
+      expect(response).to be_successful
     end
   end
 end

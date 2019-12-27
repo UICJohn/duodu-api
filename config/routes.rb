@@ -40,6 +40,13 @@ Rails.application.routes.draw do
 
     resources :subways, only: [:index]
 
+    resources :report_posts, only: [:create] do
+      collection do
+        get :survey
+      end
+    end
+
+
     resources :post_comments, only: %i[index create show destroy] do
       member do
         post :reply

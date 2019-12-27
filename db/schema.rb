@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_26_033432) do
+ActiveRecord::Schema.define(version: 2019_12_26_121454) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -277,6 +277,23 @@ ActiveRecord::Schema.define(version: 2019_12_26_033432) do
     t.index ["source_id"], name: "index_subways_on_source_id"
   end
 
+  create_table "survey_options", force: :cascade do |t|
+    t.integer "survey_id"
+    t.integer "position"
+    t.text "body"
+    t.boolean "custom_option", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "surveys", force: :cascade do |t|
+    t.text "body"
+    t.string "title"
+    t.string "code_name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "tag_translations", force: :cascade do |t|
     t.bigint "tag_id", null: false
     t.string "locale", null: false
@@ -292,6 +309,17 @@ ActiveRecord::Schema.define(version: 2019_12_26_033432) do
     t.integer "category_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "user_surveys", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "survey_id"
+    t.integer "survey_option_id"
+    t.text "body"
+    t.integer "target_id"
+    t.string "target_type"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "users", force: :cascade do |t|

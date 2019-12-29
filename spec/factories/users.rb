@@ -16,7 +16,7 @@ FactoryBot.define do
 
     after :create do |user|
       # user.avatar.attach fixture_file_upload(Rails.root.join('spec', 'fixtures', 'assets', 'test.jpg'), 'image/jpg')
-      create :location_with_regions, target: user
+      create :location, :with_geo, target: user
     end
   end
 end

@@ -319,43 +319,31 @@ RSpec.describe 'Post', type: :request do
     end
 
     it 'should create house mate post' do
+      province = create :province, name: '北京市'
+      city = create :city, name: '北京市', province: province
+      suburb = create :suburb, name: '东城区', city: city
+
       expect do
         post '/v1/posts', params: {
           post: {
-            title: 'sdfsf',
-                  body: 'sdfsdfd',
-                  locations_attributes: [
-                    {
-                      name: '腾讯众创空间(西安)',
-                                            address: '陕西省西安市碑林区南二环西段69号西安创新设计中心',
-                                            longitude: 108.93462,
-                                            latitude: 34.23055
-                    },
-                    {
-                      name: '腾讯众创空间(西安)',
-                      address: '陕西省西安市碑林区南二环西段69号西安创新设计中心',
-                      longitude: 108.93462,
-                      latitude: 34.23055
-                    },
-                    {
-                      name: '西安绥德商会',
-                      address: '陕西省西安市未央区风景御园18号楼',
-                      longitude: 108.939588,
-                      latitude: 34.340366
-                    }
-                  ],
-                  available_from: '2019-10-23',
-                  min_rent: nil,
-                  max_rent: nil,
-                  range: nil,
-                  type: 'house_mate',
-                  tenants: nil,
-                  has_air_conditioner: false,
-                  has_furniture: false,
-                  has_elevator: false,
-                  has_cook_top: false,
-                  has_appliance: false,
-                  has_network: false
+            title: "找室友", body: "adfasfd",
+            available_from: "2019-12-29",
+            has_pets: true,
+            min_rent: "1222",
+            max_rent: nil,
+            type: "house_mate",
+            tenants: "2",
+            has_air_conditioner: true,
+            has_furniture: false,
+            has_elevator: false,
+            has_cook_top: true,
+            has_appliance: true,
+            has_network: true,
+            tenants_gender: "male",
+            location_attributes: {
+              suburb: "东城区",
+              address: "东城区"
+            }
           }
         }, headers: @headers
       end.to change(Post::HouseMate, :count).by 1
@@ -364,93 +352,38 @@ RSpec.describe 'Post', type: :request do
       expect(post['post']).to be_present
       housemate = Post::HouseMate.first
       expect(housemate.active?).to eq false
-      expect(housemate.locations.count).to eq 3
+      expect(housemate.location).to be_present
     end
 
-    it 'should not create house mate post if more than 4 locations' do
+
+    it 'should not create house mate post without location' do
+      province = create :province, name: '北京市'
+      city = create :city, name: '北京市', province: province
+      suburb = create :suburb, name: '东城区', city: city
+
       expect do
         post '/v1/posts', params: {
           post: {
-            title: 'sdfsf',
-                  body: 'sdfsdfd',
-                  type: 'house_mate',
-                  locations_attributes: [
-                    {
-                      name: '腾讯众创空间(西安)',
-                                            address: '陕西省西安市碑林区南二环西段69号西安创新设计中心',
-                                            longitude: 108.93462,
-                                            latitude: 34.23055
-                    },
-                    {
-                      name: '腾讯众创空间(西安)',
-                      address: '陕西省西安市碑林区南二环西段69号西安创新设计中心',
-                      longitude: 108.93462,
-                      latitude: 34.23055
-                    },
-                    {
-                      name: '西安绥德商会',
-                      address: '陕西省西安市未央区风景御园18号楼',
-                      longitude: 108.939588,
-                      latitude: 34.340366
-                    },
-                    {
-                      name: '西安绥德商会',
-                      address: '陕西省西安市未央区风景御园18号楼',
-                      longitude: 108.919588,
-                      latitude: 34.340366
-                    },
-                    {
-                      name: '西安绥德商会',
-                      address: '陕西省西安市未央区风景御园18号楼',
-                      longitude: 108.929588,
-                      latitude: 34.340366
-                    }
-                  ],
-                  available_from: '2019-10-23',
-                  min_rent: nil,
-                  max_rent: nil,
-                  range: nil,
-                  post_type: 'house_mate',
-                  tenants: nil,
-                  has_air_conditioner: false,
-                  has_furniture: false,
-                  has_elevator: false,
-                  has_cook_top: false,
-                  has_appliance: false,
-                  has_network: false
+            title: "找室友", body: "adfasfd",
+            available_from: "2019-12-29",
+            has_pets: true,
+            min_rent: "1222",
+            max_rent: nil,
+            type: "house_mate",
+            tenants: "2",
+            has_air_conditioner: true,
+            has_furniture: false,
+            has_elevator: false,
+            has_cook_top: true,
+            has_appliance: true,
+            has_network: true,
+            tenants_gender: "male",
           }
         }, headers: @headers
       end.to change(Post::HouseMate, :count).by 0
       expect(response).to be_successful
-      res = JSON.parse response.body
-      expect(res['error'].key?('locations')).to eq true
-    end
-
-    it 'should not create house mate post if more than 4 locations' do
-      expect do
-        post '/v1/posts', params: {
-          post: {
-            title: 'sdfsf',
-                  body: 'sdfsdfd',
-                  locations_attributes: [],
-                  available_from: '2019-10-23',
-                  min_rent: nil,
-                  max_rent: nil,
-                  range: nil,
-                  type: 'house_mate',
-                  tenants: nil,
-                  has_air_conditioner: false,
-                  has_furniture: false,
-                  has_elevator: false,
-                  has_cook_top: false,
-                  has_appliance: false,
-                  has_network: false
-          }
-        }, headers: @headers
-      end.to change(Post::HouseMate, :count).by 0
-      expect(response).to be_successful
-      res = JSON.parse response.body
-      expect(res['error'].key?('locations')).to eq true
+      body = JSON.parse response.body
+      expect(body['error']).to be_present
     end
   end
 

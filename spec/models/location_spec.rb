@@ -42,9 +42,8 @@ RSpec.describe Post, type: :model do
     it 'should run fetch_location_detail worker | reverse: true' do
       allow(Map).to receive(:reverse_geocode).and_return('location' => { 'lat' => 39.912391, 'lng' => 116.125863 }, 'address' => '北京市门头沟区石龙东路', 'formatted_addresses' => { 'recommend' => '门头沟新城', 'rough' => '门头沟新城' }, 'address_component' => { 'nation' => '中国', 'province' => '北京市', 'city' => '北京市', 'district' => '门头沟区', 'street' => '石龙东路', 'street_number' => '石龙东路' }, 'ad_info' => { 'nation_code' => '156', 'adcode' => '110109', 'city_code' => '156110000', 'name' => '中国,北京市,北京市,门头沟区', 'location' => { 'lat' => 39.912392, 'lng' => 116.125862 }, 'nation' => '中国', 'province' => '北京市', 'city' => '北京市', 'district' => '门头沟区' }, 'address_reference' => { 'street_number' => { 'id' => '', 'title' => '', 'location' => { 'lat' => 39.911915, 'lng' => 116.126083 }, '_distance' => 49.6, '_dir_desc' => '北' }, 'business_area' => { 'id' => '5808235588535804078', 'title' => '永定', 'location' => { 'lat' => 39.912392, 'lng' => 116.125862 }, '_distance' => 0, '_dir_desc' => '内' }, 'famous_area' => { 'id' => '5808235588535804078', 'title' => '永定', 'location' => { 'lat' => 39.912392, 'lng' => 116.125862 }, '_distance' => 0, '_dir_desc' => '内' }, 'town' => { 'id' => '110109006', 'title' => '永定镇', 'location' => { 'lat' => 39.912392, 'lng' => 116.125862 }, '_distance' => 0, '_dir_desc' => '内' }, 'street' => { 'id' => '13694683111035560626', 'title' => '石龙东路', 'location' => { 'lat' => 39.911915, 'lng' => 116.126083 }, '_distance' => 49.6, '_dir_desc' => '北' }, 'landmark_l2' => { 'id' => '5134902804537691571', 'title' => '门头沟新城', 'location' => { 'lat' => 39.909653, 'lng' => 116.125175 }, '_distance' => 310.5, '_dir_desc' => '北' } })
       Sidekiq::Testing.inline! do
-        location = create(:location, target: @post)
-        @post.locations << location
-        location.reload
+        location = create(:location, :with_geo, target: @post, address: nil)
+        location.reload        
         expect(location.country_id).to eq @country.id
         expect(location.province_id).to eq @province.id
         expect(location.city_id).to eq @city.id
@@ -57,7 +56,6 @@ RSpec.describe Post, type: :model do
       allow(Map).to receive(:geocode).and_return('title' => '南二环西段69号', 'location' => { 'lng' => 108.93425, 'lat' => 34.23052 }, 'ad_info' => { 'adcode' => '610103' }, 'address_components' => { 'province' => '陕西省', 'city' => '西安市', 'district' => '碑林区', 'street' => '南二环西段', 'street_number' => '69' }, 'similarity' => 0.8, 'deviation' => 1000, 'reliability' => 7, 'level' => 9)
       Sidekiq::Testing.inline! do
         location = create(:location, target: @post, address: '北二环22号', longitude: nil, latitude: nil)
-        @post.locations << location
         location.reload
         expect(location.longitude.to_f).to eq 108.93425
         expect(location.latitude.to_f).to eq 34.23052

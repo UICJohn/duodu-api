@@ -17,6 +17,14 @@ class Location < ApplicationRecord
     end
   end
 
+  def suburb=(suburb_attr)
+    if suburb_attr.is_a?(String)
+      super Region::Base.find_by(name: suburb_attr)
+    else
+      super suburb_attr
+    end
+  end
+
   private
 
   def key_fields_present?

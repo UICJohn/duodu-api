@@ -1,9 +1,10 @@
 class Post::HouseMate < Post::Base
-  has_many :locations, as: :target, dependent: :destroy
+
+  has_one :location, as: :target, dependent: :destroy
 
   validates :min_rent, :max_rent, numericality: { allow_blank: true }
-  validates :locations, presence: true
-  validates :locations, length: { maximum: 4 }
+  validates :location, presence: true
 
-  accepts_nested_attributes_for :locations, allow_destroy: true
+  accepts_nested_attributes_for :location
+
 end

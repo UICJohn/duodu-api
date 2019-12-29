@@ -5,23 +5,20 @@ json.posts do
     json.type post.type.split('::').last.underscore
     json.view_count Warehouse::PostFact.count_view_for(post)
     json.like current_user.like_post_ids.include?(post.id) if current_user.present?
+    json.comments_count post.comments_count
+    json.like_count post.post_collections.count('distinct user_id')
     json.available_from post.available_from.to_date
+
+    json.location do
+      json.call(post.location, :name, :address)
+      json.suburb post.location.suburb.try(:name)
+      json.city post.location.city.try(:name)
+    end
+
     if post.type == 'Post::HouseMate'
       json.call(post, :min_rent, :max_rent)
-      json.locations do
-        json.array! post.locations do |location|
-          json.call(location, :name, :address)
-          json.suburb location.suburb.name
-          json.city location.city.name
-        end
-      end
     else
       json.call(post, :rent, :livings, :rooms, :toilets)
-      json.location do
-        json.call(post.location, :name, :address)
-        json.suburb post.location.suburb.try(:name)
-        json.city post.location.city.try(:name)
-      end
       json.tenants post.tenants if post.type == 'Post::ShareHouse'
     end
 

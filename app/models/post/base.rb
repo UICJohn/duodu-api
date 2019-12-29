@@ -18,16 +18,18 @@ class Post::Base < ApplicationRecord
   scope :active, -> { where(active: true) }
 
   def can_active?
-    if is_a?(Post::HouseMate) && locations.any?{ |location| %i[city_id suburb_id].all? { |col| location.send(col).present? } }
-      true
-    elsif %i[city_id suburb_id].all? { |col| location.send(col).present? && images.attached? }
-      true
-    else
-      false
-    end
+    return false if %i[city_id suburb_id].any? { |col| location.send(col).blank? }
+
+    return false if !is_a?(Post::HouseMate) && !images.attached?
+
+    true
   end
 
   def comments_count
     comments.count + (comments.map{ |comment| comment.sub_comments.count }.inject(:+) || 0)
+  end
+
+  def contact
+    use_user_contact ? user.phone : phone
   end
 end

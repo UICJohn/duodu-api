@@ -49,7 +49,7 @@ RSpec.describe Post, type: :model do
       expect(post.errors.messages.map { |k, _v| k }).to eq %i[
         user
         available_from
-        locations
+        location
       ]
     end
   end

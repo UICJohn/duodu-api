@@ -11,7 +11,7 @@ FactoryBot.define do
     user { create :wechat_user }
     rent { 2000 }
     before :create do |post|
-      post.location = build :location_with_regions
+      post.location = build :location, :with_geo
     end
   end
 end

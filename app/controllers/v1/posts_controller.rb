@@ -118,7 +118,6 @@ class V1::PostsController < ApplicationController
       :has_pets,
       :min_rent,
       :max_rent,
-      :locations_attributes,
       :tenants_gender,
       :smoke_allow,
       :smoker,
@@ -128,11 +127,9 @@ class V1::PostsController < ApplicationController
       :has_cook_top,
       :has_appliance,
       :has_network,
-      locations_attributes: %i[
-        name
+      location_attributes: %i[
+        suburb
         address
-        longitude
-        latitude
       ]
     )
   end

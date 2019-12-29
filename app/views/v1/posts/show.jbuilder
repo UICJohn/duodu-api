@@ -1,6 +1,6 @@
 json.post do
   json.id @post.id
-  json.call(@post, :title, :body, :type, :available_from, :tenants)
+  json.call(@post, :title, :body, :type, :available_from, :tenants, :contact)
 
   json.view_count Warehouse::PostFact.count_view_for(@post)
   json.comments_count @post.comments_count

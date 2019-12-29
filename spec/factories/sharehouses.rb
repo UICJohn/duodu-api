@@ -12,7 +12,7 @@ FactoryBot.define do
     rent { 2000 }
     payment_type { 0 }
     before :create do |post|
-      post.location = build :location_with_regions
+      post.location = build :location, :with_geo
     end
   end
 end

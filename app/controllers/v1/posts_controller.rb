@@ -128,7 +128,10 @@ class V1::PostsController < ApplicationController
       :has_appliance,
       :has_network,
       location_attributes: %i[
-        suburb
+        name,
+        suburb,
+        city,
+        province,
         address
       ]
     )

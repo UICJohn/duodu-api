@@ -1,7 +1,7 @@
 json.page @page
 json.posts do
   json.array! @posts do |post|
-    json.call(post, :id, :body, :title)
+    json.call(post, :id, :body, :title, :smoker, :pets_allow, :has_pets, :property_type)
     json.type post.type.split('::').last.underscore
     json.view_count Warehouse::PostFact.count_view_for(post)
     json.like current_user.like_post_ids.include?(post.id) if current_user.present?
@@ -10,9 +10,10 @@ json.posts do
     json.available_from post.available_from.to_date
 
     json.location do
-      json.call(post.location, :name, :address)
-      json.suburb post.location.suburb.try(:name)
-      json.city post.location.city.try(:name)
+      json.call(post.location, :name, :address, :latitude, :longitude)
+      json.suburb post.location.suburb_name
+      json.city post.location.city_name
+      json.province post.location.province_name
     end
 
     if post.type == 'Post::HouseMate'

@@ -1,7 +1,7 @@
 json.post do
   json.id @post.id
-  json.call(@post, :title, :body, :type, :available_from, :tenants, :contact)
-
+  json.call(@post, :title, :body, :available_from, :tenants, :contact)
+  json.type @post.type.split('::').last.underscore
   json.view_count Warehouse::PostFact.count_view_for(@post)
   json.comments_count @post.comments_count
   json.like_count @post.post_collections.count('distinct user_id')
@@ -23,6 +23,23 @@ json.post do
     json.age    @post.user.age
   end
 
+  json.location do
+    json.call(@post.location, :country, :name, :address, :city, :longitude, :latitude, :suburb)
+  end
+
+  json.call(@post,
+    :has_furniture,
+    :has_appliance,
+    :has_network,
+    :has_air_conditioner,
+    :has_elevator,
+    :has_cook_top,
+    :has_pets,
+    :pets_allow,
+    :smoke_allow,
+    :tenants_gender
+  )
+
   if @post.is_a?(Post::HouseMate)
     json.call(
       @post,
@@ -42,25 +59,11 @@ json.post do
       :rooms,
       :toilets,
       :property_type,
-      :has_furniture,
-      :has_appliance,
-      :has_network,
-      :has_air_conditioner,
-      :has_elevator,
-      :has_cook_top,
-      :has_pets,
-      :pets_allow,
-      :smoke_allow,
-      :tenants_gender
     )
     json.images do
       json.array! @post.images.map(&:url)
     end
 
-    json.cover_image @post.cover_image_url    
-
-    json.location do
-      json.call(@post.location, :country, :name, :address, :city, :longitude, :latitude, :suburb)
-    end
+    json.cover_image @post.cover_image_url
   end
 end

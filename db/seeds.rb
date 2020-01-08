@@ -31,15 +31,15 @@ Region::Country.where(name:'中国', code: 'CN').first_or_create
 # comment notification template
 NotificationTemplate.where(
   title: "有人@你了",
-  body: '#{user.username}评论了你的帖子',
-  tag: 'comment'
+  body: '#{sender.username}评论了你的帖子',
+  code: 'comment'
 ).first_or_create
 
 # reply notification template
 NotificationTemplate.where(
   title: "有人@你了",
-  body: '#{user.username}回复了你的评论',
-  tag: 'reply'
+  body: '#{sender.username}回复了你的评论',
+  code: 'reply'
 ).first_or_create
 
 # NotificationTemplate.create(

@@ -5,6 +5,8 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
   end
 
+  mount ActionCable.server => "/cable"
+
   devise_for :users, defaults: { format: :json }, controllers: { sessions: 'users/sessions', registrations: 'users/registrations', passwords: 'users/passwords' }
 
   devise_scope :user do
@@ -52,6 +54,14 @@ Rails.application.routes.draw do
         post :reply
       end
     end
+
+    resources :notifications, only: %i[show] do
+      collection do
+        get :unread_count
+      end
+    end
+
+    resources :comments, only: %i[index]
 
   end
 

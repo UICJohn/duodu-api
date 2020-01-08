@@ -10,25 +10,34 @@ class Comment < ApplicationRecord
 
   after_create :create_notification
 
+  attr_reader :root
+
   def sub_comments
     [ comments.to_a, comments.map { |comment| comment.sub_comments if comment.comments.present? } ].flatten.compact.uniq.sort_by(&:id)
   end
 
   def root
-    root_target = self
-    loop do
-      root_target = root_target.target
-      break unless root_target.is_a?(Comment)
+    if @root.present?
+      @root
+    else
+      @root = self
+      loop do
+        @root = @root.target
+        break unless @root.is_a?(Comment)
+      end
+      @root
     end
-    root_target
   end
 
   private
 
   def create_notification
-    if template = NotificationTemplate.find_by(tag: (target.is_a?(Comment) ? 'reply' : 'comment'))
+    return unless target.user_id == user_id
+
+    if template = NotificationTemplate.find_by(code: (target.is_a?(Comment) ? 'reply' : 'comment'))
       Notification.create!(
-        user_id: target.user_id,
+        receiver_id: target.user_id,
+        sender_id: user_id,
         target: self,
         status: 0,
         template_id: template.id

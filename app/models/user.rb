@@ -29,6 +29,7 @@ class User < ApplicationRecord
   has_many :post_collections
   has_many :like_posts, through: :post_collections, source: :post
   has_many :comments
+  has_many :notifications, foreign_key: 'receiver_id'
 
   before_save :set_password_status
   before_save :fetch_avatar

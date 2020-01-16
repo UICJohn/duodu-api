@@ -61,6 +61,10 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :messages, only: %i[index]
+
+    get '/chat_room/fetch_room' => 'chat_rooms#fetch_room'
+
     resources :comments, only: %i[index]
 
   end

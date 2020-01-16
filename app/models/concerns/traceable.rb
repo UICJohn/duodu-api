@@ -9,7 +9,7 @@ module Traceable
     elsif created_at.year == Time.now.year
       created_at.strftime('%m-%d %H:%M')
     else
-      "#{Time.now.year - created_at.year}年前"
+      created_at.strftime('%Y-%m-%d %H:%M')
     end
   end
 end

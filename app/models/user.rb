@@ -30,6 +30,10 @@ class User < ApplicationRecord
   has_many :like_posts, through: :post_collections, source: :post
   has_many :comments
   has_many :notifications, foreign_key: 'receiver_id'
+  has_many :messages
+  has_many :conversations
+  has_many :delivery_logs
+  has_many :chat_rooms, through: :conversations
 
   before_save :set_password_status
   before_save :fetch_avatar

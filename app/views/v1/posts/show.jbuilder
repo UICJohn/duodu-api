@@ -17,10 +17,11 @@ json.post do
   end
 
   json.user do
+    json.id       @post.user.id
     json.username @post.user.username
-    json.avatar @post.user.avatar.url if @post.user.avatar.attached?
-    json.gender @post.user_gender
-    json.age    @post.user.age
+    json.avatar   @post.user.avatar.url if @post.user.avatar.attached?
+    json.gender   @post.user_gender
+    json.age      @post.user.age
   end
 
   json.location do

@@ -18,6 +18,7 @@ class Post::Base < ApplicationRecord
   scope :active, -> { where(active: true) }
 
   enum tenants_gender: { male: 0, female: 1, unisex: 2 }
+
   def can_active?
     return false if %i[city_id suburb_id].any? { |col| location.send(col).blank? }
 

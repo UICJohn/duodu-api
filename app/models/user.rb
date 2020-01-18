@@ -4,8 +4,8 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable and :omniauthable
   attr_accessor :code, :avatar_url, :update_key_attr
 
-  devise :database_authenticatable, :async, :recoverable, :registerable, :trackable, :validatable, :jwt_authenticatable, jwt_revocation_strategy: JWTBlacklist,
-          authentication_keys: [:login]
+  devise :database_authenticatable, :async, :recoverable, :registerable, :trackable, :validatable, :jwt_authenticatable,
+          jwt_revocation_strategy: JWTBlacklist, authentication_keys: [:login]
 
   has_one_attached :avatar
 

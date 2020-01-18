@@ -4,6 +4,8 @@ module Notifiable
   included do
     attr_reader :receivers
 
+    has_many :delivery_logs, as: :target
+
     after_create :notify
 
     def channel_prefix
@@ -20,6 +22,14 @@ module Notifiable
 
     def resend!
       NotificationsWorker.perform_async(self.class.to_s, self.id)
+    end
+
+    def create_delivered_record!(user, delivery_method = 0)
+      target.where(user: user, delivery_method: delivery_method).first_or_create
+    end
+
+    def delivered?(user)
+      self.where(user: user).present?
     end
 
     private

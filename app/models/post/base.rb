@@ -15,6 +15,7 @@ class Post::Base < ApplicationRecord
   delegate :gender,   to: :user, prefix: true
   delegate :username, to: :user
 
+  default_scope { order('id DESC') }
   scope :active, -> { where(active: true) }
 
   enum tenants_gender: { male: 0, female: 1, unisex: 2 }

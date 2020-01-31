@@ -1,7 +1,10 @@
 class ChatRoom < ApplicationRecord
-  has_many :messages
   has_many :conversations
   has_many :users, through: :conversations
+
+  def messages
+    Message.where("conversation_id in (?)", conversation_ids)
+  end
 
   def self.private_room_for(u1, u2)
     room_id = Conversation.select('chat_room_id').group('chat_room_id').having("array_agg(user_id ORDER BY user_id ASC) = ?", "{#{[u1.id, u2.id].sort.join(',')}}").pluck('distinct chat_room_id')

@@ -2,7 +2,6 @@ class Notification < ApplicationRecord
   include Notifiable
   include Traceable
 
-  belongs_to :receiver, class_name: 'User'
   belongs_to :sender, class_name: 'User', optional: true
   belongs_to :target, polymorphic: true, optional: true
   belongs_to :template, class_name: 'NotificationTemplate', foreign_key: :template_id
@@ -13,13 +12,16 @@ class Notification < ApplicationRecord
   scope :comments, -> { joins(:template).where("code = 'comment' or code = 'reply'") }
   scope :unread, -> { where("status != ?", Notification.statuses[:read]) }
 
+  delegate :user, to: :target, allow_nil: true
+
   %i[title body].each do |attr_name|
     define_method "#{attr_name}" do
-      eval('"' + template.send(attr_name) + '"')  
+      eval('"' + template.send(attr_name) + '"')
     end
   end
 
   def receivers
-    @receivers ||= [self.receiver]
-  end  
+    @receivers ||= [user]
+  end
+
 end

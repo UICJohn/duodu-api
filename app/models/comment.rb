@@ -8,7 +8,7 @@ class Comment < ApplicationRecord
   has_many :comments, as: :target
   has_many :notifications, as: :target
 
-  after_create :create_notification
+  after_create :create_notification, if: proc { |comment|  comment.target.user_id != comment.user_id }
 
   attr_reader :root
 
@@ -32,8 +32,6 @@ class Comment < ApplicationRecord
   private
 
   def create_notification
-    return unless target.user_id == user_id
-
     if template = NotificationTemplate.find_by(code: (target.is_a?(Comment) ? 'reply' : 'comment'))
       Notification.create!(
         receiver_id: target.user_id,

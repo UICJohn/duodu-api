@@ -132,12 +132,12 @@ ActiveRecord::Schema.define(version: 2020_01_15_142649) do
 
   create_table "messages", force: :cascade do |t|
     t.bigint "user_id"
-    t.bigint "chat_room_id"
+    t.bigint "conversation_id"
     t.integer "status", default: 0
     t.text "body"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["chat_room_id"], name: "index_messages_on_chat_room_id"
+    t.index ["conversation_id"], name: "index_messages_on_conversation_id"
     t.index ["user_id"], name: "index_messages_on_user_id"
   end
 

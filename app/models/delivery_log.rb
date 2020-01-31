@@ -13,7 +13,7 @@ class DeliveryLog < ApplicationRecord
 
   private
   def self_message?
-    if target.user == user
+    if target.sender == user
       errors.add(:base, 'try to create delivery log for self message')
     end
   end

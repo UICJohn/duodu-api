@@ -13,18 +13,18 @@ RSpec.describe 'Messages', type: :request do
     before do
       @user1 = create :wechat_user
       @chat_room = create :chat_room
-      create :conversation, chat_room: @chat_room, user: @user
-      create :conversation, chat_room: @chat_room, user: @user1
+      @c1 = create :conversation, chat_room: @chat_room, user: @user
+      @c2 = create :conversation, chat_room: @chat_room, user: @user1
 
       @chat_room1 = create :chat_room
-      create :conversation, chat_room: @chat_room1, user: @user1
-      create :conversation, chat_room: @chat_room1, user: (create :wechat_user)
+      @c3 = create :conversation, chat_room: @chat_room1, user: @user1
+      @c4 = create :conversation, chat_room: @chat_room1, user: (create :wechat_user)
 
-      @message = create :message, user_id: @user1.id, chat_room: @chat_room
-      @message1 = create :message, user_id: @user.id, chat_room: @chat_room
-      create :message, user_id: @user1.id, chat_room: @chat_room
-      create :message, user_id: @user.id,  chat_room: @chat_room
-      create :message, user_id: @user1.id, chat_room: @chat_room
+      @message = create :message, user_id: @user1.id, conversation: @c2
+      @message1 = create :message, user_id: @user.id, conversation: @c1
+      create :message, user_id: @user1.id, conversation: @c2
+      create :message, user_id: @user.id,  conversation: @c1
+      create :message, user_id: @user1.id, conversation: @c2
     end
 
     it 'should return error' do
@@ -39,12 +39,13 @@ RSpec.describe 'Messages', type: :request do
     end
 
     it 'should return all message and create delivery log' do
-      create :message, user_id: @user1.id, chat_room: @chat_room1
-      create :message, user_id: @user.id, chat_room: @chat_room
+      create :message, user_id: @user1.id, conversation: @c3
+      create :message, user_id: @user.id, conversation: @c1
 
       expect{
         get "/v1/messages", params: { room_id: @chat_room.id }, headers: @headers
       }.to change(DeliveryLog, :count).by(3)
+
       expect(response).to be_successful
       response_body = JSON.parse(response.body)
       expect(response_body['current_user']['id']).to eq @user.id

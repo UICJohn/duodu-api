@@ -25,7 +25,7 @@ RSpec.describe 'Post', type: :request do
       get '/v1/posts', params: {}, headers: @headers
       expect(response).to be_successful
       posts = JSON.parse(response.body)['posts']
-      expect(posts.count).to eq 13
+      expect(posts.count).to eq 10
     end
 
     it 'should success' do
@@ -36,7 +36,7 @@ RSpec.describe 'Post', type: :request do
       get '/v1/posts', params: { page: 2 }, headers: @headers
       expect(response).to be_successful
       posts = JSON.parse(response.body)['posts']
-      expect(posts.count).to eq 12
+      expect(posts.count).to eq 2
     end
 
     # it 'should filter posts with location' do

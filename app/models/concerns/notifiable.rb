@@ -17,7 +17,7 @@ module Notifiable
     end
 
     def receivers
-      @receivers ||= [self.user]
+      @receivers ||= [self.sender]
     end
 
     def resend!

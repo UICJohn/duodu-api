@@ -6,8 +6,8 @@ load File.join(Rails.root, 'lib', 'tasks', 'posts.rake')
 RSpec.describe 'Post Comments', type: :request do
   before do
     @user = create :wechat_user
-    create :notification_template, tag: 'comment'
-    create :notification_template, tag: 'reply'
+    create :notification_template, code: 'comment'
+    create :notification_template, code: 'reply'
     @headers = Devise::JWT::TestHelpers.auth_headers({ 'Accept' => 'application/json' }, @user)
   end
 

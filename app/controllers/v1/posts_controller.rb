@@ -48,7 +48,6 @@ class V1::PostsController < ApplicationController
     if (post = Post::Base.find_by(id: params[:post_id]))
       unless current_user.like_post_ids.include?(post.id)
         current_user.post_collections << PostCollection.create(post_id: post.id, user_id: current_user.id)
-        Etl::LikePost.process(user_id: current_user.id, post_id: post.id)
       end
       success!
     else
@@ -58,7 +57,6 @@ class V1::PostsController < ApplicationController
 
   def dislike
     if (record = current_user.post_collections.find_by(post_id: params[:post_id]))
-      Etl::DislikePost.process(user_id: current_user.id, post_id: record.post_id)
       record.destroy
       success!
     else

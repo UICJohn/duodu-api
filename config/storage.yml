@@ -17,7 +17,7 @@ staging:
   access_key_id: LTAIGt0BBAlKBUv9
   access_key_secret: mjMc6mI3rBjvWE9MTIrw71Ydpqfoio
   bucket: duodu-storage
-  path: systems
+  path: staging
   endpoint: https://oss-cn-zhangjiakou.aliyuncs.com
   mode: private
 

@@ -4,7 +4,7 @@ class Post::Base < ApplicationRecord
 
   self.table_name = 'posts'
 
-  searchkick callbacks: :async
+  # searchkick callbacks: :async
 
   belongs_to :user
   has_many :post_collections, foreign_key: 'post_id'

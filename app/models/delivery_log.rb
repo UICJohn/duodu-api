@@ -8,7 +8,9 @@ class DeliveryLog < ApplicationRecord
   enum delivery_method: { action_cable: 0, controller: 1 }
 
   def self.create_delivered_record!(target, user, delivery_method = 0)
-    DeliveryLog.where(target: target, user: user, delivery_method: delivery_method).first_or_create
+    DeliveryLog.where(target: target, user: user).first_or_create do |record|
+      record.delivery_method = delivery_method
+    end
   end
 
   private

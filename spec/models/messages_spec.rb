@@ -80,6 +80,59 @@ RSpec.describe Message, type: :model do
       message = create :message, sender: @user, conversation: @c1
       expect(message.receivers).to include(@user1)
       expect(message.receivers.count).to eq 1
+
+      user3 = (create :wechat_user)
+      create :conversation, user_id: user3.id , chat_room_id: @chat_room.id
+      expect(message.receivers.count).to eq 2
+      expect(message.receivers).to include(@user1)
+      expect(message.receivers).to include(user3)
+    end
+
+  end
+
+  describe '#create_delivered_record!' do
+    before do
+      @user = create :wechat_user
+      @user1 = create :wechat_user
+      @user2 = create :wechat_user
+      @chat_room = create :chat_room
+      @c1 = create :conversation, user_id: @user.id, chat_room_id: @chat_room.id
+      create :conversation, user_id: @user1.id, chat_room_id: @chat_room.id
+    end
+
+    it 'should createt one log for message' do
+      message = create :message, sender: @user, conversation: @c1
+      expect{
+        message.create_delivered_record!(@user1)
+      }.to change(DeliveryLog, :count).by 1
+
+      expect{
+        message.create_delivered_record!(@user1)
+      }.to change(DeliveryLog, :count).by 0
+    end
+
+  end
+
+  describe '#delivered?' do
+    before do
+      @user = create :wechat_user
+      @user1 = create :wechat_user
+      @user2 = create :wechat_user
+      @chat_room = create :chat_room
+      @c1 = create :conversation, user_id: @user.id, chat_room_id: @chat_room.id
+      create :conversation, user_id: @user1.id, chat_room_id: @chat_room.id
+    end
+
+    it 'should return true' do
+      message = create :message, sender: @user, conversation: @c1
+      
+      create :delivery_log, user: @user1, target: message
+      expect(message.delivered?(@user1)).to eq true
+    end
+
+    it 'should return false' do
+      message = create :message, sender: @user, conversation: @c1
+      expect(message.delivered?(@user1)).to eq false
     end
   end
 

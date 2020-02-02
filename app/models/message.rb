@@ -34,12 +34,8 @@ class Message < ApplicationRecord
   end
 
   def receivers
-    @receivers ||= chat_room.users.where.not(id: sender.id)
+    chat_room.users.where.not(id: sender.id)
   end
-
-  # def ready?
-  #   status == 'ready' || status.zero?
-  # end
 
   private
 

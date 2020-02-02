@@ -17,7 +17,7 @@ module Notifiable
     end
 
     def receivers
-      @receivers ||= [self.sender]
+      raise 'You should implement this method'
     end
 
     def resend!
@@ -25,11 +25,11 @@ module Notifiable
     end
 
     def create_delivered_record!(user, delivery_method = 0)
-      target.where(user: user, delivery_method: delivery_method).first_or_create
+      DeliveryLog.create_delivered_record!(self, user, delivery_method)
     end
 
     def delivered?(user)
-      self.where(user: user).present?
+      DeliveryLog.where(user: user, target: self).present?
     end
 
     private

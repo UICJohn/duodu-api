@@ -17,7 +17,7 @@ class User < ApplicationRecord
   validates :phone, format: { with: /\A[0-9]{11}\z/, message: '手机号不正确' }, uniqueness: true, allow_blank: true
   validates :avatar, content_type: %r{\Aimage/.*\z}
   validates :email, format: { with: Devise.email_regexp, allow_blank: true }
-
+  validates_uniqueness_of :uid, scope: :provider
 
   has_one  :location, as: :target
   has_one  :preference
@@ -26,7 +26,7 @@ class User < ApplicationRecord
   has_many :friendships
   has_many :friends, through: :friendships, source: :user
   has_many :posts, class_name: 'Post::Base'
-  has_many :post_collections
+  has_many :post_collections, dependent: :destroy
   has_many :like_posts, through: :post_collections, source: :post
   has_many :comments
   has_many :notifications, foreign_key: 'receiver_id'
@@ -64,8 +64,13 @@ class User < ApplicationRecord
     end
   end
 
+
+  def age
+    Date.today.year - (dob&.year || 2000)
+  end
+
   def self.from_wechat(auth)
-    where(provider: 'wechat', uid: auth[:uid]).first_or_create! do |user|
+    where(provider: 'wechat', uid: auth[:uid].strip).first_or_create! do |user|
       user.password = Devise.friendly_token[0, 20] if user.password.nil?
       user.session_key = auth[:session_key]
     end
@@ -78,10 +83,6 @@ class User < ApplicationRecord
     elsif conditions.key?(:phone) || conditions.key?(:email)
       where(conditions.to_hash).first
     end
-  end
-
-  def age
-    Date.today.year - (dob&.year || 2000)
   end
 
   private
